@@ -19,11 +19,6 @@ node.addShape(shape)
 np = render.attachNewNode(node)
 np.setPos(0, 0, -2)
 world.attachRigidBody(node)
-#test
-mytext = loader.loadTexture("test.png")
-print mytext
-#node.setTexture(mytext)
-
 
 
 # Boxes
