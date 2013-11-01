@@ -6,6 +6,9 @@ from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
 from multiprocessing import Process
 
+"""file of definition of the physical engine and 
+3D display of the world """
+
 class MyApp(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
@@ -64,10 +67,6 @@ for i in range(4):
     add_box(i)
 
 
-def get_render():
-    return render
-
-
 # Update
 def update(task):
     dt = globalClock.getDt()
@@ -77,14 +76,24 @@ def update(task):
 taskMgr.add(update, 'update')
 
 
-def main():
-    while(True):
+def display_simu(t):
+    """ display the 3d rendering of the seen during t steps"""
+    for i in range(t):
         taskMgr.step()
 
-#p = Process(target=main)
 
-#p.start()
+def run_physics(t):
+    """ run physics for t steps """
+    for i in range(t):
+        dt = globalClock.getDt()
+        world.doPhysics(dt)
 
-print "coucou ca va ?"
-#p.join()
-#app.run()
+
+def run(t, visual=False):
+    if visual:
+        display_simu(t)
+    else:
+        run_physics(t)
+
+
+
