@@ -7,7 +7,7 @@ class Node:
     """
     def __init__(self, father):
         self.edges = [father]
-    
+
     def set_father(self, father):
         self.edges[0] = father
 
@@ -20,7 +20,7 @@ class EmptyNode(Node):
 
 
 class Block(Node):
-    """ a block is a cubical shaped node with 6 face (so 6 
+    """ a block is a cubical shaped node with 6 face (so 6
     potential edges)"""
     def __init__(self, father):
         Node.__init__(self, father)
@@ -39,7 +39,7 @@ class Joint(Node):
 
 class Vertebra(Node):
     """ a Vertebra is a node with 2 degrees of freedom, that
-    can only be linked to 2 other vertebra or be the end of the 
+    can only be linked to 2 other vertebra or be the end of the
     vertebral column """
     def __init__(self, father):
         Node.__init__(self, father)
@@ -49,8 +49,8 @@ class Vertebra(Node):
 
 
 class Head(Node):
-    """ Head of the structure, 
-    by default a head has no father ( but it 
+    """ Head of the structure,
+    by default a head has no father ( but it
     is possible to add one for circular structure for instance
     )"""
     def __init__(self):
@@ -69,7 +69,7 @@ class MetaStructure:
     def follow_edge(self, ind=1):
         self.current = self.current.edges[self.selector]
         self.selector = ind
-   
+
     def next_edge(self):
         self.selector += 1
 
@@ -88,7 +88,7 @@ class MetaStructure:
 
     def add_joint(self):
         node = Joint(self.current)
-        self.current.edges[self.selector] = node 
+        self.current.edges[self.selector] = node
         self.all_nodes.append(node)
 
     def add_vertebra(self):
@@ -102,7 +102,14 @@ class MetaStructure:
         self.all_nodes.append(node)
 
 
+def load_structure(name):
+    """ function to load a structure from a file in the
+    structure folder"""
+    pass
+#TODO
 
 
-
-
+def save_structure(name):
+    """ save the structure creating a file with name name"""
+    pass
+#TODO

@@ -6,6 +6,8 @@ from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
 from multiprocessing import Process
 
+from rp.datastructure import metastructure
+
 """file of definition of the physical engine and 
 3D display of the world """
 
@@ -87,6 +89,21 @@ def run_physics(t):
     for i in range(t):
         dt = globalClock.getDt()
         world.doPhysics(dt)
+
+
+def build(creature):
+    """ creature is a metastructure ( graph describing the struct)
+        this function build the structure and add it in panda
+        world
+    """
+#TODO  implement this function
+
+
+def add_creature(name):
+    """function that add the creature described in a file (name)
+    and add it in panda world"""
+    creature = metastructure.load_structure(name)
+    build(creature)
 
 
 def run(t, visual=False):
