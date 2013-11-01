@@ -124,7 +124,7 @@ def add_creature(name):
     """function that add the creature described in a file (name)
     and add it in panda world"""
     mstructure = metastructure.load_structure(name)
-    Creature(mstructure).get_variables()
+    return Creature(mstructure).get_variables()
 
 
 def run(t, visual=False):
@@ -132,6 +132,3 @@ def run(t, visual=False):
         display_simu(t)
     else:
         run_physics(t)
-
-
-
