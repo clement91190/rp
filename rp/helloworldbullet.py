@@ -1,10 +1,22 @@
-import direct.directbase.DirectStart
+from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3
 from panda3d.bullet import BulletWorld
 from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
- 
+from multiprocessing import Process
+
+class MyApp(ShowBase):
+    def __init__(self):
+        ShowBase.__init__(self)
+        self.environ = self.loader.loadModel("models/environment")
+        self.environ.reparentTo(self.render)
+        # Apply scale and position transforms on the model.
+        self.environ.setScale(0.25, 0.25, 0.25)
+        self.environ.setPos(-8, 42, -1)
+
+
+app = MyApp()
 base.cam.setPos(10, -30, 20)
 base.cam.lookAt(0, 0, 5)
  
@@ -34,12 +46,17 @@ for i in range(20):
     np.setPos(0, i*0.2 % 0.5, 2+i*1.1 )
     world.attachRigidBody(node)
     model.copyTo(np)
- 
+
+
 # Update
 def update(task):
-  dt = globalClock.getDt()
-  world.doPhysics(dt)
-  return task.cont
+    dt = globalClock.getDt()
+    world.doPhysics(dt)
+    return task.cont
  
 taskMgr.add(update, 'update')
-run()
+
+p = Process(target=app.run)
+
+p.start()
+app.run()
