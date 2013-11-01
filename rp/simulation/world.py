@@ -4,12 +4,12 @@ from panda3d.bullet import BulletWorld
 from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
-from multiprocessing import Process
 
 from rp.datastructure import metastructure
 
-"""file of definition of the physical engine and 
+"""file of definition of the physical engine and
 3D display of the world """
+
 
 class MyApp(ShowBase):
     def __init__(self):
@@ -20,24 +20,25 @@ class MyApp(ShowBase):
         self.environ.setScale(0.25, 0.25, 0.25)
         self.environ.setPos(-8, 42, -1)
 
+        # World
+        self.world = BulletWorld()
+        self.world.setGravity(Vec3(0, 0, -9.81))
 
 app = MyApp()
 base.cam.setPos(10, -30, 20)
 base.cam.lookAt(0, 0, 5)
  
-# World
-world = BulletWorld()
-world.setGravity(Vec3(0, 0, -9.81))
- 
+
 # Plane
 shape = BulletPlaneShape(Vec3(0, 0, 1), 1)
 node = BulletRigidBodyNode('Ground')
 node.addShape(shape)
 np = render.attachNewNode(node)
 np.setPos(0, 0, -2)
-world.attachRigidBody(node)
+app.world.attachRigidBody(node)
 
 
+# Boxes
 def define_model():
     model = loader.loadModel('models/box.egg')
     model.setPos(-0.5, -0.5, -0.5)
@@ -55,26 +56,32 @@ shape = define_shape()
 
 
 def add_box(i):
-    # Boxes
     node = BulletRigidBodyNode('Box')
     node.setMass(1.0)
     node.addShape(shape)
     np = render.attachNewNode(node)
-    np.setPos(0, i*0.2 % 0.5, 2+i*1.1 )
-    world.attachRigidBody(node)
+    np.setPos(0, i * 0.2 % 0.5, 2 + i * 1.1 )
+    app.world.attachRigidBody(node)
     model.copyTo(np)
 
 
-for i in range(4):
+for i in range(200):
     add_box(i)
+
+def physical_step():
+    """perform one step on the physical world
+    and read the command..."""
+    dt = globalClock.getDt()
+    app.world.doPhysics(dt)
+    #TODO add the command part 
 
 
 # Update
 def update(task):
-    dt = globalClock.getDt()
-    world.doPhysics(dt)
+    physical_step()
     return task.cont
- 
+
+
 taskMgr.add(update, 'update')
 
 
@@ -87,23 +94,37 @@ def display_simu(t):
 def run_physics(t):
     """ run physics for t steps """
     for i in range(t):
-        dt = globalClock.getDt()
-        world.doPhysics(dt)
+        physical_step()
 
 
-def build(creature):
-    """ creature is a metastructure ( graph describing the struct)
-        this function build the structure and add it in panda
-        world
-    """
+class Creature():
+    def __init__(self, metastructure):
+        """constructor of the class
+        use the metastructure"""
+        self.metastucture = metastructure
+
+    def build(self, creature):
+        """ creature is a metastructure ( graph describing the struct)
+            this function build the structure and add it in panda
+            world
+        """
 #TODO  implement this function
+
+    def get_variables(self):
+        """ variables is probably going to be a list of list
+        [[coefficient] for all angles]"""
+        return self.variables
+
+    def update_angles():
+        """calculate the new value of the angles based on the
+        variables"""
 
 
 def add_creature(name):
     """function that add the creature described in a file (name)
     and add it in panda world"""
-    creature = metastructure.load_structure(name)
-    build(creature)
+    mstructure = metastructure.load_structure(name)
+    Creature(mstructure).get_variables()
 
 
 def run(t, visual=False):
