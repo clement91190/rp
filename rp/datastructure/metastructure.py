@@ -25,7 +25,7 @@ class Block(Node):
     def __init__(self, father):
         Node.__init__(self, father)
         for i in range(1, 6):
-            self.edges.append(EmptyNode())
+            self.edges.append(EmptyNode(self))
 
 
 class Joint(Node):
@@ -33,7 +33,7 @@ class Joint(Node):
     (think servomotor) """
     def __init__(self, father):
         Node.__init__(self, father)
-        self.edges.append(EmptyNode())
+        self.edges.append(EmptyNode(self))
         self.angle = 0
 
 
@@ -43,7 +43,7 @@ class Vertebra(Node):
     vertebral column """
     def __init__(self, father):
         Node.__init__(self, father)
-        self.edges.append(EmptyNode())
+        self.edges.append(EmptyNode(self))
         self.angle1 = 0
         self.angle2 = 0
 
@@ -54,7 +54,9 @@ class Head(Node):
     is possible to add one for circular structure for instance
     )"""
     def __init__(self):
-        Node.__init__(None)
+        Node.__init__(self, None)
+        for i in range(1, 6):
+            self.edges.append(EmptyNode(self))
 
 
 class MetaStructure:
@@ -63,7 +65,7 @@ class MetaStructure:
     def __init__(self):
         self.head = Head()
         self.current = self.head  # indicate the current Node
-        self.selector = 1  # indicate the edge selected
+        self.selector = 1  # indicate the edge selected 0 is always the father
         self.all_nodes = [self.head]
 
     def follow_edge(self, ind=1):
