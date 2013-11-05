@@ -27,6 +27,9 @@ class Block(Node):
         for i in range(1, 6):
             self.edges.append(EmptyNode(self))
 
+    def type(self):
+        return "block"
+
 
 class Joint(Node):
     """ a joint is a link with 1 degree of freedom
@@ -35,6 +38,9 @@ class Joint(Node):
         Node.__init__(self, father)
         self.edges.append(EmptyNode(self))
         self.angle = 0
+
+    def type(self):
+        return "joint"
 
 
 class Vertebra(Node):
@@ -47,6 +53,9 @@ class Vertebra(Node):
         self.angle1 = 0
         self.angle2 = 0
 
+    def type(self):
+        return "vertebra"
+
 
 class Head(Node):
     """ Head of the structure,
@@ -57,6 +66,9 @@ class Head(Node):
         Node.__init__(self, None)
         for i in range(1, 6):
             self.edges.append(EmptyNode(self))
+
+    def type(self):
+        return "head"
 
 
 class MetaStructure:

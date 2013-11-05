@@ -114,11 +114,14 @@ class Creature():
     def build_bloc(self):
         pass
 
+#TODO  implement this function
     def build_joint(self):
         pass
 
+#TODO  implement this function
     def build_vertebra(self):
         pass
+#TODO  implement this function
 
     def build(self):
         """ this function build the structure and add it in panda
@@ -126,13 +129,13 @@ class Creature():
         """
 
         #create a dictionary to chech the nodes already built
-        self.building_status = dict(zip(self.metastructure.all_nodes,
+        self.building_status = dict(zip(
+            self.metastructure.all_nodes,
             [False for i in self.metastructure.all_nodes]))
-        
-        self.recursive_build(metastructure.head)
-    
+        self.recursive_build(self.metastructure.head)
+
     def recursive_build(self, node):
-        """ recursive function to build the 
+        """ recursive function to build the
         structure """
         self.build_node(node)
         for face, edge in node.edges():
@@ -144,8 +147,11 @@ class Creature():
     def build_node(self, node):
         """ depending on the type of node call different
         functions """
-        pass
-#TODO  implement this function
+        return {
+            'block': self.build_bloc(),
+            'vertebra': self.build_vertebra(),
+            'joint': self.build_joint(),
+            'head': self.build_head()}[node.type()]
 
     def link(self, nodeA, nodeB, face):
         """ build a solid link between 2 nodes (or elastic) """
