@@ -5,7 +5,7 @@ from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
 
-from rp.datastructure import metastructure
+from rp.datastructure.metastructure import MetaStructure
 
 """file of definition of the physical engine and
 3D display of the world """
@@ -16,13 +16,13 @@ class MyWorld(BulletWorld):
         BulletWorld.__init__(self)
         
         #adding gravity
-        self.world.setGravity(Vec3(0, 0, -9.81))
+        self.setGravity(Vec3(0, 0, -9.81))
         
         # Ground definition
         shape = BulletPlaneShape(Vec3(0, 0, 1), 1)
-        node = BulletRigidBodyNode('Ground')
-        node.addShape(shape)
-        self.world.attachRigidBody(node)
+        self.ground_node = BulletRigidBodyNode('Ground')
+        self.ground_node.addShape(shape)
+        self.attachRigidBody(self.ground_node)
 
     def physical_step(self):
         """perform one step on the physical world
@@ -50,15 +50,18 @@ class MyApp(ShowBase):
 
         # World
         self.world = world
-        np = render.attachNewNode(node)
+        np = render.attachNewNode(self.world.ground_node)
         np.setPos(0, 0, -2)
  
         #camera
         base.cam.setPos(10, -30, 20)
         base.cam.lookAt(0, 0, 5)
 
-        taskMgr.add(update, 'update')
-    
+        taskMgr.add(self.update, 'update')
+        
+        #creatures
+        self.creatures=[]
+
        # Update
     def update(self, task):
         self.world.physical_step()
@@ -76,26 +79,37 @@ class MyApp(ShowBase):
         """ display the 3d rendering of the seen during t steps"""
         for i in range(t):
             taskMgr.step()
+    
+    def add_creature(self):
+        """function that add the creature described in a file (name)
+        and add it in panda world"""
+        m = MetaStructure()
+        m.add_joint()
+        self.creatures.append(Creature(m, self))
+        #return Creature(m).get_variables()
+
 
 
 class Creature():
-    def __init__(self, metastructure):
+    def __init__(self, metastructure, app):
         """constructor of the class
         use the metastructure"""
         self.metastucture = metastructure
-
+        self.world = app.world
+        
     def build_head():
-        node = BulletRigidBodyNode('bloc')
-        node.setMass(1.0)
-        shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-        node.addShape(shape)
-        np = render.attachNewNode(node)
-        np.setPos(0, 0, 2)
-        self.world.attachRigidBody(node)
-        model = loader.loadModel('models/box.egg')
-        model.setPos(-0.5, -0.5, -0.5)
-        model.flattenLight()
-        model.copyTo(np)
+        for i in range(100):
+            node = BulletRigidBovdyNode('bloc')
+            node.setMass(1.0)
+            shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+            node.addShape(shape)
+            np = render.attachNewNode(node)
+            np.setPos(0, 0, 2 + 1.1 *i)
+            self.world.attachRigidBody(node)
+            model = loader.loadModel('models/box.egg')
+            model.setPos(-0.5, -0.5, -0.5)
+            model.flattenLight()
+            model.copyTo(np)
 
     def build_bloc():
         pass
@@ -111,6 +125,8 @@ class Creature():
             this function build the structure and add it in panda
             world
         """
+
+        build_head()
 #TODO  implement this function
 
     def get_variables(self):
@@ -122,11 +138,5 @@ class Creature():
         """calculate the new value of the angles based on the
         variables"""
 
-
-def add_creature(name):
-    """function that add the creature described in a file (name)
-    and add it in panda world"""
-    mstructure = metastructure.load_structure(name)
-    return Creature(mstructure).get_variables()
 
 
