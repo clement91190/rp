@@ -11,8 +11,36 @@ from rp.datastructure import metastructure
 3D display of the world """
 
 
-class MyApp(ShowBase):
+class MyWorld(BulletWorld):
     def __init__(self):
+        BulletWorld.__init__(self)
+        
+        #adding gravity
+        self.world.setGravity(Vec3(0, 0, -9.81))
+        
+        # Ground definition
+        shape = BulletPlaneShape(Vec3(0, 0, 1), 1)
+        node = BulletRigidBodyNode('Ground')
+        node.addShape(shape)
+        self.world.attachRigidBody(node)
+
+    def physical_step(self):
+        """perform one step on the physical world
+        and read the command..."""
+        dt = globalClock.getDt()
+        self.doPhysics(dt)
+        #TODO add the command part 
+
+    def run_physics(self, t):
+        """ run physics for t steps """
+        for i in range(t):
+            self.physical_step()
+
+
+
+class MyApp(ShowBase):
+    def __init__(self, world):
+        """initialiation with a physical world """
         ShowBase.__init__(self)
         self.environ = self.loader.loadModel("models/environment")
         self.environ.reparentTo(self.render)
@@ -21,80 +49,33 @@ class MyApp(ShowBase):
         self.environ.setPos(-8, 42, -1)
 
         # World
-        self.world = BulletWorld()
-        self.world.setGravity(Vec3(0, 0, -9.81))
-
-app = MyApp()
-base.cam.setPos(10, -30, 20)
-base.cam.lookAt(0, 0, 5)
+        self.world = world
+        np = render.attachNewNode(node)
+        np.setPos(0, 0, -2)
  
+        #camera
+        base.cam.setPos(10, -30, 20)
+        base.cam.lookAt(0, 0, 5)
 
-# Plane
-shape = BulletPlaneShape(Vec3(0, 0, 1), 1)
-node = BulletRigidBodyNode('Ground')
-node.addShape(shape)
-np = render.attachNewNode(node)
-np.setPos(0, 0, -2)
-app.world.attachRigidBody(node)
-
-
-# Boxes
-def define_model():
-    model = loader.loadModel('models/box.egg')
-    model.setPos(-0.5, -0.5, -0.5)
-    model.flattenLight()
-    return model
+        taskMgr.add(update, 'update')
+    
+       # Update
+    def update(self, task):
+        self.world.physical_step()
+        return task.cont
 
 
-def define_shape():
-    shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-    return shape
+    def run(self, t, visual=False):
+        if visual:
+            self.display_simu(t)
+        else:
+            self.run_physics(t)
 
 
-model = define_model()
-shape = define_shape()
-
-
-def add_box(i):
-    node = BulletRigidBodyNode('Box')
-    node.setMass(1.0)
-    node.addShape(shape)
-    np = render.attachNewNode(node)
-    np.setPos(0, i * 0.2 % 0.5, 2 + i * 1.1 )
-    app.world.attachRigidBody(node)
-    model.copyTo(np)
-
-
-for i in range(200):
-    add_box(i)
-
-def physical_step():
-    """perform one step on the physical world
-    and read the command..."""
-    dt = globalClock.getDt()
-    app.world.doPhysics(dt)
-    #TODO add the command part 
-
-
-# Update
-def update(task):
-    physical_step()
-    return task.cont
-
-
-taskMgr.add(update, 'update')
-
-
-def display_simu(t):
-    """ display the 3d rendering of the seen during t steps"""
-    for i in range(t):
-        taskMgr.step()
-
-
-def run_physics(t):
-    """ run physics for t steps """
-    for i in range(t):
-        physical_step()
+    def display_simu(self, t):
+        """ display the 3d rendering of the seen during t steps"""
+        for i in range(t):
+            taskMgr.step()
 
 
 class Creature():
@@ -102,6 +83,28 @@ class Creature():
         """constructor of the class
         use the metastructure"""
         self.metastucture = metastructure
+
+    def build_head():
+        node = BulletRigidBodyNode('bloc')
+        node.setMass(1.0)
+        shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        node.addShape(shape)
+        np = render.attachNewNode(node)
+        np.setPos(0, 0, 2)
+        self.world.attachRigidBody(node)
+        model = loader.loadModel('models/box.egg')
+        model.setPos(-0.5, -0.5, -0.5)
+        model.flattenLight()
+        model.copyTo(np)
+
+    def build_bloc():
+        pass
+
+    def build_joint():
+        pass
+
+    def build_vertebra():
+        pass
 
     def build(self, creature):
         """ creature is a metastructure ( graph describing the struct)
@@ -127,8 +130,3 @@ def add_creature(name):
     return Creature(mstructure).get_variables()
 
 
-def run(t, visual=False):
-    if visual:
-        display_simu(t)
-    else:
-        run_physics(t)
