@@ -1,5 +1,5 @@
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import Vec3
+from panda3d.core import Vec3, TransformState
 from panda3d.bullet import BulletWorld
 from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
@@ -72,7 +72,7 @@ class MyApp(ShowBase):
         if visual:
             self.display_simu(t)
         else:
-            self.run_physics(t)
+            self.world.run_physics(t)
 
 
     def display_simu(self, t):
@@ -84,7 +84,6 @@ class MyApp(ShowBase):
         """function that add the creature described in a file (name)
         and add it in panda world"""
         m = MetaStructure()
-        m.add_joint()
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
@@ -94,7 +93,7 @@ class Creature():
     def __init__(self, metastructure, app):
         """constructor of the class
         use the metastructure"""
-        self.metastucture = metastructure
+        self.metastructure = metastructure
         self.world = app.world
         self.build()
         
@@ -102,7 +101,9 @@ class Creature():
         node = BulletRigidBodyNode('bloc')
         node.setMass(1.0)
         shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        shape2 = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         node.addShape(shape)
+        node.addShape(shape2, TransformState.makePos(Vec3(1.0, 1.0, 1.0)))
         np = render.attachNewNode(node)
         np.setPos(0, 0, 2)
         self.world.attachRigidBody(node)
@@ -136,13 +137,17 @@ class Creature():
 
     def recursive_build(self, node):
         """ recursive function to build the
+        node.addShape(shape)
         structure """
         self.build_node(node)
-        for face, edge in node.edges():
-            if not self.bulding_status[edge]:
+        print " building node :{}".format(node)
+        print node.edges
+        for face, edge in enumerate(node.edges[1:]):
+            if edge.type() != 'empty': 
+                if  not self.building_status[edge]:
                 #then we have to construct this node too
-                self.recursive_build(edge)
-            self.link(node, edge, face)
+                    self.recursive_build(edge)
+                self.link(node, edge, face)
 
     def build_node(self, node):
         """ depending on the type of node call different

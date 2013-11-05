@@ -17,6 +17,9 @@ class Node:
 
 class EmptyNode(Node):
     """ Empty node """
+    def type(self):
+        return "empty"
+
 
 
 class Block(Node):
