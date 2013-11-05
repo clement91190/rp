@@ -98,16 +98,18 @@ class Creature():
         self.world = app.world
         self.build()
         
-    def build_head(self):
-        node = BulletRigidBodyNode('bloc')
-        node.setMass(1.0)
+    def build_head(self, node=BulletRigidBodyNode('bloc'), np=None):
+        """ build the head of the creature """
+        node.setMass( node.getMass() + 1.0)
+        if np is None:
+            np = render.attachNewNode(node)
         shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         shape2 = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         node.addShape(shape)
         node.addShape(shape2, TransformState.makePos(Vec3(1.0, 1.0, 1.0)))
-        np = render.attachNewNode(node)
         np.setPos(0, 0, 2)
-        self.world.attachRigidBody(node)
+        
+        self.world.attachRigidBody(node)  # this must be at done at the end...
         model = CubeMaker(0.5).generate()
         #loader.loadModel('models/cube.egg')
         model.setPos(0,0,0)
@@ -120,17 +122,18 @@ class Creature():
         model.flattenLight()
         model.setColor(0, 1.0, 1.0)
         model.copyTo(np)
+        return (node, np)
 
 
 
     def build_bloc(self):
         pass
 
-#TODO  implement this function
+#TODO  implement this function with different cases 
     def build_joint(self):
         pass
 
-#TODO  implement this function
+#TODO  implement this function with different cases
     def build_vertebra(self):
         pass
 #TODO  implement this function
@@ -140,34 +143,42 @@ class Creature():
             world
         """
 
-        #create a dictionary to chech the nodes already built
+        #create a dictionary to chech the nodes already added and linked
         self.building_status = dict(zip(
             self.metastructure.all_nodes,
-            [False for i in self.metastructure.all_nodes]))
+            [[False, False, False] for i in self.metastructure.all_nodes]))
+        # we build this to check for joints if the 2 parts of the 
+        #joints have been built and the link also
         self.recursive_build(self.metastructure.head)
 
     def recursive_build(self, node):
         """ recursive function to build the
-        node.addShape(shape)
         structure """
-        self.build_node(node)
+        self.build_node(node, self.building_status[node])
         print " building node :{}".format(node)
         print node.edges
+     #TODO complete here in case of a joint/vertebra
+        #adding
         for face, edge in enumerate(node.edges[1:]):
-            if edge.type() != 'empty': 
-                if  not self.building_status[edge]:
-                #then we have to construct this node too
-                    self.recursive_build(edge)
-                self.link(node, edge, face)
+            if edge.type() != 'empty':
+                if edge.gen_type() == 'piece':
+                    if not all(self.building_status[edge][0]):
+                    #then we have to add this node (because it
+                    #is not entirely finished
+                        self.recursive_build_piece(edge)
 
-    def build_node(self, node):
+    def build_node(self, node, build_stat):
         """ depending on the type of node call different
         functions """
+        if node.gen_type == 'piece':
+            self.building_status[node] = [True, True, True]
         return {
+            'head': self.build_head(),
             'block': self.build_bloc(),
-            'vertebra': self.build_vertebra(),
-            'joint': self.build_joint(),
-            'head': self.build_head()}[node.type()]
+            'vertebra': self.build_vertebra(build_stat),
+            'joint': self.build_joint(build_stat)}[node.type()]
+
+    def build
 
     def link(self, nodeA, nodeB, face):
         """ build a solid link between 2 nodes (or elastic) """

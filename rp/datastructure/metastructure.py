@@ -32,7 +32,9 @@ class Block(Node):
 
     def type(self):
         return "block"
-
+    
+    def gen_type(self):
+        return "piece"
 
 class Joint(Node):
     """ a joint is a link with 1 degree of freedom
@@ -44,6 +46,9 @@ class Joint(Node):
 
     def type(self):
         return "joint"
+ 
+    def gen_type(self):
+        return "link"
 
 
 class Vertebra(Node):
@@ -58,6 +63,9 @@ class Vertebra(Node):
 
     def type(self):
         return "vertebra"
+ 
+    def gen_type(self):
+        return "link"
 
 
 class Head(Node):
@@ -72,6 +80,9 @@ class Head(Node):
 
     def type(self):
         return "head"
+ 
+    def gen_type(self):
+        return "piece"
 
 
 class MetaStructure:
