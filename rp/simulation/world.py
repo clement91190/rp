@@ -6,6 +6,7 @@ from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
 
 from rp.datastructure.metastructure import MetaStructure
+from rp.utils.primitives.cube import CubeMaker
 
 """file of definition of the physical engine and
 3D display of the world """
@@ -107,10 +108,20 @@ class Creature():
         np = render.attachNewNode(node)
         np.setPos(0, 0, 2)
         self.world.attachRigidBody(node)
-        model = loader.loadModel('models/box.egg')
-        model.setPos(-0.5, -0.5, -0.5)
+        model = CubeMaker(0.5).generate()
+        #loader.loadModel('models/cube.egg')
+        model.setPos(0,0,0)
         model.flattenLight()
+        model.setColor(1.0, 1.0, 1.0)
         model.copyTo(np)
+        model = CubeMaker(1.5).generate()
+        #loader.loadModel('models/cube.egg')
+        model.setPos(3,0,0)
+        model.flattenLight()
+        model.setColor(0, 1.0, 1.0)
+        model.copyTo(np)
+
+
 
     def build_bloc(self):
         pass
