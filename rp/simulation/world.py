@@ -125,7 +125,30 @@ class Creature():
             world
         """
 
-        self.build_head()
+        #create a dictionary to chech the nodes already built
+        self.building_status = dict(zip(self.metastructure.all_nodes,
+            [False for i in self.metastructure.all_nodes]))
+        
+        self.recursive_build(metastructure.head)
+    
+    def recursive_build(self, node):
+        """ recursive function to build the 
+        structure """
+        self.build_node(node)
+        for face, edge in node.edges():
+            if not self.bulding_status[edge]:
+                #then we have to construct this node too
+                self.recursive_build(edge)
+            self.link(node, edge, face)
+
+    def build_node(self, node):
+        """ depending on the type of node call different
+        functions """
+        pass
+#TODO  implement this function
+
+    def link(self, nodeA, nodeB, face):
+        """ build a solid link between 2 nodes (or elastic) """
 #TODO  implement this function
 
     def get_variables(self):
