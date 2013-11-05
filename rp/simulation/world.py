@@ -96,37 +96,36 @@ class Creature():
         use the metastructure"""
         self.metastucture = metastructure
         self.world = app.world
+        self.build()
         
-    def build_head():
-        for i in range(100):
-            node = BulletRigidBovdyNode('bloc')
-            node.setMass(1.0)
-            shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-            node.addShape(shape)
-            np = render.attachNewNode(node)
-            np.setPos(0, 0, 2 + 1.1 *i)
-            self.world.attachRigidBody(node)
-            model = loader.loadModel('models/box.egg')
-            model.setPos(-0.5, -0.5, -0.5)
-            model.flattenLight()
-            model.copyTo(np)
+    def build_head(self):
+        node = BulletRigidBodyNode('bloc')
+        node.setMass(1.0)
+        shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        node.addShape(shape)
+        np = render.attachNewNode(node)
+        np.setPos(0, 0, 2)
+        self.world.attachRigidBody(node)
+        model = loader.loadModel('models/box.egg')
+        model.setPos(-0.5, -0.5, -0.5)
+        model.flattenLight()
+        model.copyTo(np)
 
-    def build_bloc():
+    def build_bloc(self):
         pass
 
-    def build_joint():
+    def build_joint(self):
         pass
 
-    def build_vertebra():
+    def build_vertebra(self):
         pass
 
-    def build(self, creature):
-        """ creature is a metastructure ( graph describing the struct)
-            this function build the structure and add it in panda
+    def build(self):
+        """ this function build the structure and add it in panda
             world
         """
 
-        build_head()
+        self.build_head()
 #TODO  implement this function
 
     def get_variables(self):
