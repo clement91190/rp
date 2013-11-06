@@ -85,21 +85,12 @@ class MyApp(ShowBase):
         """function that add the creature described in a file (name)
         and add it in panda world"""
         m = MetaStructure()
-        m.next_edge()
-        m.add_block()
-        m.next_edge()
-        m.add_block()
-        m.next_edge()
-        m.add_block()
-        m.next_edge()
-        m.add_block()
-        m.follow_edge()
-        m.add_block()
-        m.follow_edge()
-        m.add_block()
-        m.follow_edge()
         m.add_vertebra()
-         
+        m.follow_edge()
+        m.add_block()
+        m.follow_edge()
+        m.add_block()
+
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
@@ -185,9 +176,9 @@ class Creature():
         model.setColor(1.0, 1.0, 0)
         model.copyTo(render_node)
 
-        def build_link():
+    def build_link(self, node):
 #TODO  implement this function
-            pass
+        pass
 
     def build(self):
         """ this function build the structure and add it in panda
@@ -198,11 +189,11 @@ class Creature():
         self.shape_building_status = dict(zip(
             filter(lambda i: i.gen_type() == 'shape', self.metastructure.all_nodes),
             [False for i in self.metastructure.all_nodes if i.gen_type() == 'shape']))
-        print "building status {}".format(self.shape_building_status)
+        #print "building status {}".format(self.shape_building_status)
         self.link_building_status = dict(zip(
             filter(lambda i: i.gen_type() == 'link', self.metastructure.all_nodes),
             [[(None, None), (None, None)] for i in self.metastructure.all_nodes if i.gen_type() == 'link']))
-        print "building link status {}".format(self.link_building_status)
+        #print "building link status {}".format(self.link_building_status)
         # we build this to check for joints if the 2 parts of the 
         #joints have been built and the link also
         self.recursive_build(self.metastructure.head)
@@ -219,7 +210,7 @@ class Creature():
         self.world.attachRigidBody(sh1[0])  # this must be at done at the end...
         l = self.next_link(sh1)
         while l is not None:
-            print "recursive build l"
+            #print "recursive build {}".format(l)
             self.recursive_build(l)
             l = self.next_link(sh1)
 
@@ -233,7 +224,7 @@ class Creature():
      
     def change_transform(self, transform, face, type='shape'):
         """ change to transform to go on a face """
-        print " change face to {}".format(face)
+        #print " change face to {}".format(face)
         #print transform
         mat = transform.getMat()
         mat = LMatrix4f.rotateMat(*self.quat_dict[face]) * mat
@@ -243,7 +234,7 @@ class Creature():
         return transform
 
     def change_back_transform(self, transform, face, type='bloc'):
-        print "back transform"
+        #print "back transform"
         #print transform
         mat = transform.getMat()
         mult = LMatrix4f.rotateMat(*self.quat_dict[face])
@@ -257,12 +248,13 @@ class Creature():
 
     def complete_shape(self, sh1, node, transform):
         """ create the shape then call recursive function"""
-        print "complete shape {}".format(node)
+        #print "complete shape {}".format(node)
         ## construct the node
         self.add_node_to_shape(node, sh1, transform)
         if node.gen_type == 'piece':
             self.shape_building_status[node] = True
-        elif node.gen_type == 'link':
+        elif node.gen_type() == 'link':
+            print "## link done ##"
             self.link_building_status[node][1] = (sh1, transform)
             self.build_link(node)
         ## recursive loop over the edges
@@ -277,11 +269,13 @@ class Creature():
                 elif edge.gen_type() == 'link':
                     if self.link_building_status[edge][0][0] is None:
                         # first time we see this link
-                        self.add_node_to_shape(node, sh1, transform)
+                        print "hi new link"
+                        self.add_node_to_shape(edge, sh1, transform)
                         self.link_building_status[edge][0] = (sh1, transform)
                     else:
                         # link is complete:
-                        self.add_node_to_shape(node, sh1)
+                        print " hi end link"
+                        self.add_node_to_shape(edge, sh1)
                         self.link_building_status[edge][1] = (sh1, transform)
                         self.build_link(edge)
                 transform = self.change_back_transform(transform, face + 1 , type)
@@ -289,19 +283,22 @@ class Creature():
     def next_link(self, shape):
         """ get all the half-built links going away from
         a shape. a link is a vertebra or a joint """
-        for edge, l in self.link_building_status:
-            if l[0][0] == shape and l[1, 0] is None:
+        print self.link_building_status
+        for edge, l in self.link_building_status.items():
+            if l[0][0] == shape and l[1][0] is None:
+                print "changing shape"
                 return edge
         return None
     
     def add_node_to_shape(self, node, shape, transform):
         """ depending on the type of node call different
         functions """
+
         return {
             'head': self.build_head,
             'block': self.build_bloc,
             'vertebra': self.build_vertebra,
-            'joint': self.build_joint(shape, transform)}[node.type()](shape, transform)
+            'joint': self.build_joint}[node.type()](shape, transform)
 
     def get_variables(self):
         """ variables is probably going to be a list of list
