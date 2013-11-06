@@ -87,10 +87,13 @@ class MyApp(ShowBase):
         m = MetaStructure()
         m.add_vertebra()
         m.follow_edge()
+        m.add_vertebra()
+        m.follow_edge()
         m.add_block()
         m.follow_edge()
         m.add_block()
-
+        m.follow_edge()
+        m.add_joint()
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
@@ -201,9 +204,7 @@ class Creature():
     def recursive_build(self, node):
         """ recursive function to build the
         structure """
-        print " building node :{}".format(node)
-        print node.edges
-     #TODO complete here in case of a joint/vertebra
+        #print " building node :{}".format(node)
         #adding
         sh1, transform = self.create_shape(node)
         self.complete_shape(sh1, node, transform)
@@ -225,24 +226,20 @@ class Creature():
     def change_transform(self, transform, face, type='shape'):
         """ change to transform to go on a face """
         #print " change face to {}".format(face)
-        #print transform
         mat = transform.getMat()
         mat = LMatrix4f.rotateMat(*self.quat_dict[face]) * mat
         mat = LMatrix4f.translateMat(Vec3(1.0, 0, 0)) * mat
         transform = transform.makeMat(mat)
-        #print transform
         return transform
 
     def change_back_transform(self, transform, face, type='bloc'):
         #print "back transform"
-        #print transform
         mat = transform.getMat()
         mult = LMatrix4f.rotateMat(*self.quat_dict[face])
         mult.invertInPlace()
         mat =  LMatrix4f.translateMat(Vec3(-1.0, 0, 0)) * mat
         mat =  mult * mat
         transform = transform.makeMat(mat)
-        #print transform
         return transform
 
 
@@ -283,7 +280,7 @@ class Creature():
     def next_link(self, shape):
         """ get all the half-built links going away from
         a shape. a link is a vertebra or a joint """
-        print self.link_building_status
+        #print self.link_building_status
         for edge, l in self.link_building_status.items():
             if l[0][0] == shape and l[1][0] is None:
                 print "changing shape"
