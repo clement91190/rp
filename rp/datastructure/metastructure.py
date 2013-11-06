@@ -34,7 +34,7 @@ class Block(Node):
         return "block"
     
     def gen_type(self):
-        return "piece"
+        return "shape"
 
 class Joint(Node):
     """ a joint is a link with 1 degree of freedom

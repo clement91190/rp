@@ -1,5 +1,5 @@
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import Vec3, TransformState
+from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
 from panda3d.bullet import BulletWorld
 from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
@@ -85,6 +85,19 @@ class MyApp(ShowBase):
         """function that add the creature described in a file (name)
         and add it in panda world"""
         m = MetaStructure()
+        m.next_edge()
+        m.add_block()
+        m.next_edge()
+        m.add_block()
+        m.next_edge()
+        m.add_block()
+        m.next_edge()
+        m.add_block()
+        m.follow_edge()
+        m.add_block()
+        m.follow_edge()
+        m.add_block()
+         
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
@@ -96,36 +109,48 @@ class Creature():
         use the metastructure"""
         self.metastructure = metastructure
         self.world = app.world
+        self.quat_dict = {
+            1: (0, Vec3(1,0,0)),
+            2: (90, Vec3(0, 1, 0)),
+            3: (-90, Vec3(0, 1, 0)),
+            4: (90, Vec3(0, 0, 1)),
+            5: (-90, Vec3(0, 0, 1))}
+       
         self.build()
 
-    def build_head(self, shape):
-        """ build the head of the creature """
 
+
+    def build_head(self, shape, transform):
+        """ build the head of the creature """
+        print "add head"
         bullet_node, render_node = shape
         bullet_node.setMass(bullet_node.getMass() + 1.0)
         shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-        shape2 = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         bullet_node.addShape(shape)
-        bullet_node.addShape(shape2, TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
+        #TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
         render_node.setPos(0, 0, 4)
 
         model = CubeMaker(0.5).generate()
         #loader.loadModel('models/cube.egg')
         model.setPos(0, 0, 0)
         model.flattenLight()
-        model.setColor(1.0, 1.0, 1.0)
-        model.copyTo(render_node)
-        model = CubeMaker(0.5).generate()
-        #loader.loadModel('models/cube.egg')
-        model.setPos(1.0, 0.0, 0.0)
-        model.flattenLight()
         model.setColor(0, 1.0, 1.0)
         model.copyTo(render_node)
-
-        self.world.attachRigidBody(bullet_node)  # this must be at done at the end...
-
+       
     def build_bloc(self, shape, transform):
-        pass
+        print " add bloc at {}".format(transform)
+        bullet_node, render_node = shape
+        bullet_node.setMass(bullet_node.getMass() + 1.0)
+        bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        bullet_node.addShape(bullet_shape, transform)
+
+        model = CubeMaker(0.5).generate()
+        #loader.loadModel('models/cube.egg')
+        model.setTransform(transform)
+        model.flattenLight()
+        model.setColor(1.0, 1.0, 1.0)
+        model.copyTo(render_node)
+
 
 #TODO  implement this function with different cases 
     def build_joint(self, shape, transform):
@@ -143,12 +168,12 @@ class Creature():
 
         #create a dictionary to chech the nodes already added and linked
         self.shape_building_status = dict(zip(
-            filter(lambda i: i.gen_type == 'shape', self.metastructure.all_nodes),
-            [False for i in self.metastructure.all_nodes if i.gen_type == 'shape']))
-
+            filter(lambda i: i.gen_type() == 'shape', self.metastructure.all_nodes),
+            [False for i in self.metastructure.all_nodes if i.gen_type() == 'shape']))
+        print "building status {}".format(self.shape_building_status)
         self.link_building_status = dict(zip(
-            filter(lambda i: i.gen_type == 'link', self.metastructure.all_nodes),
-            [[(None, None), (None, None)] for i in self.metastructure.all_nodes if i.gen_type == 'link']))
+            filter(lambda i: i.gen_type() == 'link', self.metastructure.all_nodes),
+            [[(None, None), (None, None)] for i in self.metastructure.all_nodes if i.gen_type() == 'link']))
         # we build this to check for joints if the 2 parts of the 
         #joints have been built and the link also
         self.recursive_build(self.metastructure.head)
@@ -162,6 +187,7 @@ class Creature():
         #adding
         sh1, transform = self.create_shape(node)
         self.complete_shape(sh1, node, transform)
+        self.world.attachRigidBody(sh1[0])  # this must be at done at the end...
         l = self.next_link(sh1)
         while l is not None:
             print "recursive build l"
@@ -175,11 +201,35 @@ class Creature():
         transform = TransformState.makePos(Vec3(0.0, 0.0, 0.0))
         shape = (bullet_node, render_node)
         return (shape, transform)
-   
+     
+    def change_transform(self, transform, face, type='shape'):
+        """ change to transform to go on a face """
+        print " change face to {}".format(face)
+        print transform
+        mat = transform.getMat()
+        mat = LMatrix4f.rotateMat(*self.quat_dict[face]) * mat
+        mat = LMatrix4f.translateMat(Vec3(1.0, 0, 0)) * mat
+        transform = transform.makeMat(mat)
+        print transform
+        return transform
+
+    def change_back_transform(self, transform, face, type='bloc'):
+        print "back transform"
+        print transform
+        mat = transform.getMat()
+        mult = LMatrix4f.rotateMat(*self.quat_dict[face])
+        mult.invertInPlace()
+        mat =  LMatrix4f.translateMat(Vec3(-1.0, 0, 0)) * mat
+        mat =  mult * mat
+        transform = transform.makeMat(mat)
+        print transform
+        return transform
+
+
     def complete_shape(self, sh1, node, transform):
         """ create the shape then call recursive function"""
         #TODO add transform
-
+        print "complete shape {}".format(node)
         ## construct the node
         self.add_node_to_shape(node, sh1, transform)
         if node.gen_type == 'piece':
@@ -190,12 +240,12 @@ class Creature():
         ## recursive loop over the edges
         for face, edge in enumerate(node.edges[1:]):
             if edge.type() != 'empty':
-                #TODO transform.change() face
+                transform = self.change_transform(transform, face + 1  , type)
                 if edge.gen_type() == 'shape':
-                    if not self.building_status[edge]:
+                    if not self.shape_building_status[edge]:
                     #then we have to add this node (because it
                     #is not entirely finished
-                        self.complete_shape(sh1, edge)
+                        self.complete_shape(sh1, edge, transform)
                 elif edge.gen_type() == 'link':
                     if self.link_building_status[edge][0][0] is None:
                         # first time we see this link
@@ -206,7 +256,7 @@ class Creature():
                         self.add_node_to_shape(node, sh1)
                         self.link_building_status[edge][1] = (sh1, transform)
                         self.build_link(edge)
-                #TODO transform back() face
+                transform = self.change_back_transform(transform, face + 1 , type)
                         
     def next_link(self, shape):
         """ get all the half-built links going away from
@@ -220,10 +270,10 @@ class Creature():
         """ depending on the type of node call different
         functions """
         return {
-            'head': self.build_head(shape),
-            'block': self.build_bloc(shape, transform),
-            'vertebra': self.build_vertebra(shape, transform),
-            'joint': self.build_joint(shape, transform)}[node.type()]
+            'head': self.build_head,
+            'block': self.build_bloc,
+            'vertebra': self.build_vertebra,
+            'joint': self.build_joint(shape, transform)}[node.type()](shape, transform)
 
     def get_variables(self):
         """ variables is probably going to be a list of list

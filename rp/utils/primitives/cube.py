@@ -4,7 +4,7 @@ from pandac.PandaModules import GeomVertexFormat, GeomVertexData, GeomVertexWrit
 
 
 class CubeMaker:
-    def __init__(self, size = 1.0):
+    def __init__(self, size = 0.5):
         # self.smooth = True/False
         # self.uv = True/False or Spherical/Box/...
         # self.color = Method1/Method2/...
