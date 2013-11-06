@@ -97,6 +97,8 @@ class Creature():
         self.metastructure = metastructure
         self.world = app.world
         self.build()
+        self.pieces = []
+
         
     def build_head(self, node=BulletRigidBodyNode('bloc'), np=None):
         """ build the head of the creature """
@@ -106,8 +108,8 @@ class Creature():
         shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         shape2 = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         node.addShape(shape)
-        node.addShape(shape2, TransformState.makePos(Vec3(1.0, 1.0, 1.0)))
-        np.setPos(0, 0, 2)
+        node.addShape(shape2, TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
+        np.setPos(0, 0, 4)
         
         self.world.attachRigidBody(node)  # this must be at done at the end...
         model = CubeMaker(0.5).generate()
@@ -116,9 +118,9 @@ class Creature():
         model.flattenLight()
         model.setColor(1.0, 1.0, 1.0)
         model.copyTo(np)
-        model = CubeMaker(1.5).generate()
+        model = CubeMaker(0.5).generate()
         #loader.loadModel('models/cube.egg')
-        model.setPos(3,0,0)
+        model.setPos(1.0,0.0,0.0)
         model.flattenLight()
         model.setColor(0, 1.0, 1.0)
         model.copyTo(np)
@@ -130,11 +132,11 @@ class Creature():
         pass
 
 #TODO  implement this function with different cases 
-    def build_joint(self):
+    def build_joint(self, build_stat):
         pass
 
 #TODO  implement this function with different cases
-    def build_vertebra(self):
+    def build_vertebra(self, build_stat):
         pass
 #TODO  implement this function
 
@@ -178,7 +180,6 @@ class Creature():
             'vertebra': self.build_vertebra(build_stat),
             'joint': self.build_joint(build_stat)}[node.type()]
 
-    def build
 
     def link(self, nodeA, nodeB, face):
         """ build a solid link between 2 nodes (or elastic) """
