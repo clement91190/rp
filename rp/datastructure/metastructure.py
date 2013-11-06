@@ -82,7 +82,7 @@ class Head(Node):
         return "head"
  
     def gen_type(self):
-        return "piece"
+        return "shape"
 
 
 class MetaStructure:

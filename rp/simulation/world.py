@@ -97,46 +97,42 @@ class Creature():
         self.metastructure = metastructure
         self.world = app.world
         self.build()
-        self.pieces = []
 
-        
-    def build_head(self, node=BulletRigidBodyNode('bloc'), np=None):
+    def build_head(self, shape):
         """ build the head of the creature """
-        node.setMass( node.getMass() + 1.0)
-        if np is None:
-            np = render.attachNewNode(node)
+
+        bullet_node, render_node = shape
+        bullet_node.setMass(bullet_node.getMass() + 1.0)
         shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         shape2 = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-        node.addShape(shape)
-        node.addShape(shape2, TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
-        np.setPos(0, 0, 4)
-        
-        self.world.attachRigidBody(node)  # this must be at done at the end...
+        bullet_node.addShape(shape)
+        bullet_node.addShape(shape2, TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
+        render_node.setPos(0, 0, 4)
+
         model = CubeMaker(0.5).generate()
         #loader.loadModel('models/cube.egg')
-        model.setPos(0,0,0)
+        model.setPos(0, 0, 0)
         model.flattenLight()
         model.setColor(1.0, 1.0, 1.0)
-        model.copyTo(np)
+        model.copyTo(render_node)
         model = CubeMaker(0.5).generate()
         #loader.loadModel('models/cube.egg')
-        model.setPos(1.0,0.0,0.0)
+        model.setPos(1.0, 0.0, 0.0)
         model.flattenLight()
         model.setColor(0, 1.0, 1.0)
-        model.copyTo(np)
-        return (node, np)
+        model.copyTo(render_node)
 
+        self.world.attachRigidBody(bullet_node)  # this must be at done at the end...
 
-
-    def build_bloc(self):
+    def build_bloc(self, shape, transform):
         pass
 
 #TODO  implement this function with different cases 
-    def build_joint(self, build_stat):
+    def build_joint(self, shape, transform):
         pass
 
 #TODO  implement this function with different cases
-    def build_vertebra(self, build_stat):
+    def build_vertebra(self, shape, transform):
         pass
 #TODO  implement this function
 
@@ -146,9 +142,13 @@ class Creature():
         """
 
         #create a dictionary to chech the nodes already added and linked
-        self.building_status = dict(zip(
-            self.metastructure.all_nodes,
-            [[False, False, False] for i in self.metastructure.all_nodes]))
+        self.shape_building_status = dict(zip(
+            filter(lambda i: i.gen_type == 'shape', self.metastructure.all_nodes),
+            [False for i in self.metastructure.all_nodes if i.gen_type == 'shape']))
+
+        self.link_building_status = dict(zip(
+            filter(lambda i: i.gen_type == 'link', self.metastructure.all_nodes),
+            [[(None, None), (None, None)] for i in self.metastructure.all_nodes if i.gen_type == 'link']))
         # we build this to check for joints if the 2 parts of the 
         #joints have been built and the link also
         self.recursive_build(self.metastructure.head)
@@ -156,34 +156,74 @@ class Creature():
     def recursive_build(self, node):
         """ recursive function to build the
         structure """
-        self.build_node(node, self.building_status[node])
         print " building node :{}".format(node)
         print node.edges
      #TODO complete here in case of a joint/vertebra
         #adding
+        sh1, transform = self.create_shape(node)
+        self.complete_shape(sh1, node, transform)
+        l = self.next_link(sh1)
+        while l is not None:
+            print "recursive build l"
+            self.recursive_build(l)
+            l = self.next_link(sh1)
+
+    def create_shape(self, node):
+        """ create the shape and return it"""
+        bullet_node = BulletRigidBodyNode('bloc')
+        render_node = render.attachNewNode(bullet_node)
+        transform = TransformState.makePos(Vec3(0.0, 0.0, 0.0))
+        shape = (bullet_node, render_node)
+        return (shape, transform)
+   
+    def complete_shape(self, sh1, node, transform):
+        """ create the shape then call recursive function"""
+        #TODO add transform
+
+        ## construct the node
+        self.add_node_to_shape(node, sh1, transform)
+        if node.gen_type == 'piece':
+            self.shape_building_status[node] = True
+        elif node.gen_type == 'link':
+            self.link_building_status[node][1] = (sh1, transform)
+            self.build_link(node)
+        ## recursive loop over the edges
         for face, edge in enumerate(node.edges[1:]):
             if edge.type() != 'empty':
-                if edge.gen_type() == 'piece':
-                    if not all(self.building_status[edge][0]):
+                #TODO transform.change() face
+                if edge.gen_type() == 'shape':
+                    if not self.building_status[edge]:
                     #then we have to add this node (because it
                     #is not entirely finished
-                        self.recursive_build_piece(edge)
-
-    def build_node(self, node, build_stat):
+                        self.complete_shape(sh1, edge)
+                elif edge.gen_type() == 'link':
+                    if self.link_building_status[edge][0][0] is None:
+                        # first time we see this link
+                        self.add_node_to_shape(node, sh1, transform)
+                        self.link_building_status[edge][0] = (sh1, transform)
+                    else:
+                        # link is complete:
+                        self.add_node_to_shape(node, sh1)
+                        self.link_building_status[edge][1] = (sh1, transform)
+                        self.build_link(edge)
+                #TODO transform back() face
+                        
+    def next_link(self, shape):
+        """ get all the half-built links going away from
+        a shape. a link is a vertebra or a joint """
+        for edge, l in self.link_building_status:
+            if l[0][0] == shape and l[1, 0] is None:
+                return edge
+        return None
+    
+    def add_node_to_shape(self, node, shape, transform):
         """ depending on the type of node call different
         functions """
-        if node.gen_type == 'piece':
-            self.building_status[node] = [True, True, True]
         return {
-            'head': self.build_head(),
-            'block': self.build_bloc(),
-            'vertebra': self.build_vertebra(build_stat),
-            'joint': self.build_joint(build_stat)}[node.type()]
-
-
-    def link(self, nodeA, nodeB, face):
-        """ build a solid link between 2 nodes (or elastic) """
-#TODO  implement this function
+            'head': self.build_head(shape),
+            'block': self.build_bloc(shape, transform),
+            'vertebra': self.build_vertebra(shape, transform),
+            'joint': self.build_joint(shape, transform)}[node.type()]
 
     def get_variables(self):
         """ variables is probably going to be a list of list
