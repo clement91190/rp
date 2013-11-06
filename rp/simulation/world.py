@@ -97,6 +97,8 @@ class MyApp(ShowBase):
         m.add_block()
         m.follow_edge()
         m.add_block()
+        m.follow_edge()
+        m.add_vertebra()
          
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
@@ -134,7 +136,7 @@ class Creature():
         #loader.loadModel('models/cube.egg')
         model.setPos(0, 0, 0)
         model.flattenLight()
-        model.setColor(0, 1.0, 1.0)
+        model.setColor(1.0, 1.0, 1.0)
         model.copyTo(render_node)
        
     def build_bloc(self, shape, transform):
@@ -144,22 +146,48 @@ class Creature():
         bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         bullet_node.addShape(bullet_shape, transform)
 
-        model = CubeMaker(0.5).generate()
+        model = CubeMaker(0.4).generate()
         #loader.loadModel('models/cube.egg')
         model.setTransform(transform)
         model.flattenLight()
-        model.setColor(1.0, 1.0, 1.0)
+        model.setColor(0, 1.0, 1.0)
         model.copyTo(render_node)
 
 
 #TODO  implement this function with different cases 
     def build_joint(self, shape, transform):
-        pass
+        print " add joint at {}".format(transform)
+        bullet_node, render_node = shape
+        bullet_node.setMass(bullet_node.getMass() + 1.0)
+        bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        bullet_node.addShape(bullet_shape, transform)
+
+        model = CubeMaker(0.25).generate()
+        #loader.loadModel('models/cube.egg')
+        model.setTransform(transform)
+        model.flattenLight()
+        model.setColor(1.0, 0, 1.0)
+        model.copyTo(render_node)
+
 
 #TODO  implement this function with different cases
     def build_vertebra(self, shape, transform):
-        pass
+        print " add vertebra at {}".format(transform)
+        bullet_node, render_node = shape
+        bullet_node.setMass(bullet_node.getMass() + 1.0)
+        bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        bullet_node.addShape(bullet_shape, transform)
+
+        model = CubeMaker(0.25).generate()
+        #loader.loadModel('models/cube.egg')
+        model.setTransform(transform)
+        model.flattenLight()
+        model.setColor(1.0, 1.0, 0)
+        model.copyTo(render_node)
+
+        def build_link():
 #TODO  implement this function
+            pass
 
     def build(self):
         """ this function build the structure and add it in panda
@@ -174,6 +202,7 @@ class Creature():
         self.link_building_status = dict(zip(
             filter(lambda i: i.gen_type() == 'link', self.metastructure.all_nodes),
             [[(None, None), (None, None)] for i in self.metastructure.all_nodes if i.gen_type() == 'link']))
+        print "building link status {}".format(self.link_building_status)
         # we build this to check for joints if the 2 parts of the 
         #joints have been built and the link also
         self.recursive_build(self.metastructure.head)
@@ -205,30 +234,29 @@ class Creature():
     def change_transform(self, transform, face, type='shape'):
         """ change to transform to go on a face """
         print " change face to {}".format(face)
-        print transform
+        #print transform
         mat = transform.getMat()
         mat = LMatrix4f.rotateMat(*self.quat_dict[face]) * mat
         mat = LMatrix4f.translateMat(Vec3(1.0, 0, 0)) * mat
         transform = transform.makeMat(mat)
-        print transform
+        #print transform
         return transform
 
     def change_back_transform(self, transform, face, type='bloc'):
         print "back transform"
-        print transform
+        #print transform
         mat = transform.getMat()
         mult = LMatrix4f.rotateMat(*self.quat_dict[face])
         mult.invertInPlace()
         mat =  LMatrix4f.translateMat(Vec3(-1.0, 0, 0)) * mat
         mat =  mult * mat
         transform = transform.makeMat(mat)
-        print transform
+        #print transform
         return transform
 
 
     def complete_shape(self, sh1, node, transform):
         """ create the shape then call recursive function"""
-        #TODO add transform
         print "complete shape {}".format(node)
         ## construct the node
         self.add_node_to_shape(node, sh1, transform)
