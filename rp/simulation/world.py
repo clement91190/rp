@@ -154,7 +154,7 @@ class Creature():
         print " add joint at {}".format(transform)
         bullet_node, render_node = shape
         bullet_node.setMass(bullet_node.getMass() + 1.0)
-        bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        bullet_shape = BulletBoxShape(Vec3(0.25, 0.25, 0.25))
         bullet_node.addShape(bullet_shape, transform)
 
         model = CubeMaker(0.25).generate()
@@ -170,7 +170,7 @@ class Creature():
         print " add vertebra at {}".format(transform)
         bullet_node, render_node = shape
         bullet_node.setMass(bullet_node.getMass() + 1.0)
-        bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
+        bullet_shape = BulletBoxShape(Vec3(0.25, 0.25, 0.25))
         bullet_node.addShape(bullet_shape, transform)
 
         model = CubeMaker(0.25).generate()
@@ -197,9 +197,8 @@ class Creature():
        
         cs = BulletHingeConstraint(bda[0], bdb[0], ta.getPos(), tb.getPos(),ta.getQuat().getAxis(), tb.getQuat().getAxis() ) 
      
-        cs.enableMotor()
-        cs.setLowerLimit(90)
-        cs.setUpperLimit(110)
+        cs.enableMotor(True)
+        cs.setLimit(-90, 90)
      
         self.world.attachConstraint(cs)
 
