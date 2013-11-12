@@ -112,7 +112,7 @@ class Creature():
             3: (-90, Vec3(0, 1, 0)),
             4: (90, Vec3(0, 0, 1)),
             5: (-90, Vec3(0, 0, 1))}
-       
+        self.dof_motors = {}  
         self.build()
 
 
@@ -199,10 +199,10 @@ class Creature():
      
         cs.enableMotor(True)
         cs.setLimit(-90, 90)
-     
+        cs.setMaxMotorImpulse(5.0)  #TODO look for the unit of this thing 
         self.world.attachConstraint(cs)
 
-     
+        self.dof_motors[node] = cs 
         print "add constraint"
 
 
