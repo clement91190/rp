@@ -4,6 +4,7 @@ from panda3d.bullet import BulletWorld
 from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
+from panda3d.bullet import BulletHingeConstraint
 
 from rp.datastructure.metastructure import MetaStructure
 from rp.utils.primitives.cube import CubeMaker
@@ -85,15 +86,15 @@ class MyApp(ShowBase):
         """function that add the creature described in a file (name)
         and add it in panda world"""
         m = MetaStructure()
-        m.add_vertebra()
-        m.follow_edge()
-        m.add_vertebra()
-        m.follow_edge()
-        m.add_block()
-        m.follow_edge()
+        #m.add_vertebra()
+        #m.follow_edge()
+        #m.add_vertebra()
+        #m.follow_edge()
         m.add_block()
         m.follow_edge()
         m.add_joint()
+        m.follow_edge()
+        m.add_block()
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
@@ -140,7 +141,7 @@ class Creature():
         bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         bullet_node.addShape(bullet_shape, transform)
 
-        model = CubeMaker(0.4).generate()
+        model = CubeMaker(0.5).generate()
         #loader.loadModel('models/cube.egg')
         model.setTransform(transform)
         model.flattenLight()
@@ -180,8 +181,31 @@ class Creature():
         model.copyTo(render_node)
 
     def build_link(self, node):
-#TODO  implement this function
-        pass
+
+        (bda, ta), (bdb, tb) = self.link_building_status[node] 
+        # probably add some changes in the transform here
+        
+        mat = tb.getMat()
+        mat = LMatrix4f.translateMat(Vec3(-0.5, 0, 0)) * mat
+        mat = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
+        tb = TransformState.makeMat(mat)
+       
+        mat = ta.getMat()
+        mat = LMatrix4f.translateMat(Vec3(0.5, 0, 0)) * mat
+        mat = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
+        ta = TransformState.makeMat(mat)
+       
+        cs = BulletHingeConstraint(bda[0], bdb[0], ta.getPos(), tb.getPos(),ta.getQuat().getAxis(), tb.getQuat().getAxis() ) 
+     
+        cs.enableMotor()
+        cs.setLowerLimit(90)
+        cs.setUpperLimit(110)
+     
+        self.world.attachConstraint(cs)
+
+     
+        print "add constraint"
+
 
     def build(self):
         """ this function build the structure and add it in panda
@@ -252,7 +276,7 @@ class Creature():
             self.shape_building_status[node] = True
         elif node.gen_type() == 'link':
             print "## link done ##"
-            self.link_building_status[node][1] = (sh1, transform)
+            self.link_building_status[node][1] = (sh1, TransformState.makeMat(transform.getMat()))
             self.build_link(node)
         ## recursive loop over the edges
         for face, edge in enumerate(node.edges[1:]):
@@ -268,12 +292,12 @@ class Creature():
                         # first time we see this link
                         print "hi new link"
                         self.add_node_to_shape(edge, sh1, transform)
-                        self.link_building_status[edge][0] = (sh1, transform)
+                        self.link_building_status[edge][0] = (sh1, TransformState.makeMat(transform.getMat()))
                     else:
                         # link is complete:
                         print " hi end link"
                         self.add_node_to_shape(edge, sh1)
-                        self.link_building_status[edge][1] = (sh1, transform)
+                        self.link_building_status[edge][1] = (sh1, TransformState.makeMat(transform.getMat()))
                         self.build_link(edge)
                 transform = self.change_back_transform(transform, face + 1 , type)
                         
