@@ -98,6 +98,22 @@ class MyApp(ShowBase):
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
+    def add_snake(self, size):
+        """function that add the creature described in a file (name)
+        and add it in panda world"""
+        m = MetaStructure()
+        
+        for i in range(size):
+            m.add_block()
+            m.follow_edge()
+            m.add_joint()
+            m.follow_edge()
+
+        self.creatures.append(Creature(m, self))
+        #return Creature(m).get_variables()
+
+
+
 
 
 class Creature():
