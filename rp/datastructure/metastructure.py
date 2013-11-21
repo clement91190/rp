@@ -1,4 +1,7 @@
 # -*-coding:Utf-8 -*
+import math
+
+nb = 0
 
 
 class Node:
@@ -43,6 +46,11 @@ class Joint(Node):
         Node.__init__(self, father)
         self.edges.append(EmptyNode(self))
         self.angle = 0
+        global nb
+        nb = nb + 1
+        print "########### nb {}".format(nb)
+        self.phi = nb * math.pi * 0.5
+
 
     def type(self):
         return "joint"
@@ -60,6 +68,10 @@ class Vertebra(Node):
         self.edges.append(EmptyNode(self))
         self.angle1 = 0
         self.angle2 = 0
+        global nb
+        nb = nb + 1
+        print "########### nb {}".format(nb)
+        self.phi = nb * math.pi * 0.5
 
     def type(self):
         return "vertebra"
@@ -93,6 +105,7 @@ class MetaStructure:
         self.current = self.head  # indicate the current Node
         self.selector = 1  # indicate the edge selected 0 is always the father
         self.all_nodes = [self.head]
+        self.dof_nodes = []
 
     def follow_edge(self, ind=1):
         self.current = self.current.edges[self.selector]
@@ -118,11 +131,13 @@ class MetaStructure:
         node = Joint(self.current)
         self.current.edges[self.selector] = node
         self.all_nodes.append(node)
+        self.dof_nodes.append(node)
 
     def add_vertebra(self):
         node = Vertebra(self.current)
         self.current.edges[self.selector] = node
         self.all_nodes.append(node)
+        self.dof_nodes.append(node)
 
     def add_block(self):
         node = Block(self.current)

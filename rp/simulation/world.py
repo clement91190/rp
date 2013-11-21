@@ -8,6 +8,7 @@ from panda3d.bullet import BulletHingeConstraint
 
 from rp.datastructure.metastructure import MetaStructure
 from rp.utils.primitives.cube import CubeMaker
+from rp.control.BrainControl import BrainControl
 
 """file of definition of the physical engine and
 3D display of the world """
@@ -25,18 +26,22 @@ class MyWorld(BulletWorld):
         self.ground_node = BulletRigidBodyNode('Ground')
         self.ground_node.addShape(shape)
         self.attachRigidBody(self.ground_node)
+        self.brain = BrainControl()
 
-    def physical_step(self):
+    def physical_step(self, creatures,  dt=0):
         """perform one step on the physical world
         and read the command..."""
-        dt = globalClock.getDt()
+        if dt == 0:
+            dt = globalClock.getDt()
+        for c in creatures:
+            angles =  self.brain.calc_angles(c.metastructure)
+            c.update_angles(angles, dt);
         self.doPhysics(dt)
-        #TODO add the command part 
 
-    def run_physics(self, t):
+    def run_physics(self, t, creatures):
         """ run physics for t steps """
         for i in range(t):
-            self.physical_step()
+            self.physical_step(creatures, 0.1)
 
 
 
@@ -66,7 +71,7 @@ class MyApp(ShowBase):
 
        # Update
     def update(self, task):
-        self.world.physical_step()
+        self.world.physical_step(self.creatures)
         return task.cont
 
 
@@ -74,7 +79,7 @@ class MyApp(ShowBase):
         if visual:
             self.display_simu(t)
         else:
-            self.world.run_physics(t)
+            self.world.run_physics(t, self.creatures)
 
 
     def display_simu(self, t):
@@ -92,9 +97,29 @@ class MyApp(ShowBase):
         #m.follow_edge()
         m.add_block()
         m.follow_edge()
+        m.next_edge()
+        m.next_edge()
+        m.add_joint()
+        m.previous_edge()
+        m.add_joint()
+        m.previous_edge()
+
         m.add_joint()
         m.follow_edge()
         m.add_block()
+        m.follow_edge()
+        m.add_joint()
+        m.follow_edge()
+
+        m.add_block()
+        m.follow_edge()
+        m.next_edge()
+        m.next_edge()
+        m.add_joint()
+        m.previous_edge()
+        m.add_joint()
+        m.previous_edge()
+
         self.creatures.append(Creature(m, self))
         #return Creature(m).get_variables()
 
@@ -199,7 +224,6 @@ class Creature():
     def build_link(self, node):
 
         (bda, ta), (bdb, tb) = self.link_building_status[node] 
-        # probably add some changes in the transform here
         
         mat = tb.getMat()
         mat = LMatrix4f.translateMat(Vec3(-0.5, 0, 0)) * mat
@@ -212,7 +236,8 @@ class Creature():
         ta = TransformState.makeMat(mat)
        
         cs = BulletHingeConstraint(bda[0], bdb[0], ta.getPos(), tb.getPos(),ta.getQuat().getAxis(), tb.getQuat().getAxis() ) 
-     
+    
+        #add the motor
         cs.enableMotor(True)
         cs.setLimit(-90, 90)
         cs.setMaxMotorImpulse(5.0)  #TODO look for the unit of this thing 
@@ -341,9 +366,9 @@ class Creature():
         [[coefficient] for all angles]"""
         return self.variables
 
-    def update_angles():
-        """calculate the new value of the angles based on the
-        variables"""
-
+    def update_angles(self, angles, dt):
+        """update the target angles """
+        for node, angle in angles.items():
+            self.dof_motors[node].setMotorTarget(angle, dt)
 
 
