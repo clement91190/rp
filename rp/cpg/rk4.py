@@ -3,7 +3,9 @@ def rk4(t0, y0, t, f, h=0.01):
     y' = f ( t, y)
     h -> step
     yo = y(to)
-    return estimation of y(t) (t > t0)"""
+    return estimation of y(t) (t > t0)
+
+    should work with vector ? """
 
     N = int((t - t0) / h)
     yp = y0

@@ -1,6 +1,6 @@
 # -*-coding:Utf-8 -*
 import math
-
+import numpy as np
 nb = 0
 
 
@@ -24,7 +24,6 @@ class EmptyNode(Node):
         return "empty"
 
 
-
 class Block(Node):
     """ a block is a cubical shaped node with 6 face (so 6
     potential edges)"""
@@ -35,9 +34,10 @@ class Block(Node):
 
     def type(self):
         return "block"
-    
+
     def gen_type(self):
         return "shape"
+
 
 class Joint(Node):
     """ a joint is a link with 1 degree of freedom
@@ -51,10 +51,9 @@ class Joint(Node):
         print "########### nb {}".format(nb)
         self.phi = nb * math.pi * 0.5
 
-
     def type(self):
         return "joint"
- 
+
     def gen_type(self):
         return "link"
 
@@ -75,7 +74,7 @@ class Vertebra(Node):
 
     def type(self):
         return "vertebra"
- 
+
     def gen_type(self):
         return "link"
 
@@ -92,7 +91,7 @@ class Head(Node):
 
     def type(self):
         return "head"
- 
+
     def gen_type(self):
         return "shape"
 
@@ -143,6 +142,14 @@ class MetaStructure:
         node = Block(self.current)
         self.current.edges[self.selector] = node
         self.all_nodes.append(node)
+
+    def size(self):
+        """ return the number of nodes """
+        return len(self.all_nodes)
+
+    def compute_and_get_connectivity_matrix(self):
+        #TODO implement the right version of this
+        return np.matrix(np.eye(self.size()))
 
 
 def load_structure(name):
