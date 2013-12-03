@@ -145,7 +145,7 @@ class MetaStructure:
 
     def size(self):
         """ return the number of nodes """
-        return len(self.all_nodes)
+        return len(self.dof_nodes)
 
     def compute_and_get_connectivity_matrix(self):
         #TODO implement the right version of this
