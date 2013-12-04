@@ -149,9 +149,16 @@ class MetaStructure:
 
     def compute_and_get_connectivity_matrix(self):
         #TODO implement the right version of this
-        return np.matrix(np.eye(self.size()))
-
-
+        m = np.matrix(np.eye(self.size()))
+        for i in range(self.size()):
+            for j in range(self.size()):
+                if i == j + 1 or j == i + 1:
+                    pass
+                    #m[i, j] = 0.1
+                    #m[j, i] = 0.1
+        print m
+        return m
+    
 def load_structure(name):
     """ function to load a structure from a file in the
     structure folder"""
