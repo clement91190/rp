@@ -12,7 +12,7 @@ import rp.datastructure.metastructure as metastructure
     w is the connectivity matrix (and w_i_i the frequency of cell i),
     small_phi the delay matrix and phi_i_i the phase of cell i"""
 
-apply = lambda m, t: np.matrix([[t(m, i, j) for j in range(m.shape[1])] for i in range(m.shape[0])])
+apply = lambda m, n,  t: np.matrix([[t(m, n, i, j) for j in range(n.shape[1])] for i in range(n.shape[0])])
 
 
 class CPG:
@@ -21,8 +21,10 @@ class CPG:
         print "Building CPG"
         self.n = metastructure.size()
         print " {} cells".format(self.n)
+        self.omega = np.zeros((1, self.n))
         self.w = metastructure.compute_and_get_connectivity_matrix()
-        self.phi = np.matrix(np.zeros((self.n, self.n)))
+        self.phi = np.matrix(np.zeros(self.n))
+        self.small_phi = np.matrix(np.zeros((self.n, self.n)))
         self.r = np.zeros((1, 2 * self.n))  # we store also the derivative
         self.R = np.zeros((1, self.n))
         self.theta = np.zeros((1, self.n))
@@ -60,25 +62,25 @@ class CPG:
 
     def set_desired_frequency(self, W=None):
         if W is None:
-            W = np.random.rand(self.n) * 10
-        for i, W_i in enumerate(W):
-            self.w[i, i] = W[i]
-
+            self.omega = np.random.rand(self.n) * 10
+        else:
+            self.omega = W
+        
     def set_desired_offset(self, X):
         self.X = X
 
     @staticmethod
-    def phi_diff(w, phi, rr):
+    def phi_diff(omega, w, phi, small_phi, rr):
         """return the temporal derivative of phi """
-        t = lambda m, i, j: m[j, j] - m[i, i] - m[i, j]
-        return np.diag(np.diag(w) + rr * np.multiply(apply(phi, t), w).T)
+        t = lambda phi, small_phi, i, j: phi[0, j] - phi[0, i] - small_phi[i, j]
+        return omega + rr * np.multiply(apply(phi, small_phi, t), w).T
 
     def run_dynamic(self, dt=0.01):
-        f = lambda t, phi: CPG.phi_diff(self.w, phi, self.get_r())
+        f = lambda t, phi: CPG.phi_diff(self.omega, self.w, self.phi, self.small_phi, self.get_r())
         self.phi = rk4.rk4(0, self.phi, dt, f)
 
-    def get_theta(self, t):
-        self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(t * np.diag(self.phi)))
+    def get_theta(self):
+        self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(self.phi))
         return self.theta
 
     def run_dynamic_amp_offset(self, dt=0.01):
@@ -114,8 +116,8 @@ def main():
         control.run_dynamic_amp_offset()
         #val[:, i] = control.R - control.get_r()
         # val[:, i] = control.get_x()
-        #val[:, i] = control.get_theta(t)
-        val[:, i] = np.diag(control.phi)
+        val[:, i] = control.get_theta()
+        #val[:, i] = (control.phi)
     print "Plot results"
 
     #plot
