@@ -118,6 +118,8 @@ def main():
         # val[:, i] = control.get_x()
         val[:, i] = control.get_theta()
         #val[:, i] = (control.phi)
+        if i == 500:
+            control.set_desired_amplitude()
     print "Plot results"
 
     #plot

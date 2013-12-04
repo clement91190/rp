@@ -10,6 +10,7 @@ class Node:
     """
     def __init__(self, father):
         self.edges = [father]
+        self.ind = 0
 
     def set_father(self, father):
         self.edges[0] = father
@@ -17,10 +18,23 @@ class Node:
     def set_edge(self, node, ind=1):
         self.edges[ind] = node
 
+    def get_linked_link(self):
+        l = []
+        for edge in self.edges[1:]:
+            if edge is not None:
+                if edge.gen_type() == "shape":
+                    l += edge.get_linked_link()
+                elif edge.gen_type() == "link":
+                    l.append(edge.ind)
+        return l
+
 
 class EmptyNode(Node):
     """ Empty node """
     def type(self):
+        return "empty"
+
+    def gen_type(self):
         return "empty"
 
 
@@ -131,12 +145,14 @@ class MetaStructure:
         self.current.edges[self.selector] = node
         self.all_nodes.append(node)
         self.dof_nodes.append(node)
+        node.ind = len(self.dof_nodes) - 1
 
     def add_vertebra(self):
         node = Vertebra(self.current)
         self.current.edges[self.selector] = node
         self.all_nodes.append(node)
         self.dof_nodes.append(node)
+        node.ind = len(self.dof_nodes) - 1
 
     def add_block(self):
         node = Block(self.current)
@@ -148,17 +164,16 @@ class MetaStructure:
         return len(self.dof_nodes)
 
     def compute_and_get_connectivity_matrix(self):
-        #TODO implement the right version of this
         m = np.matrix(np.eye(self.size()))
-        for i in range(self.size()):
-            for j in range(self.size()):
-                if i == j + 1 or j == i + 1:
-                    pass
-                    #m[i, j] = 0.1
-                    #m[j, i] = 0.1
+        for i, node1 in enumerate(self.dof_nodes):
+            print node1.get_linked_link()
+            for j in node1.get_linked_link():
+                m[i, j] = 1
+                m[j, i] = 1
         print m
         return m
-    
+
+
 def load_structure(name):
     """ function to load a structure from a file in the
     structure folder"""
