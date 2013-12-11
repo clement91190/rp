@@ -361,4 +361,4 @@ class Creature():
         angles = self.cpg.get_theta()
         for i, node in enumerate(self.metastructure.dof_nodes):
             self.dof_motors[node].setMotorTarget(angles[0,i], dt)
-
+            self.cpg.real_angles[i] = self.dof_motors[node].getHingeAngle()

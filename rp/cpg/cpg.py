@@ -30,6 +30,7 @@ class CPG:
         self.theta = np.zeros((1, self.n))
         self.x = np.zeros((1, 2 * self.n))
         self.X = np.zeros((1, self.n))
+        self.real_angles = np.zeros(self.n)
 
         self.ar = 20.0  # rad/s
         self.ax = 20.0  # rad/s
@@ -57,7 +58,9 @@ class CPG:
         self.t_space = np.linspace(0, self.simu_time, self.step)
         self.fig = pp.figure(1)
         self.line = []
+        self.linereal = []
         self.val = np.zeros((self.n, 1000))
+        self.real_val = np.zeros((self.n, 1000))
         for j in range(self.n):
             self.val[j, 0] = -80
             self.val[j, 1] = 80
@@ -66,19 +69,22 @@ class CPG:
             pp.subplot(self.n, 1, j + 1).set_autoscaley_on(True)
             pp.ion()
             linej, = pp.plot(self.t_space, self.val[j, :])
+            linejreal, = pp.plot(self.t_space, self.real_val[j, :])
             self.line.append(linej)
+            self.linereal.append(linejreal)
         self.plot_ind = 0
 
     def update_plot(self):
         self.val[:, self.plot_ind] = self.get_theta()
+        self.real_val[:, self.plot_ind] = self.real_angles
         #ploting
         if self.plot_ind < self.step - 1:
             self.plot_ind += 1
         if self.plot_ind % 10 == 0:
             for j in range(self.n):
                 #print "update ", i , j
-
                 self.line[j].set_ydata(self.val[j, :])
+                self.linereal[j].set_ydata(self.val[j, :])
                 pp.subplot(self.n, 1, j + 1)
             self.fig.canvas.draw()
 
