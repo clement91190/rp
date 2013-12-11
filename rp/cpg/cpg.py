@@ -16,7 +16,7 @@ apply = lambda m, n,  t: np.matrix([[t(m, n, i, j) for j in range(n.shape[1])] f
 
 
 class CPG:
-    def __init__(self, metastructure):
+    def __init__(self, metastructure, plot=True):
         """ build the vectors of the CPG """
         print "Building CPG"
         self.n = metastructure.size()
@@ -46,6 +46,42 @@ class CPG:
             self.m_offset[i + self.n, i] = - self.ax ** 2 / 4
             self.m_offset[i + self.n, i + self.n] = - self.ax
 
+        self.plot = plot
+
+        if self.plot:
+            self.plot_init()
+
+    def plot_init(self):
+        self.simu_time = 10
+        self.step = 1000
+        self.t_space = np.linspace(0, self.simu_time, self.step)
+        self.fig = pp.figure(1)
+        self.line = []
+        self.val = np.zeros((self.n, 1000))
+        for j in range(self.n):
+            self.val[j, 0] = -80
+            self.val[j, 1] = 80
+
+        for j in range(self.n):
+            pp.subplot(self.n, 1, j + 1).set_autoscaley_on(True)
+            pp.ion()
+            linej, = pp.plot(self.t_space, self.val[j, :])
+            self.line.append(linej)
+        self.plot_ind = 0
+
+    def update_plot(self):
+        self.val[:, self.plot_ind] = self.get_theta()
+        #ploting
+        if self.plot_ind < self.step - 1:
+            self.plot_ind += 1
+        if self.plot_ind % 10 == 0:
+            for j in range(self.n):
+                #print "update ", i , j
+
+                self.line[j].set_ydata(self.val[j, :])
+                pp.subplot(self.n, 1, j + 1)
+            self.fig.canvas.draw()
+
     def get_x(self):
         """ return the value without the derivative"""
         return self.x[0, :self.n]
@@ -65,7 +101,7 @@ class CPG:
             self.omega = np.random.rand(self.n) * 10
         else:
             self.omega = W
-        
+
     def set_desired_offset(self, X):
         self.X = X
 
@@ -90,6 +126,12 @@ class CPG:
         f_offset = lambda t, x: x * self.m_offset.T + np.concatenate((np.zeros((1, self.n)), self.X), axis=1) * self.ax ** 2 / 4
         self.x = rk4.rk4(0, self.x, dt, f_offset)
 
+    def run_all_dynamics(self, dt=0.01):
+        self.run_dynamic(dt)
+        self.run_dynamic_amp_offset(dt)
+        if self.plot:
+            self.update_plot()
+
 
 def main():
     print "Building Meta Structure"
@@ -105,31 +147,18 @@ def main():
     control.set_desired_frequency()
     control.set_desired_amplitude()
 
-    simu_time = 10
-    t_space = np.linspace(0, simu_time, 1000)
+    steps = 1000
 
+#plot
+    print "Plot results"
+   
     print "Start Simulation"
     #simulation
-    val = np.zeros((control.n, 1000))
-    for i, t in enumerate(t_space):
-        control.run_dynamic()
-        control.run_dynamic_amp_offset()
-        #val[:, i] = control.R - control.get_r()
-        # val[:, i] = control.get_x()
-        val[:, i] = control.get_theta()
-        #val[:, i] = (control.phi)
+    for i in range(steps):
+        control.run_all_dynamics()
         if i == 500:
             control.set_desired_amplitude()
-    print "Plot results"
+   #pp.figure(1)
 
-    #plot
-    pp.figure(1)
-    for i in range(control.n):
-        pp.subplot(control.n, 1, i + 1)
-        pp.plot(t_space, np.array(val[i, :]))
-
-    pp.show()
-
-
-if __name__== '__main__': 
-    main()   
+if __name__ == '__main__':
+    main()

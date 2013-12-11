@@ -9,6 +9,7 @@ from panda3d.bullet import BulletHingeConstraint
 from rp.datastructure.metastructure import MetaStructure
 from rp.utils.primitives.cube import CubeMaker
 from rp.control.BrainControl import BrainControl
+from rp.cpg import cpg
 
 """file of definition of the physical engine and
 3D display of the world """
@@ -34,8 +35,8 @@ class MyWorld(BulletWorld):
         if dt == 0:
             dt = globalClock.getDt()
         for c in creatures:
-            angles =  self.brain.calc_angles(c.metastructure)
-            c.update_angles(angles, dt);
+            c.update_angles(dt);
+        
         self.doPhysics(dt)
 
     def run_physics(self, t, creatures):
@@ -125,9 +126,6 @@ class MyApp(ShowBase):
         #return Creature(m).get_variables()
 
 
-
-
-
 class Creature():
     def __init__(self, metastructure, app):
         """constructor of the class
@@ -142,6 +140,10 @@ class Creature():
             5: (-90, Vec3(0, 0, 1))}
         self.dof_motors = {}  
         self.build()
+        self.cpg = cpg.CPG(self.metastructure)
+        self.cpg.set_desired_frequency()
+        self.cpg.set_desired_amplitude()
+
 
 
 
@@ -317,12 +319,12 @@ class Creature():
                 elif edge.gen_type() == 'link':
                     if self.link_building_status[edge][0][0] is None:
                         # first time we see this link
-                        print "hi new link"
+                        #print "hi new link"
                         self.add_node_to_shape(edge, sh1, transform)
                         self.link_building_status[edge][0] = (sh1, TransformState.makeMat(transform.getMat()))
                     else:
                         # link is complete:
-                        print " hi end link"
+                        #print " hi end link"
                         self.add_node_to_shape(edge, sh1)
                         self.link_building_status[edge][1] = (sh1, TransformState.makeMat(transform.getMat()))
                         self.build_link(edge)
@@ -353,9 +355,10 @@ class Creature():
         [[coefficient] for all angles]"""
         return self.variables
 
-    def update_angles(self, angles, dt):
+    def update_angles(self, dt):
         """update the target angles """
-        for node, angle in angles.items():
-            self.dof_motors[node].setMotorTarget(angle, dt)
-
+        self.cpg.run_all_dynamics( 0.01)
+        angles = self.cpg.get_theta()
+        for i, node in enumerate(self.metastructure.dof_nodes):
+            self.dof_motors[node].setMotorTarget(angles[0,i], dt)
 

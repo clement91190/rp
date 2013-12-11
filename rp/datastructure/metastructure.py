@@ -1,6 +1,7 @@
 # -*-coding:Utf-8 -*
 import math
 import numpy as np
+import pickle
 nb = 0
 
 
@@ -166,22 +167,26 @@ class MetaStructure:
     def compute_and_get_connectivity_matrix(self):
         m = np.matrix(np.eye(self.size()))
         for i, node1 in enumerate(self.dof_nodes):
-            print node1.get_linked_link()
+            #print node1.get_linked_link()
             for j in node1.get_linked_link():
                 m[i, j] = 1
                 m[j, i] = 1
-        print m
+        #print m
         return m
 
+    def get_angle_dict(self):
+        return {node: 0 for node in self.dof_nodes}
 
-def load_structure(name):
+    def save_structure(self, name='creature.txt'):
+        """ save the structure creating a file with name name"""
+        with open(name, 'r') as fich:
+            pickle.dump(fich, self)
+
+
+def load_structure(name="creature.txt"):
     """ function to load a structure from a file in the
     structure folder"""
-    pass
-#TODO
+    with open(name) as fich:
+        return pickle.load(fich)
 
 
-def save_structure(name):
-    """ save the structure creating a file with name name"""
-    pass
-#TODO
