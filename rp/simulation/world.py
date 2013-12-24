@@ -5,7 +5,7 @@ from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
 from panda3d.bullet import BulletHingeConstraint
-
+import random
 from rp.datastructure.metastructure import MetaStructure
 from rp.utils.primitives.cube import CubeMaker
 from rp.control.BrainControl import BrainControl
@@ -35,7 +35,7 @@ class MyWorld(BulletWorld):
         if dt == 0:
             dt = globalClock.getDt()
         for c in creatures:
-            c.update_angles(dt);
+            c.update_angles(dt)
         
         self.doPhysics(dt)
 
@@ -144,9 +144,6 @@ class Creature():
         self.cpg.set_desired_frequency()
         self.cpg.set_desired_amplitude()
 
-
-
-
     def build_head(self, shape, transform):
         """ build the head of the creature """
         print "add head"
@@ -229,7 +226,7 @@ class Creature():
         #add the motor
         cs.enableMotor(True)
         cs.setLimit(-90, 90)
-        cs.setMaxMotorImpulse(5.0)  #TODO look for the unit of this thing 
+        #cs.setMaxMotorImpulse(5000)  #TODO look for the unit of this thing 
         self.world.attachConstraint(cs)
 
         self.dof_motors[node] = cs 
@@ -357,8 +354,9 @@ class Creature():
 
     def update_angles(self, dt):
         """update the target angles """
-        self.cpg.run_all_dynamics( 0.01)
+        self.cpg.run_all_dynamics(0.01)
         angles = self.cpg.get_theta()
         for i, node in enumerate(self.metastructure.dof_nodes):
-            self.dof_motors[node].setMotorTarget(angles[0,i], dt)
+            self.dof_motors[node].setMotorTarget(angles[0, i], 1)
             self.cpg.real_angles[i] = self.dof_motors[node].getHingeAngle()
+            #self.cpg.real_angles[i] = angles[0, i] 

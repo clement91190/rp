@@ -84,7 +84,7 @@ class CPG:
             for j in range(self.n):
                 #print "update ", i , j
                 self.line[j].set_ydata(self.val[j, :])
-                self.linereal[j].set_ydata(self.val[j, :])
+                self.linereal[j].set_ydata(self.real_val[j, :])
                 pp.subplot(self.n, 1, j + 1)
             self.fig.canvas.draw()
 
@@ -104,7 +104,7 @@ class CPG:
 
     def set_desired_frequency(self, W=None):
         if W is None:
-            self.omega = np.random.rand(self.n) * 10
+            self.omega = np.random.rand(self.n) * 1
         else:
             self.omega = W
 
