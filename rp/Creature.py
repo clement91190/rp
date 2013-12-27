@@ -1,12 +1,5 @@
-from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
-#from panda3d.bullet import BulletWorld
-#from panda3d.bullet import BulletPlaneShape
-#from panda3d.bullet import BulletRigidBodyNode
-#from panda3d.bullet import BulletBoxShape
-#from panda3d.bullet import BulletHingeConstraint
-
-from panda3d.ode import OdeWorld
+from panda3d.ode import OdeWorld, OdeBoxGeom
 from panda3d.ode import OdeBody, OdeMass, OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
 
 
@@ -26,7 +19,7 @@ class Creature():
         self.metastructure = metastructure
         self.physics = physics
         self.quat_dict = {
-            1: (0, Vec3(1,0,0)),
+            1: (0, Vec3(1, 0, 0)),
             2: (90, Vec3(0, 1, 0)),
             3: (-90, Vec3(0, 1, 0)),
             4: (90, Vec3(0, 0, 1)),
@@ -130,6 +123,7 @@ class Creature():
     def build(self):
         """ this function build the structure and add it in panda
             world
+            - this should be called in the constructor of Creature
         """
 
         #create a dictionary to chech the nodes already added and linked
@@ -147,7 +141,8 @@ class Creature():
 
     def recursive_build(self, node):
         """ recursive function to build the
-        structure """
+        structure
+        -> this is where the magic appends"""
         #print " building node :{}".format(node)
         #adding
         sh1, transform = self.create_shape(node)
@@ -162,8 +157,8 @@ class Creature():
     def create_shape(self, node):
         """ create the shape and return it"""
 
-        ode_body = OdeBody(self.world.ode_world)
-        ode_mass = OdeMass()i
+        ode_body = OdeBody(self.physics.world)
+        ode_mass = OdeMass()
         ode_mass.setBox(50, 1, 1, 1)
         bullet_node = BulletRigidBodyNode('bloc')
         render_node = render.attachNewNode(bullet_node)
@@ -256,4 +251,4 @@ class Creature():
         angles = self.cpg.get_theta()
         for i, node in enumerate(self.metastructure.dof_nodes):
             self.dof_motors[node].setMotorTarget(angles[0,i], dt)
-            self.cpg.real_angles[i] = self.dof_motors[node].getHingeAngle()
+            s
