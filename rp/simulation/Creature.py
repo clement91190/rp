@@ -13,96 +13,61 @@ from rp.simulation.MultiBox import MultiBoxFactory
 
 
 class Creature():
-    def __init__(self, metastructure, physics):
+    def __init__(self, metastructure, physics, render):
         """constructor of the class
         use the metastructure"""
         self.metastructure = metastructure
         self.physics = physics
+        self.render = render
         self.quat_dict = {
             1: (0, Vec3(1, 0, 0)),
             2: (90, Vec3(0, 1, 0)),
             3: (-90, Vec3(0, 1, 0)),
             4: (90, Vec3(0, 0, 1)),
             5: (-90, Vec3(0, 0, 1))}
-        self.dof_motors = {}  
+        self.dof_motors = {}
+        self.factory = MultiBoxFactory(self.render, self.physics)
         self.build()
         self.cpg = cpg.CPG(self.metastructure)
         self.cpg.set_desired_frequency()
         self.cpg.set_desired_amplitude()
 
-    def build_head(self, shape, transform):
+    def build_head(self, id_mb, transform):
         """ build the head of the creature """
         print "add head"
-        bullet_node, render_node = shape
-        #bullet_node.setMass(bullet_node.getMass() + 1.0)
-        
-        shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-        bullet_node.addShape(shape)
-        #TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
-        render_node.setPos(0, 0, 4)
+        size = 0.5
+        color = (1, 1, 1)
+        self.factory.add_to_multi(size, transform, color, id_mb)
 
-        model = CubeMaker(0.5).generate()
-        #loader.loadModel('models/cube.egg')
-        model.setPos(0, 0, 0)
-        model.flattenLight()
-        model.setColor(1.0, 1.0, 1.0)
-        model.copyTo(render_node)
-       
-    def build_bloc(self, shape, transform):
+    def build_bloc(self, id_mb, transform):
         print " add bloc at {}".format(transform)
-        bullet_node, render_node = shape
-        bullet_node.setMass(bullet_node.getMass() + 1.0)
-        bullet_shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
-        bullet_node.addShape(bullet_shape, transform)
-
-        model = CubeMaker(0.5).generate()
-        #loader.loadModel('models/cube.egg')
-        model.setTransform(transform)
-        model.flattenLight()
-        model.setColor(0, 1.0, 1.0)
-        model.copyTo(render_node)
-
-
-#TODO  implement this function with different cases 
-    def build_joint(self, shape, transform):
-        print " add joint at {}".format(transform)
-        bullet_node, render_node = shape
-        bullet_node.setMass(bullet_node.getMass() + 1.0)
-        bullet_shape = BulletBoxShape(Vec3(0.25, 0.25, 0.25))
-        bullet_node.addShape(bullet_shape, transform)
-
-        model = CubeMaker(0.25).generate()
-        #loader.loadModel('models/cube.egg')
-        model.setTransform(transform)
-        model.flattenLight()
-        model.setColor(1.0, 0, 1.0)
-        model.copyTo(render_node)
-
+        size = 0.5
+        color = (0, 1, 1)
+        self.factory.add_to_multi(size, transform, color, id_mb)
 
 #TODO  implement this function with different cases
-    def build_vertebra(self, shape, transform):
-        print " add vertebra at {}".format(transform)
-        bullet_node, render_node = shape
-        bullet_node.setMass(bullet_node.getMass() + 1.0)
-        bullet_shape = BulletBoxShape(Vec3(0.25, 0.25, 0.25))
-        bullet_node.addShape(bullet_shape, transform)
+    def build_joint(self, id_mb, transform):
+        print " add joint at {}".format(transform)
+        size = 0.25
+        color = (1, 0, 1)
+        self.factory.add_to_multi(size, transform, color, id_mb)
 
-        model = CubeMaker(0.25).generate()
-        #loader.loadModel('models/cube.egg')
-        model.setTransform(transform)
-        model.flattenLight()
-        model.setColor(1.0, 1.0, 0)
-        model.copyTo(render_node)
+#TODO  implement this function with different cases
+    def build_vertebra(self, id_mb, transform):
+        print " add vertebra at {}".format(transform)
+        size = 0.25
+        color = (1, 1, 0)
+        self.factory.add_to_multi(size, transform, color, id_mb)
 
     def build_link(self, node):
 
         (bda, ta), (bdb, tb) = self.link_building_status[node] 
-        
+
         mat = tb.getMat()
         mat = LMatrix4f.translateMat(Vec3(-0.5, 0, 0)) * mat
         mat = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
         tb = TransformState.makeMat(mat)
-       
+
         mat = ta.getMat()
         mat = LMatrix4f.translateMat(Vec3(0.5, 0, 0)) * mat
         mat = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
@@ -138,6 +103,7 @@ class Creature():
         # we build this to check for joints if the 2 parts of the 
         #joints have been built and the link also
         self.recursive_build(self.metastructure.head)
+        self.factory.finish()
 
     def recursive_build(self, node):
         """ recursive function to build the
@@ -145,27 +111,21 @@ class Creature():
         -> this is where the magic appends"""
         #print " building node :{}".format(node)
         #adding
-        sh1, transform = self.create_shape(node)
-        self.complete_shape(sh1, node, transform)
-        self.world.attachRigidBody(sh1[0])  # this must be at done at the end...
+        id_mb1, transform = self.create_shape(node)
+        self.complete_shape(id_mb1, node, transform)
+        #self.world.attachRigidBody(id_mb1[0])  # this must be at done at the end...
         l = self.next_link(sh1)
         while l is not None:
             #print "recursive build {}".format(l)
             self.recursive_build(l)
-            l = self.next_link(sh1)
+            l = self.next_link(id_mb1)
 
     def create_shape(self, node):
         """ create the shape and return it"""
 
-        multi_box =  
-        ode_body = OdeBody(self.physics.world)
-        ode_mass = OdeMass()
-        ode_mass.setBox(50, 1, 1, 1)
-        bullet_node = BulletRigidBodyNode('bloc')
-        render_node = render.attachNewNode(bullet_node)
+        id_of_multibox = self.factory.create() 
         transform = TransformState.makePos(Vec3(0.0, 0.0, 0.0))
-        shape = (bullet_node, render_node)
-        return (shape, transform)
+        return (id_of_multibox, transform)
      
     def change_transform(self, transform, face, type='shape'):
         """ change to transform to go on a face """
@@ -187,39 +147,39 @@ class Creature():
         return transform
 
 
-    def complete_shape(self, sh1, node, transform):
+    def complete_shape(self, id_mb1, node, transform):
         """ create the shape then call recursive function"""
         #print "complete shape {}".format(node)
         ## construct the node
-        self.add_node_to_shape(node, sh1, transform)
+        self.add_node_to_shape(node, id_mb1, transform)
         if node.gen_type == 'piece':
             self.shape_building_status[node] = True
         elif node.gen_type() == 'link':
             print "## link done ##"
-            self.link_building_status[node][1] = (sh1, TransformState.makeMat(transform.getMat()))
+            self.link_building_status[node][1] = (id_mb1, TransformState.makeMat(transform.getMat()))
             self.build_link(node)
         ## recursive loop over the edges
         for face, edge in enumerate(node.edges[1:]):
             if edge.type() != 'empty':
-                transform = self.change_transform(transform, face + 1  , type)
+                transform = self.change_transform(transform, face + 1, type)
                 if edge.gen_type() == 'shape':
                     if not self.shape_building_status[edge]:
                     #then we have to add this node (because it
                     #is not entirely finished
-                        self.complete_shape(sh1, edge, transform)
+                        self.complete_shape(id_mb1, edge, transform)
                 elif edge.gen_type() == 'link':
                     if self.link_building_status[edge][0][0] is None:
                         # first time we see this link
                         #print "hi new link"
-                        self.add_node_to_shape(edge, sh1, transform)
-                        self.link_building_status[edge][0] = (sh1, TransformState.makeMat(transform.getMat()))
+                        self.add_node_to_shape(edge, id_mb1, transform)
+                        self.link_building_status[edge][0] = (id_mb1, TransformState.makeMat(transform.getMat()))
                     else:
                         # link is complete:
                         #print " hi end link"
-                        self.add_node_to_shape(edge, sh1)
-                        self.link_building_status[edge][1] = (sh1, TransformState.makeMat(transform.getMat()))
+                        self.add_node_to_shape(edge, id_mb1)
+                        self.link_building_status[edge][1] = (id_mb1, TransformState.makeMat(transform.getMat()))
                         self.build_link(edge)
-                transform = self.change_back_transform(transform, face + 1 , type)
+                transform = self.change_back_transform(transform, face + 1, type)
                         
     def next_link(self, shape):
         """ get all the half-built links going away from
@@ -231,7 +191,7 @@ class Creature():
                 return edge
         return None
     
-    def add_node_to_shape(self, node, shape, transform):
+    def add_node_to_shape(self, node, id_mb, transform):
         """ depending on the type of node call different
         functions """
 
@@ -239,7 +199,7 @@ class Creature():
             'head': self.build_head,
             'block': self.build_bloc,
             'vertebra': self.build_vertebra,
-            'joint': self.build_joint}[node.type()](shape, transform)
+            'joint': self.build_joint}[node.type()](id_mb, transform)
 
     def get_variables(self):
         """ variables is probably going to be a list of list

@@ -37,6 +37,7 @@ class MultiBox():
     def draw(self):
         """ draw all the boxes in the correct position/orientation
         transform is a TransformState"""
+        #TODO account for offset
         transform_body = self.get_transform()
         transform_body = transform_body.getMat()
         for i, (model, body) in enumerate(self.boxes):
@@ -62,9 +63,14 @@ class MultiBoxFactory():
 
     def create(self):
         self.multiboxes.append(MultiBox(self.render, self.physics))
+        return len(self.multiboxes[-1])
 
     def add_to_multi(self, size=0.5, transform=TransformState.makeIdentity(), color=(0, 1, 1), id_of_multi=-1):
-        self.multiboxes[id_of_multi].add(size, color, transform) 
+        self.multiboxes[id_of_multi].add(size, color, transform)
+
+    def finish(self):
+        for multibox in self.multiboxes:
+            multibox.finish()
 
 
 class Box():
