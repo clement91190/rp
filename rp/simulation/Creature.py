@@ -4,9 +4,9 @@ from panda3d.ode import OdeBody, OdeMass, OdeSimpleSpace, OdeJointGroup, OdePlan
 
 
 from rp.datastructure.metastructure import MetaStructure
-from rp.utils.primitives.cube import CubeMaker
 from rp.control.BrainControl import BrainControl
 from rp.cpg import cpg
+from rp.simulation.MultiBox import MultiBoxFactory
 
 """file of definition of the physical engine and
 3D display of the world """
@@ -157,6 +157,7 @@ class Creature():
     def create_shape(self, node):
         """ create the shape and return it"""
 
+        multi_box =  
         ode_body = OdeBody(self.physics.world)
         ode_mass = OdeMass()
         ode_mass.setBox(50, 1, 1, 1)
