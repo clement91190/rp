@@ -1,11 +1,24 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
+<<<<<<< HEAD
 from panda3d.bullet import BulletWorld
 from panda3d.bullet import BulletPlaneShape
 from panda3d.bullet import BulletRigidBodyNode
 from panda3d.bullet import BulletBoxShape
 from panda3d.bullet import BulletHingeConstraint
 import random
+=======
+#from panda3d.bullet import BulletWorld
+#from panda3d.bullet import BulletPlaneShape
+#from panda3d.bullet import BulletRigidBodyNode
+#from panda3d.bullet import BulletBoxShape
+#from panda3d.bullet import BulletHingeConstraint
+
+from panda3d.ode import OdeWorld
+from panda3d.ode import OdeBody, OdeMass, OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
+
+
+>>>>>>> bullet_to_ode
 from rp.datastructure.metastructure import MetaStructure
 from rp.utils.primitives.cube import CubeMaker
 from rp.control.BrainControl import BrainControl
@@ -15,6 +28,7 @@ from rp.cpg import cpg
 3D display of the world """
 
 
+<<<<<<< HEAD
 class MyWorld(BulletWorld):
     def __init__(self):
         BulletWorld.__init__(self)
@@ -126,12 +140,14 @@ class MyApp(ShowBase):
         #return Creature(m).get_variables()
 
 
+=======
+>>>>>>> bullet_to_ode
 class Creature():
-    def __init__(self, metastructure, app):
+    def __init__(self, metastructure, physics):
         """constructor of the class
         use the metastructure"""
         self.metastructure = metastructure
-        self.world = app.world
+        self.physics = physics
         self.quat_dict = {
             1: (0, Vec3(1,0,0)),
             2: (90, Vec3(0, 1, 0)),
@@ -148,7 +164,8 @@ class Creature():
         """ build the head of the creature """
         print "add head"
         bullet_node, render_node = shape
-        bullet_node.setMass(bullet_node.getMass() + 1.0)
+        #bullet_node.setMass(bullet_node.getMass() + 1.0)
+        
         shape = BulletBoxShape(Vec3(0.5, 0.5, 0.5))
         bullet_node.addShape(shape)
         #TransformState.makePos(Vec3(1.0, 0.0, 0.0)))
@@ -267,6 +284,10 @@ class Creature():
 
     def create_shape(self, node):
         """ create the shape and return it"""
+
+        ode_body = OdeBody(self.world.ode_world)
+        ode_mass = OdeMass()i
+        ode_mass.setBox(50, 1, 1, 1)
         bullet_node = BulletRigidBodyNode('bloc')
         render_node = render.attachNewNode(bullet_node)
         transform = TransformState.makePos(Vec3(0.0, 0.0, 0.0))

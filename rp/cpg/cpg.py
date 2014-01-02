@@ -62,8 +62,8 @@ class CPG:
         self.val = np.zeros((self.n, 1000))
         self.real_val = np.zeros((self.n, 1000))
         for j in range(self.n):
-            self.val[j, 0] = -80
-            self.val[j, 1] = 80
+            self.val[j, 0] = -1
+            self.val[j, 1] = 1
 
         for j in range(self.n):
             pp.subplot(self.n, 1, j + 1).set_autoscaley_on(True)
@@ -98,7 +98,7 @@ class CPG:
 
     def set_desired_amplitude(self, R=None):
         if R is None:
-            self.R = 45 * np.random.rand(1, self.n)
+            self.R = 1 * np.random.rand(1, self.n)
         else:
             self.R = R
 

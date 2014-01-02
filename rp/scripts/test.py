@@ -1,6 +1,6 @@
-from rp.simulation import world as w
+from rp.simulation import world_ode as w
 
-app = w.MyApp(w.MyWorld())
+app = w.MyApp()
 
 #for i in range(2, 7):
 #    app.add_snake(i)
