@@ -4,6 +4,7 @@ from panda3d.ode import OdeWorld
 from panda3d.ode import OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
 from panda3d.core import Vec3, TransformState
 from panda3d.core import BitMask32, Vec4
+from rp.simulation.Creature import Creature
 
 
 class Physics():
@@ -20,7 +21,8 @@ class Physics():
         self.space.setAutoCollideWorld(self.world)
         self.contactgroup = OdeJointGroup()
         self.space.setAutoCollideJointGroup(self.contactgroup)
-      
+     
+        self.servogroup = OdeJointGroup()
         #cm = CardMaker("ground")
         #cm.setFrame(-20, 20, -20, 20)
         #ground = render.attachNewNode(cm.generate())
@@ -36,9 +38,9 @@ class Physics():
     # The task for our simulation
     def simulationTask(self, creatures, dt=0):
         # Add the deltaTime for the task to the accumulator
-        for multi_box in creatures:
-            #c.update_angles(dt)
-            multi_box.draw()
+        for c in creatures:
+            c.update_angles(dt)
+            c.draw()
             #model.setPosQuat(render, body.getPosition(), Quat(body.getQuaternion()))
         if dt == 0:
             self.deltaTimeAccumulator += globalClock.getDt()
@@ -83,13 +85,7 @@ class MyApp(ShowBase):
         #taskMgr.doMethodLater(0.5, simulationTask, "Physics Simulation")  
         #creatures
         self.creatures=[]
-        self.factory = MultiBoxFactory(self.physics, self.render)
-        self.factory.create()
-        self.factory.add_to_multi(0.9, TransformState.makePos(Vec3(3, 0, -1)))
-        self.factory.add_to_multi()
-        self.factory.multiboxes[0].finish()
-        self.creatures = self.factory.multiboxes
-      
+              
     def update(self, task):
         self.physics.simulationTask(self.creatures)
         return task.cont
@@ -123,8 +119,7 @@ class MyApp(ShowBase):
        # m.add_joint()
         
 #m.follow_edge()
-
-        self.creatures.append(Creature(m, self))
+        self.creatures.append(Creature(m, self.physics, self.render))
         #return Creature(m).get_variables()
 
     def add_snake(self, size):
@@ -138,7 +133,7 @@ class MyApp(ShowBase):
             m.add_joint()
             m.follow_edge()
 
-        self.creatures.append(Creature(m, self))
+        self.creatures.append(Creature(m, self.physics, self.render))
         #return Creature(m).get_variables()
 
 

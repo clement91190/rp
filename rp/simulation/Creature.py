@@ -1,13 +1,14 @@
 from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
-from panda3d.ode import OdeWorld, OdeBoxGeom
+from panda3d.ode import OdeWorld, OdeBoxGeom, OdeHingeJoint
 from panda3d.ode import OdeBody, OdeMass, OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
-
 
 from rp.datastructure.metastructure import MetaStructure
 from rp.control.BrainControl import BrainControl
 from rp.cpg import cpg
 from rp.simulation.MultiBox import MultiBoxFactory
-
+from rp.simulation.PID import PID, control
+import time
+import random
 """file of definition of the physical engine and
 3D display of the world """
 
@@ -26,7 +27,7 @@ class Creature():
             4: (90, Vec3(0, 0, 1)),
             5: (-90, Vec3(0, 0, 1))}
         self.dof_motors = {}
-        self.factory = MultiBoxFactory(self.render, self.physics)
+        self.factory = MultiBoxFactory(self.physics, self.render)
         self.build()
         self.cpg = cpg.CPG(self.metastructure)
         self.cpg.set_desired_frequency()
@@ -60,28 +61,45 @@ class Creature():
         self.factory.add_to_multi(size, transform, color, id_mb)
 
     def build_link(self, node):
+        
+        (id_bda, ta), (id_bdb, tb) = self.link_building_status[node] 
 
-        (bda, ta), (bdb, tb) = self.link_building_status[node] 
-
-        mat = tb.getMat()
-        mat = LMatrix4f.translateMat(Vec3(-0.5, 0, 0)) * mat
-        mat = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
-        tb = TransformState.makeMat(mat)
-
-        mat = ta.getMat()
+        bda = self.factory.multiboxes[id_bda]
+        bdb = self.factory.multiboxes[id_bdb]
+        
+        pos =  bda.body.getPosition()
+        quat = LQuaternionf(bda.body.getQuaternion())
+        mat = TransformState.makePosQuatScale(pos, quat, Vec3(1, 1, 1)).getMat()
+        mat = mat * ta.getMat()
+        print ta
         mat = LMatrix4f.translateMat(Vec3(0.5, 0, 0)) * mat
-        mat = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
-        ta = TransformState.makeMat(mat)
        
-        cs = BulletHingeConstraint(bda[0], bdb[0], ta.getPos(), tb.getPos(),ta.getQuat().getAxis(), tb.getQuat().getAxis() ) 
-    
-        #add the motor
-        cs.enableMotor(True)
-        cs.setLimit(-90, 90)
-        cs.setMaxMotorImpulse(5.0)  #TODO look for the unit of this thing 
-        self.world.attachConstraint(cs)
+        t = TransformState.makeMat(LMatrix4f.rotateMat(*self.quat_dict[2]) * mat)
+        axis = t.getQuat().getAxis()
+        anchor = t.getPos()
 
-        self.dof_motors[node] = cs 
+        mat = LMatrix4f.translateMat(Vec3(0.5, 0, 0)) * mat
+        mat = mat * tb.getInverse().getMat()
+        t = TransformState.makeMat(mat)
+        posb = t.getPos()
+        quatb = t.getQuat()
+
+        bdb.body.setPosition(posb)
+        bdb.body.setQuaternion(quatb)
+
+        cs = OdeHingeJoint(self.physics.world, self.physics.servogroup)
+        cs.attach(bda.body, bdb.body)
+        cs.setAxis(axis)
+        cs.setAnchor(anchor)
+        
+        #add the motor
+        cs.setParamFMax(1000)
+        cs.setParamCFM(11.1111)
+        cs.setParamStopCFM(11.1111)
+        cs.setParamStopERP(0.444444)
+        pid = PID()
+
+        self.dof_motors[node] = (cs, pid)
         print "add constraint"
 
 
@@ -114,7 +132,7 @@ class Creature():
         id_mb1, transform = self.create_shape(node)
         self.complete_shape(id_mb1, node, transform)
         #self.world.attachRigidBody(id_mb1[0])  # this must be at done at the end...
-        l = self.next_link(sh1)
+        l = self.next_link(id_mb1)
         while l is not None:
             #print "recursive build {}".format(l)
             self.recursive_build(l)
@@ -141,8 +159,8 @@ class Creature():
         mat = transform.getMat()
         mult = LMatrix4f.rotateMat(*self.quat_dict[face])
         mult.invertInPlace()
-        mat =  LMatrix4f.translateMat(Vec3(-1.0, 0, 0)) * mat
-        mat =  mult * mat
+        mat = LMatrix4f.translateMat(Vec3(-1.0, 0, 0)) * mat
+        mat = mult * mat
         transform = transform.makeMat(mat)
         return transform
 
@@ -180,7 +198,7 @@ class Creature():
                         self.link_building_status[edge][1] = (id_mb1, TransformState.makeMat(transform.getMat()))
                         self.build_link(edge)
                 transform = self.change_back_transform(transform, face + 1, type)
-                        
+
     def next_link(self, shape):
         """ get all the half-built links going away from
         a shape. a link is a vertebra or a joint """
@@ -190,7 +208,7 @@ class Creature():
                 print "changing shape"
                 return edge
         return None
-    
+
     def add_node_to_shape(self, node, id_mb, transform):
         """ depending on the type of node call different
         functions """
@@ -208,8 +226,19 @@ class Creature():
 
     def update_angles(self, dt):
         """update the target angles """
-        self.cpg.run_all_dynamics( 0.01)
+        self.cpg.run_all_dynamics(0.01)
         angles = self.cpg.get_theta()
         for i, node in enumerate(self.metastructure.dof_nodes):
-            self.dof_motors[node].setMotorTarget(angles[0,i], dt)
-            s
+            (hinge, pid) = self.dof_motors[node]
+            pid.set_target_value(angles[0, i])
+            cmd = pid.step()
+            #cmd = angles[0, i] * 400
+            #print "commande" , cmd
+            pid.read(hinge.getAngle())
+            hinge.addTorque(cmd)
+            #print hinge.getAngle()
+            self.cpg.real_angles[i] = hinge.getAngle()
+            #hinge.addTorque(5)
+
+    def draw(self):
+        self.factory.draw()

@@ -5,7 +5,7 @@ from rp.utils.primitives.cube import CubeMaker
 
 
 class MultiBox():
-    def __init__(self, render, physics):
+    def __init__(self, render, physics, z=10):
         self.boxes = []
         self.transforms = []
         self.geoms = []
@@ -15,7 +15,7 @@ class MultiBox():
         self.M = OdeMass()
         #self.M.setBox(50, 0.1, 0.1, 0.1)
         #self.body.setMass(self.M)
-        self.body.setPosition(0, 0, 10)
+        self.body.setPosition(0, 0, z)
 
     def add(self, size, color, transform):
         self.transforms.append(transform)
@@ -62,8 +62,9 @@ class MultiBoxFactory():
         self.render = render
 
     def create(self):
-        self.multiboxes.append(MultiBox(self.render, self.physics))
-        return len(self.multiboxes[-1])
+        z = len(self.multiboxes) + 10 
+        self.multiboxes.append(MultiBox(self.render, self.physics, z))
+        return len(self.multiboxes) - 1
 
     def add_to_multi(self, size=0.5, transform=TransformState.makeIdentity(), color=(0, 1, 1), id_of_multi=-1):
         self.multiboxes[id_of_multi].add(size, color, transform)
@@ -71,6 +72,10 @@ class MultiBoxFactory():
     def finish(self):
         for multibox in self.multiboxes:
             multibox.finish()
+    
+    def draw(self):
+        for multibox in self.multiboxes:
+            multibox.draw()
 
 
 class Box():
