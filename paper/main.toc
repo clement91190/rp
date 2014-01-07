@@ -1,0 +1,17 @@
+\contentsline {chapter}{Abstract}{i}{dummy.1}
+\vspace {1em}
+\contentsline {chapter}{Contents}{ii}{dummy.2}
+\contentsline {chapter}{List of Figures}{iii}{dummy.4}
+\contentsline {chapter}{List of Tables}{iv}{dummy.6}
+\contentsline {chapter}{\numberline {1}State of the Art}{1}{chapter.8}
+\contentsline {chapter}{\numberline {2}Simulation Environment}{2}{chapter.9}
+\contentsline {section}{\numberline {2.1}Physics Engine}{2}{section.10}
+\contentsline {section}{\numberline {2.2}Visual rendering}{3}{section.12}
+\contentsline {subsection}{\numberline {2.2.1}The coordinate system}{4}{subsection.13}
+\contentsline {section}{\numberline {2.3}Structures of the Robots as a Graph}{4}{section.14}
+\contentsline {chapter}{\numberline {3}Control}{6}{chapter.15}
+\contentsline {section}{\numberline {3.1}PID Control of the joints}{6}{section.16}
+\contentsline {section}{\numberline {3.2}Central Pattern Generator}{7}{section.17}
+\contentsline {section}{\numberline {3.3}Learning}{7}{section.18}
+\vspace {2em}
+\vspace {2em}
