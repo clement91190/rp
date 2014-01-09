@@ -27,11 +27,44 @@ A few issues come from introducing PID in this problem. The stability is one of 
 
 \section{Central Pattern Generator}
 
-Central Pattern Generators (CPGs) are neural networks, that can generate oscillation for the control of the muscles of or body. They are the consequence and the cause of the paradigm of periodic movement in the locomation of animals. Different models have been implemented to represent CPGs. We can represent them as a graph of coupled oscillator, where each node influence the behavior of its neighbours. 
+Central Pattern Generators (CPGs) are neural networks, that can generate oscillation for the control of the muscles of or body. They are the consequence and the cause of the paradigm of periodic movement in the locomation of animals. Different models have been implemented to represent CPGs. We can represent them as a graph of coupled oscillator, where each node influence the behavior of its neighbours. For a first implementation I choose to test the model of CPG followed at EPFL ( ## INCLUDE CITATION ##). The CPG Neural Network in that case, is a graph that follow the physical architecture of the robot, settting one node for each joint (hinge or vertebra) on the structure. The dynamic of the CPG is determined by a coupling weight matrix $w_{ij}$ a phase bias matrix between nodes $\varphi_{ij}$, setting the frequency of the different oscillator $\omega_i$ and the desired amplitude and offset of the oscillation. We can compute the angle using the following system of equation and an integration method (I used the Runge-Kutta method in this project)
 
-## Equation of the chosen model
+\begin{equation*}
+    \dot{\phi_i} = \omega_i + \sum{w_{ij} * r_j * sin(\phi_i - \phi_j - \varphi_{ij}) \tag{1}
+\end{equation*}
+\begin{equation*}
+        \theta_i = x_i + r_i * cos(\phi_i)  \tag{2}
+\end{equation*}
+This two equation gives the angle of the oscillator ($\theta_i$) depending on the state variable of a node: $x_i$, $r_i$, $\phi_i$, that can be described respectively as the offset, the amplitude and the phase of the oscillator.
 
-A modification of this model is possible to plug the measured value of the degrees of freedom. Thatway a direct control is possible without using the PID controllers. 
+\begin{equation*}
+    \acute{r_i} = ar(\frac ar (R_i - r_i) - \dot{r_i}) \tag{3}
+\end{equation*}
+\begin{equation*}
+    \acute{x_i} = ax(\frac ax (X_i - x_i) - \dot{x_i}) \tag{4}
+\end{equation*}
+
+Equations (3) and (4) describe the dynamic of the amplitude and offset (a second order dynamic that converge to the desired values). This trick is to ensure continuity in the oscillations, even if some of the parameters of the oscillator change. $a_r$ and $a_x$ are gains to control the dynamic ($a_r = a_x = 20 rad/s$ ##CITATION## ). 
+
+
+A modification of this model is possible to plug the measured value of the degrees of freedom. Instead of using the second order control loop on $\theta_i$ which is achieved with the PID, we can set this control on the phase. Thatway, if the joint has troubles achieving his movement, for instance when hitting the ground, the phase will be modified and the perturbation will have an impact on othe joints through equation (1).
+
+Oneway to do so is to add a term in the equation (1), with $\dot{\theta_{reali}}$ the mesured angle velocity of the joint. 
+\begin{equation*}
+    \dot{\phi_i} = \omega_i + \sum{w_{ij} * r_j * sin(\phi_i - \phi_j - \varphi_{ij}) + a_{\phi} * \frac {\dot{\theta_{reali}} - \dot{\theta_i}} {r_i * sin (\phi_i)} \tag{1}
+\end{equation*}
+
+If we derive (2) we get: 
+\begin{equation*}
+    \dot{\theta_i} = \dot{x_i} + \dot{r_i} * cos(\phi_i) + r_i * sin(\phi_i) * \dot{\phi_i} \tag{2'}
+\end{equation*}
+
+By making the assumption that the dynamic of the amplitude and the offset is slow compared to the phase, we get
+\begin{equation*}
+    \dot{\theta_i} = r_i * sin(\phi_i) * \dot{\phi_i} \tag{2''}
+\end{equation*}
+Thatway, if we consider small variation of the phase, we can deduce an error term on $\dot{\phi_i}$ from the error on $\dot{\theta_i}$ given by $\frac {\dot{\theta_{reali}} - \dot{\theta_i}} {r_i * sin (\phi_i)}$ that we can control with a gain ($a_{\phi}$)
+
 
 \section{Learning}
 

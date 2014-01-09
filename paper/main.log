@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.10.3)  8 JAN 2014 12:14
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.10.3)  9 JAN 2014 14:14
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -962,15 +962,68 @@ Overfull \hbox (28.4965pt too wide) in paragraph at lines 19--21
 [7
 
 ]
-! You can't use `macro parameter character #' in vertical mode.
-l.32 #
-      # Equation of the chosen model
+! You can't use `macro parameter character #' in horizontal mode.
+l.30 ...test the model of CPG followed at EPFL ( #
+                                                  # INCLUDE CITATION ##). Th...
+
 ? 
-! You can't use `macro parameter character #' in vertical mode.
-l.32 ##
-        Equation of the chosen model
+! You can't use `macro parameter character #' in horizontal mode.
+l.30 ...est the model of CPG followed at EPFL ( ##
+                                                   INCLUDE CITATION ##). The...
+
 ? 
-[8 <./Figures/servomotor.png>]) [9]
+! You can't use `macro parameter character #' in horizontal mode.
+l.30 ...G followed at EPFL ( ## INCLUDE CITATION #
+                                                  #). The CPG Neural Network...
+
+? 
+! You can't use `macro parameter character #' in horizontal mode.
+l.30 ... followed at EPFL ( ## INCLUDE CITATION ##
+                                                  ). The CPG Neural Network ...
+
+? 
+! You can't use `\eqno' in math mode.
+\endmathdisplay@a ...\df@tag \@empty \else \veqno 
+                                                  \alt@tag \df@tag \fi \ifx ...
+l.34 \end{equation*}
+                    
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.34 \end{equation*}
+                    
+? 
+[8 <./Figures/servomotor.png>]
+! You can't use `macro parameter character #' in horizontal mode.
+l.47 ...trol the dynamic ($a_r = a_x = 20 rad/s$ #
+                                                  #CITATION## ).
+? 
+! You can't use `macro parameter character #' in horizontal mode.
+l.47 ...rol the dynamic ($a_r = a_x = 20 rad/s$ ##
+                                                  CITATION## ).
+? 
+! You can't use `macro parameter character #' in horizontal mode.
+l.47 ...ynamic ($a_r = a_x = 20 rad/s$ ##CITATION#
+                                                  # ).
+? 
+! You can't use `macro parameter character #' in horizontal mode.
+l.47 ...namic ($a_r = a_x = 20 rad/s$ ##CITATION##
+                                                   ).
+? 
+! You can't use `\eqno' in math mode.
+\endmathdisplay@a ...\df@tag \@empty \else \veqno 
+                                                  \alt@tag \df@tag \fi \ifx ...
+l.55 \end{equation*}
+                    
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.55 \end{equation*}
+                    
+? 
+[9]) [10]
 ------------------------------------------------------------------------------
  Bibliography
 ------------------------------------------------------------------------------
@@ -984,7 +1037,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 286.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 286.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 286.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 5A0216D7CA4B3139059268F0FA94AA03;2129.
+(rerunfilecheck)             Checksum: 379730C340CA91E738B47A693DC1432A;2129.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -992,29 +1045,32 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 286.
  ) 
 Here is how much of TeX's memory you used:
- 11020 strings out of 495059
- 153776 string characters out of 3182030
- 234489 words of memory out of 3000000
+ 11028 strings out of 495059
+ 153825 string characters out of 3182030
+ 236489 words of memory out of 3000000
  13969 multiletter control sequences out of 15000+200000
  13731 words of font info for 50 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 49i,11n,45p,1404b,389s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 49i,12n,45p,1404b,389s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/
-msbm10.pfb>
-Output written on main.pdf (14 pages, 2331148 bytes).
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (15 pages, 2372086 bytes).
 PDF statistics:
- 215 PDF objects out of 1000 (max. 8388607)
- 178 compressed objects within 2 object streams
- 36 named destinations out of 1000 (max. 500000)
+ 247 PDF objects out of 1000 (max. 8388607)
+ 204 compressed objects within 3 object streams
+ 44 named destinations out of 1000 (max. 500000)
  138 words of extra memory for PDF output out of 10000 (max. 10000000)
 

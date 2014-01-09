@@ -229,6 +229,8 @@ class Creature():
         """update the target angles """
         self.cpg.run_all_dynamics(0.01)
         angles = self.cpg.get_theta()
+        self.cpg.read_angle(angles, 0.01)
+        self.cpg.correct_speed()
         for i, node in enumerate(self.metastructure.dof_nodes):
             (hinge, pid) = self.dof_motors[node]
             pid.set_target_value(angles[0, i])

@@ -1,5 +1,6 @@
 """ file used for the implementation of the CPGs """
 import numpy as np
+import math
 import matplotlib.pyplot as pp
 import rp.cpg.rk4 as rk4
 import rp.datastructure.metastructure as metastructure
@@ -24,6 +25,10 @@ class CPG:
         self.omega = np.zeros((1, self.n))
         self.w = metastructure.compute_and_get_connectivity_matrix()
         self.phi = np.matrix(np.zeros(self.n))
+        self.angles =  np.zeros((1, self.n))
+        self.angles_velocity = np.zeros((1, self.n))
+        self.phi_diff_error = np.zeros((1, self.n))
+        self.mean_phi_diff_error = np.zeros((1, self.n))
         self.small_phi = np.matrix(np.zeros((self.n, self.n)))
         self.r = np.zeros((1, 2 * self.n))  # we store also the derivative
         self.R = np.zeros((1, self.n))
@@ -34,6 +39,7 @@ class CPG:
 
         self.ar = 20.0  # rad/s
         self.ax = 20.0  # rad/s
+        self.aphi = 0.1  # rad/s
 
         self.m_amp = np.matrix(np.zeros((self.n * 2, self.n * 2)))
         for i in range(self.n):
@@ -115,10 +121,11 @@ class CPG:
     def phi_diff(omega, w, phi, small_phi, rr):
         """return the temporal derivative of phi """
         t = lambda phi, small_phi, i, j: phi[0, j] - phi[0, i] - small_phi[i, j]
-        return omega + rr * np.multiply(apply(phi, small_phi, t), w).T
-
+        phi_d = omega + rr * np.multiply(apply(phi, small_phi, t), w).T
+        return phi_d
+    
     def run_dynamic(self, dt=0.01):
-        f = lambda t, phi: CPG.phi_diff(self.omega, self.w, self.phi, self.small_phi, self.get_r())
+        f = lambda t, phi: CPG.phi_diff(self.omega, self.w, phi, self.small_phi, self.get_r()) + self.aphi * self.phi_diff_error
         self.phi = rk4.rk4(0, self.phi, dt, f)
 
     def get_theta(self):
@@ -137,6 +144,17 @@ class CPG:
         self.run_dynamic_amp_offset(dt)
         if self.plot:
             self.update_plot()
+    
+    def correct_speed(self):
+        """ implement the correcting term for modifying the phase in consequence """
+        self.phi_diff_error = np.array([self.angles_velocity[0, i] / (self.r[0, i] * math.sin(self.phi[0, i])) for i in range(self.n)])
+        self.phi_diff_error = self.phi_diff_error - CPG.phi_diff(self.omega, self.w, self.phi, self.small_phi, self.get_r())
+        self.mean_phi_diff_error = self.mean_phi_diff_error * 0.99 + self.phi_diff_error * 0.01
+        self.phi_diff_error = - self.mean_phi_diff_error + self.phi_diff_error
+
+    def read_angle(self, angles=None, dt=0.01):
+        self.angles_velocity = (angles - self.angles) / dt
+        self.angles = angles
 
 
 def main():
