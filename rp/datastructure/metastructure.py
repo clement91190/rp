@@ -56,11 +56,14 @@ class Block(Node):
 
 class Joint(Node):
     """ a joint is a link with 1 degree of freedom
-    (think servomotor) """
-    def __init__(self, father):
+    (think servomotor)
+    orientation is 0 or 1 => 2 directions are possible
+    """
+    def __init__(self, father, orientation=1):
         Node.__init__(self, father)
         self.edges.append(EmptyNode(self))
         self.angle = 0
+        self.orientation = orientation
         global nb
         nb = nb + 1
         print "########### nb {}".format(nb)
@@ -141,8 +144,8 @@ class MetaStructure:
         self.selector = 0
         self.follow_edge(ind)
 
-    def add_joint(self):
-        node = Joint(self.current)
+    def add_joint(self, orient=1):
+        node = Joint(self.current, orient)
         self.current.edges[self.selector] = node
         self.all_nodes.append(node)
         self.dof_nodes.append(node)

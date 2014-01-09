@@ -98,16 +98,28 @@ class Creature():
         pos =  bda.body.getPosition()
         quat = LQuaternionf(bda.body.getQuaternion())
         mat = TransformState.makePosQuatScale(pos, quat, Vec3(1, 1, 1)).getMat()
-        mat = mat * ta.getMat()
-        print ta
+        mat = ta.getMat() * mat
+        print "ta", ta
+
+        print "absol", TransformState.makeMat(mat)
         mat = LMatrix4f.translateMat(Vec3(0.5, 0, 0)) * mat
-       
-        t = TransformState.makeMat(LMatrix4f.rotateMat(*self.quat_dict[2]) * mat)
-        axis = t.getQuat().getAxis()
-        anchor = t.getPos()
+        anchor = TransformState.makeMat(mat).getPos() 
+        print "absol", TransformState.makeMat(mat)
+        
+        axis = self.quat_dict[1][1]
+        if node.orientation == 1:
+            t = LMatrix4f.rotateMat(*self.quat_dict[4]) * mat
+        else:
+            t = LMatrix4f.rotateMat(*self.quat_dict[2]) * mat
+        row = t.getRow(0)
+        print "rotation", t.getRow(0), type(t.getRow(0))
+        #axis = t.getQuat().getAxis()
+        axis = Vec3(row.getX(), row.getY(), row.getZ())
+        print "axis",axis
+        print "anchor", anchor
 
         mat = LMatrix4f.translateMat(Vec3(0.5, 0, 0)) * mat
-        mat = mat * tb.getInverse().getMat()
+        mat = tb.getInverse().getMat() * mat
         t = TransformState.makeMat(mat)
         posb = t.getPos()
         quatb = t.getQuat()
@@ -202,7 +214,6 @@ class Creature():
         if node.gen_type == 'piece':
             self.shape_building_status[node] = True
         elif node.gen_type() == 'link':
-            print "## link done ##"
             self.link_building_status[node][1] = (id_mb1, TransformState.makeMat(transform.getMat()))
             self.build_link(node)
         ## recursive loop over the edges

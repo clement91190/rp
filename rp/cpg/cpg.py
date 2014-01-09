@@ -104,7 +104,7 @@ class CPG:
 
     def set_desired_amplitude(self, R=None):
         if R is None:
-            self.R = 1 * np.random.rand(1, self.n)
+            self.R = 2 * np.random.rand(1, self.n)
         else:
             self.R = R
 
