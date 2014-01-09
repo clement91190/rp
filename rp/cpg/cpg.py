@@ -17,7 +17,7 @@ apply = lambda m, n,  t: np.matrix([[t(m, n, i, j) for j in range(n.shape[1])] f
 
 
 class CPG:
-    def __init__(self, metastructure, plot=True):
+    def __init__(self, metastructure, plot=False):
         """ build the vectors of the CPG """
         print "Building CPG"
         self.n = metastructure.size()
@@ -155,6 +155,16 @@ class CPG:
     def read_angle(self, angles=None, dt=0.01):
         self.angles_velocity = (angles - self.angles) / dt
         self.angles = angles
+
+    def get_size(self):
+        """ for now the vector of parameter contain (w -> same value for all joint)
+        Ri and Xi """
+        return self.n * 2 + 1
+
+    def read_parameters(self, params):
+        self.omega = params[0, 0] * 3 * np.ones(self.n)
+        self.X[0,:] = params[0, 1:self.n + 1]
+        self.R[0,:] = params[0, self.n + 1:]
 
 
 def main():

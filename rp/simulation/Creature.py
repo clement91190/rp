@@ -6,6 +6,7 @@ from rp.datastructure.metastructure import MetaStructure
 from rp.control.BrainControl import BrainControl
 from rp.cpg import cpg
 from rp.simulation.MultiBox import MultiBoxFactory
+from rp.learning.interface import Interface
 from rp.simulation.PID import PID, control
 import time
 import random
@@ -32,6 +33,33 @@ class Creature():
         self.cpg = cpg.CPG(self.metastructure)
         self.cpg.set_desired_frequency()
         self.cpg.set_desired_amplitude()
+        self.position = 0
+
+    def affect_optimizer(self, interface=None):
+        """ affect to the structure a learning process """
+        if interface is None:
+            self.brain = Interface(self.cpg.get_size())
+        else:
+            self.brain = interface
+        self.update_position()
+
+    def send_result_to_brain(self):
+        traveled_distance = self.update_position()
+        if self.brain is not None:
+            self.brain.set_result(traveled_distance.length())
+            self.cpg.read_parameters(self.brain.next_val_to_test())
+
+    def update_position(self):
+        """ update the position and return the traveled distance """
+        position = self.get_position()
+        traveled_distance = position - self.position
+        self.position = position
+        return traveled_distance
+
+    def get_position(self):
+        """ return the position of the center of
+        gravity of the multibox containing the head """
+        return self.factory.get_position()
 
     def build_head(self, id_mb, transform):
         """ build the head of the creature """

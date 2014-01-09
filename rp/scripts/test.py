@@ -1,10 +1,10 @@
 from rp.simulation import world_ode as w
-
 app = w.MyApp()
 
 #for i in range(2, 7):
 #    app.add_snake(i)
 #    app.run(100, visual=False)
 app.add_snake(6)
-
-app.run(10000, visual=True)
+app.learn(4)
+app.run(500, visual=True)
+app.run(500, visual=False)

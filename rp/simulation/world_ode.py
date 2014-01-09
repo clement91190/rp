@@ -5,6 +5,7 @@ from panda3d.ode import OdeSimpleSpace, OdeJointGroup, OdePlaneGeom
 from panda3d.core import Vec3, TransformState
 from panda3d.core import BitMask32, Vec4
 from rp.simulation.Creature import Creature
+from rp.learning.interface import TestBest
 
 
 class Physics():
@@ -38,6 +39,7 @@ class Physics():
     # The task for our simulation
     def simulationTask(self, creatures, dt=0):
         # Add the deltaTime for the task to the accumulator
+        self.stepSize = dt
         for c in creatures:
             c.update_angles(dt)
             c.draw()
@@ -46,10 +48,10 @@ class Physics():
             self.deltaTimeAccumulator += globalClock.getDt()
         else:
             self.deltaTimeAccumulator = dt
-        while self.deltaTimeAccumulator > self.stepSize:
+        #while self.deltaTimeAccumulator > self.stepSize:
             # Remove a stepSize from the accumulator until
             # the accumulated time is less than the stepsize
-            self.deltaTimeAccumulator -= self.stepSize
+           # self.deltaTimeAccumulator -= self.stepSize
             # Step the simulation
             self.space.autoCollide()  # Setup the contact joints
             self.world.quickStep(self.stepSize)
@@ -59,7 +61,7 @@ class Physics():
     def run_physics(self, t, creatures):
         """ run physics for t steps """
         for i in range(t):
-            self.simulationTask(creatures, 0.1)
+            self.simulationTask(creatures, 0.01)
 
 
 class MyApp(ShowBase):
@@ -76,18 +78,33 @@ class MyApp(ShowBase):
         self.physics = Physics()
         #np = render.attachNewNode(self.world.ground_node)
         #np.setPos(0, 0, -2)
- 
+
         #camera
         base.cam.setPos(10, -30, 20)
         base.cam.lookAt(0, 0, 5)
 
         self.taskMgr.add(self.update, 'update')
-        #taskMgr.doMethodLater(0.5, simulationTask, "Physics Simulation")  
+        #taskMgr.doMethodLater(0.5, simulationTask, "Physics Simulation")
         #creatures
-        self.creatures=[]
-              
+        self.creatures = []
+
+    def see_best(self):
+
+        for creat in self.creatures:
+            creat.affect_optimizer(TestBest())
+        self.run(1500, visual=True)
+
+    def learn(self, nb_iter):
+        self.run(1500, visual=False)
+        for creat in self.creatures:
+            creat.affect_optimizer()
+        for i in range(nb_iter):
+            for creat in self.creatures:
+                creat.send_result_to_brain()
+            self.run(1500, visual=False)
+
     def update(self, task):
-        self.physics.simulationTask(self.creatures)
+        self.physics.simulationTask(self.creatures, 0.01)
         return task.cont
 
     def run(self, t, visual=False):

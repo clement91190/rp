@@ -17,6 +17,9 @@ class MultiBox():
         #self.body.setMass(self.M)
         self.body.setPosition(0, 0, z)
 
+    def get_position(self):
+        return self.body.getPosition()
+
     def add(self, size, color, transform):
         self.transforms.append(transform)
         m = OdeMass()
@@ -60,6 +63,10 @@ class MultiBoxFactory():
         self.multiboxes = []
         self.physics = physics
         self.render = render
+
+    def get_position(self):
+        if len(self.multiboxes) > 0:
+            return self.multiboxes[0].get_position()
 
     def create(self):
         z = len(self.multiboxes) + 10 
