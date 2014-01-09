@@ -26,6 +26,17 @@ In order to simulate the behavior of complex shapes and bodies in a simulated wo
 \section{Visual rendering}
 A good thing about the physical engine is that it is completly separated from the rendering part. That way, it is possible to run much faster for the learning process. But it is also necessary to see the result, especially for the purpose of debuging the simulator. Carnegie Mellon University developps a framework called panda3d, that integrate both a rendering librairy using OpenGl and different physics engines (ODE and bullet). All this tools are developped in C/C++ with binding for python, which makes it an easy tool to create animation movie, games or simulations.
 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/snake.png}
+    \rule{35em}{0.5pt}
+    \caption[Simulated Snake in the environment]{3D Rendering of a snake in the environment}
+    \label{fig:Snake}
+\end{figure}
+
+
+
 \subsection{The coordinate system}
 In order to represent all the objects that we manipulate in the simulation (physics and rendering), panda3d uses a system of global/local coordinate and a tree architecture. Each element of the tree is represented in the coordinates of the father. In order to keep a coherence with this architecture, it is natural to use a graph to represent the modular structure of the robots. Panda3d also uses 4-by-4 matrices to represent the transformation of a node to its one of its children. These transformation are classical in 3d representation. They combine the benefits of 3 by 3 matrices that represent functions ($\mathbb{R}^3 \to \mathbb{R}^3$) that can be interpreted as the set of combined rotations and homotetia, where the matrix multiplication is the composition of such transformations, and a translation. Manipulating translations requires to use 4 by 4 matrices instead of 3 by 3 but the properties of the product are kept, which makes it a very useful tool to manipulate 3d objects. For instance, if the children of the node is translated of a vector $(1, 0, 0)$, then we can use a function on the object representing the Matrice (TransformState in panda3d) to change the matrice and add the translation. The same goes for giving a certain orientation to the object using quaternions to represent the 3D orientation and add this to the 4 by 4 matrix.
 
@@ -44,4 +55,14 @@ We can represent a Robot as a graph, where each node is a component of the robot
 ## Picture of Hinge and vertebra ? ##
 
 This Structure is represented in python with an object called MetaStructure, with very simple function to move within the graph and add components and follow edges that make it easy to design a structure that we have in mind, ( or for possible later use to generate them automaticly\ldots). This object is the key to describe a structure.  
-    
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/schema_arbre.png}
+    \rule{35em}{0.5pt}
+    \caption[Structure described as graph]{Structure described as a graph}
+    \label{fig:Snake}
+\end{figure}
+
+

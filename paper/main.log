@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.10.3)  6 JAN 2014 18:13
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.10.3)  8 JAN 2014 12:14
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -701,6 +701,12 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 34.
 
 LaTeX Warning: Label `Chapter 1' multiply defined.
 
+
+LaTeX Warning: Label `fig:Snake' multiply defined.
+
+
+LaTeX Warning: Label `fig:Snake' multiply defined.
+
 )
 \openout1 = `main.aux'.
 
@@ -879,85 +885,92 @@ Chapter 2.
 ------------------------------------------------------------------------------
 [2
 
-] <Figures/hinge.jpg, id=119, 401.5pt x 301.125pt>
+] <Figures/hinge.jpg, id=125, 401.5pt x 301.125pt>
 File: Figures/hinge.jpg Graphic file (type jpg)
  <use Figures/hinge.jpg>
 Package pdftex.def Info: Figures/hinge.jpg used on input line 20.
 (pdftex.def)             Requested size: 401.49901pt x 301.12425pt.
 
-[3 <./Figures/hinge.jpg>]
+<Figures/snake.png, id=126, 808.01875pt x 620.3175pt>
+File: Figures/snake.png Graphic file (type png)
+ <use Figures/snake.png>
+Package pdftex.def Info: Figures/snake.png used on input line 32.
+(pdftex.def)             Requested size: 404.00839pt x 310.15799pt.
+
+[3 <./Figures/hinge.jpg>] [4 <./Figures/snake.png (PNG copy)>]
 ! You can't use `macro parameter character #' in vertical mode.
-l.32 #
+l.43 #
       # Picture of the 4*4 Matrix ##
 ? 
 ! You can't use `macro parameter character #' in vertical mode.
-l.32 ##
+l.43 ##
         Picture of the 4*4 Matrix ##
 ? 
 ! You can't use `macro parameter character #' in horizontal mode.
-l.32 ## Picture of the 4*4 Matrix #
+l.43 ## Picture of the 4*4 Matrix #
                                    #
 ? 
 ! You can't use `macro parameter character #' in horizontal mode.
-l.32 ## Picture of the 4*4 Matrix ##
+l.43 ## Picture of the 4*4 Matrix ##
                                     
 ? 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 38.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 49.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 38.
- [4]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 49.
+
 ! You can't use `macro parameter character #' in vertical mode.
-l.44 #
+l.55 #
       # Picture of Hinge and vertebra ? ##
 ? 
 ! You can't use `macro parameter character #' in vertical mode.
-l.44 ##
+l.55 ##
         Picture of Hinge and vertebra ? ##
 ? 
 ! You can't use `macro parameter character #' in horizontal mode.
-l.44 ## Picture of Hinge and vertebra ? #
+l.55 ## Picture of Hinge and vertebra ? #
                                          #
 ? 
 ! You can't use `macro parameter character #' in horizontal mode.
-l.44 ## Picture of Hinge and vertebra ? ##
+l.55 ## Picture of Hinge and vertebra ? ##
                                           
 ? 
-) (./Chapters/Control.tex [5]
+<Figures/schema_arbre.png, id=140, 557.2017pt x 628.749pt>
+File: Figures/schema_arbre.png Graphic file (type png)
+
+<use Figures/schema_arbre.png>
+Package pdftex.def Info: Figures/schema_arbre.png used on input line 62.
+(pdftex.def)             Requested size: 278.60016pt x 314.37372pt.
+) (./Chapters/Control.tex [5] [6 <./Figures/schema_arbre.png>]
 Chapter 3.
 ------------------------------------------------------------------------------
  3 Control
 ------------------------------------------------------------------------------
-! You can't use `macro parameter character #' in vertical mode.
-l.17 #
-      # Picture of the PID sinusoid answer ##
-? 
-! You can't use `macro parameter character #' in vertical mode.
-l.17 ##
-        Picture of the PID sinusoid answer ##
-? 
-! You can't use `macro parameter character #' in horizontal mode.
-l.17 ## Picture of the PID sinusoid answer #
-                                            #
-? 
-! You can't use `macro parameter character #' in horizontal mode.
-l.17 ## Picture of the PID sinusoid answer ##
-                                             
-? 
-[6
+<Figures/servomotor.png, id=151, 1486.55376pt x 677.53125pt>
+File: Figures/servomotor.png Graphic file (type png)
+
+<use Figures/servomotor.png>
+Package pdftex.def Info: Figures/servomotor.png used on input line 19.
+(pdftex.def)             Requested size: 445.96957pt x 203.26094pt.
+
+Overfull \hbox (28.4965pt too wide) in paragraph at lines 19--21
+ [][] 
+ []
+
+[7
 
 ]
 ! You can't use `macro parameter character #' in vertical mode.
-l.25 #
+l.32 #
       # Equation of the chosen model
 ? 
 ! You can't use `macro parameter character #' in vertical mode.
-l.25 ##
+l.32 ##
         Equation of the chosen model
 ? 
-) [7]
+[8 <./Figures/servomotor.png>]) [9]
 ------------------------------------------------------------------------------
  Bibliography
 ------------------------------------------------------------------------------
@@ -971,7 +984,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 286.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 286.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 286.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 13B8F81654DD1284820C69926D13BA1C;2129.
+(rerunfilecheck)             Checksum: 5A0216D7CA4B3139059268F0FA94AA03;2129.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -979,13 +992,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 286.
  ) 
 Here is how much of TeX's memory you used:
- 10999 strings out of 495059
- 153352 string characters out of 3182030
- 234416 words of memory out of 3000000
- 13956 multiletter control sequences out of 15000+200000
+ 11020 strings out of 495059
+ 153776 string characters out of 3182030
+ 234489 words of memory out of 3000000
+ 13969 multiletter control sequences out of 15000+200000
  13731 words of font info for 50 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 49i,11n,45p,1404b,394s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 49i,11n,45p,1404b,389s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
@@ -998,10 +1011,10 @@ public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 nts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/
 msbm10.pfb>
-Output written on main.pdf (12 pages, 198241 bytes).
+Output written on main.pdf (14 pages, 2331148 bytes).
 PDF statistics:
- 194 PDF objects out of 1000 (max. 8388607)
- 164 compressed objects within 2 object streams
- 31 named destinations out of 1000 (max. 500000)
- 123 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 215 PDF objects out of 1000 (max. 8388607)
+ 178 compressed objects within 2 object streams
+ 36 named destinations out of 1000 (max. 500000)
+ 138 words of extra memory for PDF output out of 10000 (max. 10000000)
 

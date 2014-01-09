@@ -1,6 +1,6 @@
 from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
 from panda3d.ode import OdeWorld, OdeBoxGeom, OdeHingeJoint
-from panda3d.ode import OdeBody, OdeMass, OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
+from panda3d.ode import OdeBody, OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
 
 from rp.datastructure.metastructure import MetaStructure
 from rp.control.BrainControl import BrainControl
@@ -94,6 +94,7 @@ class Creature():
         
         #add the motor
         cs.setParamFMax(1000)
+        cs.setParamFudgeFactor(0.5)
         cs.setParamCFM(11.1111)
         cs.setParamStopCFM(11.1111)
         cs.setParamStopERP(0.444444)

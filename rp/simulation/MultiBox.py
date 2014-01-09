@@ -20,7 +20,7 @@ class MultiBox():
     def add(self, size, color, transform):
         self.transforms.append(transform)
         m = OdeMass()
-        m.setBox(50, size, size, size)
+        m.setBox(0.1, size, size, size)
         m.translate(transform.getPos())
         self.M.add(m)
         box = Box(self.render, size, self.physics, color, self.body, transform)

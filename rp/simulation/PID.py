@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as pp
 
 class PID():
-    def __init__(self, gd=0.7, gi=0.3):
+    def __init__(self, gd=0.2, gi=0.3):
         self.x = 0
         self.dx = 0
         self.ix = 0
@@ -11,11 +11,11 @@ class PID():
         self.er = 0
         self.ge = 0.3
         self.target_value = 0
-        self.mu = 0.1
-        self.globalg = 500
+        self.mu = 0.01
+        self.globalg = 25
         self.enableIntegrator = False
         self.count = 0
-        self.satu = 50
+        self.satu = 100
 
 
     def set_target_value(self, target_value):

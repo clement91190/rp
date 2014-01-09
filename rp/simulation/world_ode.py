@@ -132,6 +132,8 @@ class MyApp(ShowBase):
             m.follow_edge()
             m.add_joint()
             m.follow_edge()
+        
+        m.add_block()
 
         self.creatures.append(Creature(m, self.physics, self.render))
         #return Creature(m).get_variables()

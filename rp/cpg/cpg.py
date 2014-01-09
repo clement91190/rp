@@ -104,7 +104,7 @@ class CPG:
 
     def set_desired_frequency(self, W=None):
         if W is None:
-            self.omega = np.random.rand(self.n) * 1
+            self.omega = np.random.rand(self.n) * 3
         else:
             self.omega = W
 
