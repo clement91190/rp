@@ -34,7 +34,7 @@ class Physics():
         self.groundGeom.setCategoryBits(BitMask32(0x00000002))
 
         self.deltaTimeAccumulator = 0.0 
-        self.stepSize = 1.0 / 90.0
+        self.stepSize = 0.005
 
     # The task for our simulation
     def simulationTask(self, creatures, dt=0):
@@ -61,7 +61,7 @@ class Physics():
     def run_physics(self, t, creatures):
         """ run physics for t steps """
         for i in range(t):
-            self.simulationTask(creatures, 0.01)
+            self.simulationTask(creatures, 0.005)
 
 
 class MyApp(ShowBase):
@@ -114,7 +114,7 @@ class MyApp(ShowBase):
         while i < nb_iter or nb_iter == -1: 
             for creat in self.creatures:
                 creat.send_result_to_brain()
-            self.run(2500, visual=False)
+            self.run(50000, visual=False)
             self.reset(False)
             i += 1
 
@@ -134,6 +134,70 @@ class MyApp(ShowBase):
         for i in range(t):
             taskMgr.step()
 
+    def one_side(self, m):
+        
+        m.add_block()
+
+        m.follow_edge()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        m.add_block()
+        
+        m.follow_edge()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        self.joint_block(m)
+        m.follow_father()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        
+        m.next_edge()
+        m.add_block()
+        
+        m.follow_edge()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        self.joint_block(m)
+        m.follow_father()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        
+        m.follow_father()
+
+    def joint_block(self, m):
+        m.add_joint()
+        m.follow_edge()
+        m.add_block()
+        m.follow_father()
+
+
+    def add_four_legs_creature(self, plot=True):
+        m = MetaStructure()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+         #self.block_joint_block(m)
+      
+        #m.next_edge()
+        #self.block_joint_block(m)
+        self.one_side(m)
+
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+        m.next_edge()
+
+        self.one_side(m)
+
+        self.creatures.append(Creature(m, self.physics, self.render, plot))
+
+
     def add_creature(self, plot=False):
         """function that add the creature described in a file (name)
         and add it in panda world"""
@@ -152,7 +216,10 @@ class MyApp(ShowBase):
         #m.add_joint()
         #m.follow_edge()
         #m.add_block()
-        #m.next_edge() 
+        m.next_edge()
+        m.add_block()
+        m.follow_edge()
+        m.next_edge()
         for i in range(4):
             m.add_block()
             m.follow_edge()

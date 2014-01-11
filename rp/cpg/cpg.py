@@ -69,8 +69,8 @@ class CPG:
         self.val = np.zeros((self.n, self.step))
         self.real_val = np.zeros((self.n, self.step))
         for j in range(self.n):
-            self.val[j, 0] = -1
-            self.val[j, 1] = 1
+            self.val[j, 0] = - 3.5
+            self.val[j, 1] = 3.5
 
         for j in range(self.n):
             pp.subplot(self.n, 1, j + 1).set_autoscaley_on(True)
@@ -134,6 +134,9 @@ class CPG:
             return np.zeros((1, self.n))
         else:
             self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(self.phi))
+            self.theta = [max(self.theta[0, i], - math.pi * 0.75) for i in range(np.shape(self.theta)[1])]
+            self.theta = [min(ti,   math.pi * 0.75) for ti in self.theta]
+            self.theta = np.array([self.theta])
         return self.theta
 
     def run_dynamic_amp_offset(self, dt=0.01):

@@ -1,15 +1,13 @@
+import math
 from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
-from panda3d.ode import OdeWorld, OdeBoxGeom, OdeHingeJoint
-from panda3d.ode import OdeBody, OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
+from panda3d.ode import OdeHingeJoint
+from panda3d.ode import OdeBody, OdePlaneGeom 
 
-from rp.datastructure.metastructure import MetaStructure
-from rp.control.BrainControl import BrainControl
 from rp.cpg import cpg
 from rp.simulation.MultiBox import MultiBoxFactory
 from rp.learning.interface import Interface
-from rp.simulation.PID import PID, control
-import time
-import random
+from rp.learning.Nelder_mead.NelderMead import NelderMead
+from rp.simulation.PID import PID
 """file of definition of the physical engine and
 3D display of the world """
 
@@ -19,6 +17,7 @@ class Creature():
         """constructor of the class
         use the metastructure"""
         self.metastructure = metastructure
+        self.satu_cmd = 5
         self.physics = physics
         self.render = render
         self.quat_dict = {
@@ -34,11 +33,14 @@ class Creature():
         self.cpg.set_desired_frequency()
         self.cpg.set_desired_amplitude()
         self.position = 0
+        self.problem = False
+        self.penalty = 0
 
     def affect_optimizer(self, interface=None):
         """ affect to the structure a learning process """
         if interface is None:
-            self.brain = Interface(self.cpg.get_size())
+            #self.brain = Interface(self.cpg.get_size())
+            self.brain = NelderMead(self.cpg.get_size())
         else:
             self.brain = interface
         self.update_position()
@@ -46,7 +48,11 @@ class Creature():
     def send_result_to_brain(self):
         traveled_distance = self.update_position()
         if self.brain is not None:
-            self.brain.set_result(traveled_distance.length())
+            if traveled_distance.length() == 0:
+                self.brain.set_result(self.penalty)
+                self.penalty = 0
+            else:
+                self.brain.set_result(traveled_distance.length())
             self.cpg.read_parameters(self.brain.next_val_to_test())
 
     def update_position(self):
@@ -54,6 +60,9 @@ class Creature():
         position = self.get_position()
         traveled_distance = position - self.position
         self.position = position
+        if self.problem:
+            self.problem = False
+            return self.position - position
         return traveled_distance
 
     def get_position(self):
@@ -133,11 +142,13 @@ class Creature():
         cs.setAnchor(anchor)
         
         #add the motor
-        cs.setParamFMax(100)
+        cs.setParamFMax(self.satu_cmd)
         cs.setParamFudgeFactor(0.5)
         cs.setParamCFM(11.1111)
         cs.setParamStopCFM(11.1111)
         cs.setParamStopERP(0.444444)
+        cs.setParamLoStop(- math.pi * 0.5)
+        cs.setParamHiStop(math.pi * 0.5)
         pid = PID()
 
         self.dof_motors[node] = (cs, pid)
@@ -268,12 +279,13 @@ class Creature():
         """update the target angles """
         self.cpg.run_all_dynamics(0.01)
         angles = self.cpg.get_theta()
+     
         #self.cpg.read_angle(angles, 0.01)
         #self.cpg.correct_speed()
         for i, node in enumerate(self.metastructure.dof_nodes):
             (hinge, pid) = self.dof_motors[node]
             pid.set_target_value(angles[0, i])
-            cmd = pid.step()
+            cmd = pid.step(self.satu_cmd)
             #cmd = angles[0, i] * 400
             #print "commande" , cmd
             pid.read(hinge.getAngle())
@@ -281,6 +293,12 @@ class Creature():
             #print hinge.getAngle()
             self.cpg.real_angles[i] = hinge.getAngle()
             #hinge.addTorque(5)
+            if abs(hinge.getAngleRate()) > 100:
+                #print "problem"
+                self.problem = True
+                if self.penalty > - abs(hinge.getAngleRate()):
+                    self.penalty = - abs(hinge.getAngleRate())
+            #print i, hinge.getParamVel(), hinge.getAngleRate()
 
     def draw(self):
         self.factory.draw()

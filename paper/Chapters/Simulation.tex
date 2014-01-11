@@ -2,9 +2,9 @@
 
 \chapter{Simulation Environment} % Main chapter title
 
-\label{Chapter 1} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+\label{Chapter 2} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
-\lhead{Chapter 1. \emph{Simulation Environment}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+\lhead{Chapter 2. \emph{Simulation Environment}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
 %----------------------------------------------------------------------------------------
 %	SECTION 1
@@ -17,7 +17,7 @@ In order to simulate the behavior of complex shapes and bodies in a simulated wo
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics{Figures/hinge.jpg}
+    \includegraphics[scale=0.5]{Figures/hinge.jpg}
     \rule{35em}{0.5pt}
     \caption[A Hinge Constraint]{A 3D representation of a Hinge Constrain}
     \label{fig:Hinge}
@@ -52,9 +52,29 @@ We can represent a Robot as a graph, where each node is a component of the robot
     \item a vertebra : a vertebra is very much like a hinge but has two degrees of freedom (two angle directions) with smaller range, but bigger maximal torque.
 \end{itemize}
 
-## Picture of Hinge and vertebra ? ##
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=2.0]{Figures/vertebra.jpg}
+    \rule{35em}{0.5pt}
+    \caption[A Vertebra Constraint]{A 3D representation of a Vertebra Constrain}
+    \label{fig:Vertebra}
+\end{figure}
 
-This Structure is represented in python with an object called MetaStructure, with very simple function to move within the graph and add components and follow edges that make it easy to design a structure that we have in mind, ( or for possible later use to generate them automaticly\ldots). This object is the key to describe a structure.  
+
+
+This Structure is represented in python with an object called MetaStructure, with very simple function to move within the graph and add components. This object is the key to describe a structure. It is then very simple to create a structure that we have in mind ( or for possible later use to generate them automaticly\ldots). For instance, this is the code to create a snake with a given size : for the number of cell, we add a block and a joint. 
+
+\begin{verbatim}
+def add_snake(m, size):
+    #m is a Metastructure
+    for i in range(size):
+        m.add_block()
+        m.follow_edge()
+        m.add_joint()
+        m.follow_edge()
+    
+    m.add_block()
+\end{verbatim}
 
 
 \begin{figure}[htbp]
@@ -62,7 +82,7 @@ This Structure is represented in python with an object called MetaStructure, wit
     \includegraphics[scale=0.5]{Figures/schema_arbre.png}
     \rule{35em}{0.5pt}
     \caption[Structure described as graph]{Structure described as a graph}
-    \label{fig:Snake}
+    \label{fig:TreeStruct}
 \end{figure}
 
 
