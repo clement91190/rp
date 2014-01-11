@@ -36,10 +36,11 @@ class CPG:
         self.x = np.zeros((1, 2 * self.n))
         self.X = np.zeros((1, self.n))
         self.real_angles = np.zeros(self.n)
+        self.reset = True
 
         self.ar = 20.0  # rad/s
         self.ax = 20.0  # rad/s
-        self.aphi = 0.1  # rad/s
+        self.aphi = 0  # rad/s
 
         self.m_amp = np.matrix(np.zeros((self.n * 2, self.n * 2)))
         for i in range(self.n):
@@ -60,13 +61,13 @@ class CPG:
 
     def plot_init(self):
         self.simu_time = 10
-        self.step = 1000
+        self.step = 3000
         self.t_space = np.linspace(0, self.simu_time, self.step)
         self.fig = pp.figure(1)
         self.line = []
         self.linereal = []
-        self.val = np.zeros((self.n, 1000))
-        self.real_val = np.zeros((self.n, 1000))
+        self.val = np.zeros((self.n, self.step))
+        self.real_val = np.zeros((self.n, self.step))
         for j in range(self.n):
             self.val[j, 0] = -1
             self.val[j, 1] = 1
@@ -129,7 +130,10 @@ class CPG:
         self.phi = rk4.rk4(0, self.phi, dt, f)
 
     def get_theta(self):
-        self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(self.phi))
+        if self.reset:
+            return np.zeros((1, self.n))
+        else:
+            self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(self.phi))
         return self.theta
 
     def run_dynamic_amp_offset(self, dt=0.01):
@@ -161,10 +165,15 @@ class CPG:
         Ri and Xi """
         return self.n * 2 + 1
 
-    def read_parameters(self, params):
+    def read_parameters(self, params=None):
+        if params is None:
+            params = np.zeros((1, 2 * self.n + 1))
+            self.reset = True
+        else:
+            self.reset = False
         self.omega = params[0, 0] * 3 * np.ones(self.n)
-        self.X[0,:] = params[0, 1:self.n + 1]
-        self.R[0,:] = params[0, self.n + 1:]
+        self.X[0,:] = (params[0, 1:self.n + 1] - 0.5) * math.pi
+        self.R[0,:] = params[0, self.n + 1:] 
 
 
 def main():

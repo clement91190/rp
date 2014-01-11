@@ -13,5 +13,6 @@
 \contentsline {section}{\numberline {3.1}PID Control of the joints}{7}{section.18}
 \contentsline {section}{\numberline {3.2}Central Pattern Generator}{8}{section.20}
 \contentsline {section}{\numberline {3.3}Learning}{10}{section.28}
+\contentsline {subsection}{\numberline {3.3.1}Random Search}{11}{subsection.29}
 \vspace {2em}
 \vspace {2em}

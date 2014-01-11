@@ -88,20 +88,35 @@ class MyApp(ShowBase):
         #creatures
         self.creatures = []
 
+    def reset(self, visual=True):
+        """ set all angles to 0 and wait to reset the shapes """
+        for creat in self.creatures:
+           creat.cpg.read_parameters()
+        self.run(500, visual)
+
     def see_best(self):
+
+        self.run(500, visual=True)
 
         for creat in self.creatures:
             creat.affect_optimizer(TestBest())
-        self.run(1500, visual=True)
-
-    def learn(self, nb_iter):
+        while True:
+            for creat in self.creatures:
+                creat.send_result_to_brain()
+            self.run(1500, visual=True)
+            self.reset(True)
+    
+    def learn(self, nb_iter=-1):
+        i = 0
         self.run(1500, visual=False)
         for creat in self.creatures:
             creat.affect_optimizer()
-        for i in range(nb_iter):
+        while i < nb_iter or nb_iter == -1: 
             for creat in self.creatures:
                 creat.send_result_to_brain()
-            self.run(1500, visual=False)
+            self.run(2500, visual=False)
+            self.reset(False)
+            i += 1
 
     def update(self, task):
         self.physics.simulationTask(self.creatures, 0.01)
@@ -119,7 +134,7 @@ class MyApp(ShowBase):
         for i in range(t):
             taskMgr.step()
 
-    def add_creature(self):
+    def add_creature(self, plot=False):
         """function that add the creature described in a file (name)
         and add it in panda world"""
         m = MetaStructure()
@@ -137,7 +152,7 @@ class MyApp(ShowBase):
         #m.add_joint()
         #m.follow_edge()
         #m.add_block()
-        m.next_edge() 
+        #m.next_edge() 
         for i in range(4):
             m.add_block()
             m.follow_edge()
@@ -157,7 +172,7 @@ class MyApp(ShowBase):
        # m.add_joint()
         
 #m.follow_edge()
-        self.creatures.append(Creature(m, self.physics, self.render))
+        self.creatures.append(Creature(m, self.physics, self.render, plot))
         #return Creature(m).get_variables()
 
     def add_snake(self, size):

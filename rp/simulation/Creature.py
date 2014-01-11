@@ -15,7 +15,7 @@ import random
 
 
 class Creature():
-    def __init__(self, metastructure, physics, render):
+    def __init__(self, metastructure, physics, render, cpg_graph=False):
         """constructor of the class
         use the metastructure"""
         self.metastructure = metastructure
@@ -30,7 +30,7 @@ class Creature():
         self.dof_motors = {}
         self.factory = MultiBoxFactory(self.physics, self.render)
         self.build()
-        self.cpg = cpg.CPG(self.metastructure)
+        self.cpg = cpg.CPG(self.metastructure, cpg_graph)
         self.cpg.set_desired_frequency()
         self.cpg.set_desired_amplitude()
         self.position = 0
@@ -133,7 +133,7 @@ class Creature():
         cs.setAnchor(anchor)
         
         #add the motor
-        cs.setParamFMax(1000)
+        cs.setParamFMax(100)
         cs.setParamFudgeFactor(0.5)
         cs.setParamCFM(11.1111)
         cs.setParamStopCFM(11.1111)
@@ -268,8 +268,8 @@ class Creature():
         """update the target angles """
         self.cpg.run_all_dynamics(0.01)
         angles = self.cpg.get_theta()
-        self.cpg.read_angle(angles, 0.01)
-        self.cpg.correct_speed()
+        #self.cpg.read_angle(angles, 0.01)
+        #self.cpg.correct_speed()
         for i, node in enumerate(self.metastructure.dof_nodes):
             (hinge, pid) = self.dof_motors[node]
             pid.set_target_value(angles[0, i])
