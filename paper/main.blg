@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: unsrtnat.bst
+Database file #1: Bibliography.bib
+I was expecting a `,' or a `}'---line 135 of file Bibliography.bib
+ :     
+ :     year={2013}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--empty year in mitcubes
+You've used 10 entries,
+            2481 wiz_defined-function locations,
+            612 strings with 6060 characters,
+and the built_in function-call counts, 4070 in all, are:
+= -- 379
+> -- 144
+< -- 13
++ -- 60
+- -- 40
+* -- 248
+:= -- 588
+add.period$ -- 33
+call.type$ -- 10
+change.case$ -- 19
+chr.to.int$ -- 10
+cite$ -- 11
+duplicate$ -- 229
+empty$ -- 402
+format.name$ -- 59
+if$ -- 923
+int.to.chr$ -- 1
+int.to.str$ -- 11
+missing$ -- 9
+newline$ -- 57
+num.names$ -- 30
+pop$ -- 108
+preamble$ -- 1
+purify$ -- 10
+quote$ -- 0
+skip$ -- 162
+stack$ -- 0
+substring$ -- 206
+swap$ -- 63
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 67
+warning$ -- 1
+while$ -- 36
+width$ -- 0
+write$ -- 135
+(There was 1 error message)
