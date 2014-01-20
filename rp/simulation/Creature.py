@@ -53,7 +53,7 @@ class Creature():
                 self.penalty = 0
             else:
                 self.brain.set_result(traveled_distance.length())
-            self.cpg.read_parameters(self.brain.next_val_to_test())
+            self.cpg.read_parameters(self.brain.next_val_to_test(), True)
 
     def update_position(self):
         """ update the position and return the traveled distance """

@@ -91,9 +91,11 @@ class MyApp(ShowBase):
     def reset(self, visual=True):
         """ set all angles to 0 and wait to reset the shapes """
         for creat in self.creatures:
-           creat.cpg.read_parameters()
+            creat.cpg.reset = True
         self.run(500, visual)
-
+        for creat in self.creatures:
+            creat.cpg.reset = False
+        
     def see_best(self):
 
         self.run(500, visual=True)
@@ -103,8 +105,8 @@ class MyApp(ShowBase):
         while True:
             for creat in self.creatures:
                 creat.send_result_to_brain()
-            self.run(1500, visual=True)
             self.reset(True)
+            self.run(1500, visual=True)
     
     def learn(self, nb_iter=-1):
         i = 0
@@ -114,8 +116,13 @@ class MyApp(ShowBase):
         while i < nb_iter or nb_iter == -1: 
             for creat in self.creatures:
                 creat.send_result_to_brain()
-            self.run(50000, visual=False)
+            # mean of the movement over 3 trials.
             self.reset(False)
+            self.run(1500, visual=False)
+            self.reset(False)
+            self.run(1500, visual=False)
+            self.reset(False)
+            self.run(1500, visual=False)
             i += 1
 
     def update(self, task):

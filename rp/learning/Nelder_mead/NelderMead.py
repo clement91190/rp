@@ -55,6 +55,7 @@ class NelderMead(Interface):
                     self.evalc_or_e = self.evalr = False
         else:
             self.num_of_points_to_test += 1
+        print "eval x", self.num_of_points_to_test
         return self.points_and_v[self.num_of_points_to_test][0]
 
     def set_result(self, res):

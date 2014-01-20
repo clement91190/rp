@@ -129,14 +129,17 @@ class CPG:
         f = lambda t, phi: CPG.phi_diff(self.omega, self.w, phi, self.small_phi, self.get_r()) + self.aphi * self.phi_diff_error
         self.phi = rk4.rk4(0, self.phi, dt, f)
 
-    def get_theta(self):
-        if self.reset:
-            return np.zeros((1, self.n))
-        else:
-            self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(self.phi))
+    def right_range_for_theta(self):
             self.theta = [max(self.theta[0, i], - math.pi * 0.75) for i in range(np.shape(self.theta)[1])]
             self.theta = [min(ti,   math.pi * 0.75) for ti in self.theta]
             self.theta = np.array([self.theta])
+    
+
+    def get_theta(self):
+        if self.reset:
+            self.phi = math.pi * np.matrix(np.ones(self.n))
+        self.theta = self.get_x() + np.multiply(self.get_r(), np.cos(self.phi))
+        self.right_range_for_theta()
         return self.theta
 
     def run_dynamic_amp_offset(self, dt=0.01):
@@ -168,12 +171,8 @@ class CPG:
         Ri and Xi """
         return self.n * 2 + 1
 
-    def read_parameters(self, params=None):
-        if params is None:
-            params = np.zeros((1, 2 * self.n + 1))
-            self.reset = True
-        else:
-            self.reset = False
+    def read_parameters(self, params, reset):
+        self.reset = reset
         self.omega = params[0, 0] * 3 * np.ones(self.n)
         self.X[0,:] = (params[0, 1:self.n + 1] - 0.5) * math.pi
         self.R[0,:] = params[0, self.n + 1:] 
