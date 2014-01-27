@@ -83,7 +83,7 @@ class NelderMead(Interface):
         """ homotethia of scale 0.5 centered on best point """
         x1 = self.points_and_v[0][0]
         for i, (xi, res) in enumerate(self.points_and_v[1:]):
-            self.points_and_v[i + 1] = (0.5 * (xi - x1), 0 )
+            self.points_and_v[i + 1] = (0.5 * (xi + x1), 0)
             try: 
                 assert len(np.shape(self.points_and_v[i + 1][0])) == 2
             except:
