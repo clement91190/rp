@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -16,19 +16,6 @@ D.~Marbach and A.J. Ijspeert.
 \newblock In \emph{Mechatronics and Automation, 2005 IEEE International
   Conference}, volume~1, pages 248--253. IEEE, 2005.
 
-\bibitem[Heinen and Os{\'o}rio(2006)]{heinen}
-M.R. Heinen and F.S. Os{\'o}rio.
-\newblock Applying genetic algorithms to control gait of physically based
-  simulated robots.
-\newblock In \emph{Evolutionary Computation, 2006. CEC 2006. IEEE Congress on},
-  pages 1823--1830. IEEE, 2006.
-
-\bibitem[Schaffer and Grefenstette(1985)]{schaffer}
-J.D. Schaffer and J.J. Grefenstette.
-\newblock Multi-objective learning via genetic algorithms.
-\newblock In \emph{Proceedings of the Ninth International Joint Conference on
-  Artificial Intelligence}, pages 593--595. Citeseer, 1985.
-
 \bibitem[Sproewitz et~al.(2008)Sproewitz, Moeckel, Maye, and
   Ijspeert]{sproewitz}
 Alexander Sproewitz, Rico Moeckel, J{\'e}r{\^o}me Maye, and Auke~Jan Ijspeert.
@@ -37,32 +24,31 @@ Alexander Sproewitz, Rico Moeckel, J{\'e}r{\^o}me Maye, and Auke~Jan Ijspeert.
 \newblock \emph{The International Journal of Robotics Research}, 27\penalty0
   (3-4):\penalty0 423--443, 2008.
 
-\bibitem[Kohl and Stone(2004)]{aibo}
-N.~Kohl and P.~Stone.
-\newblock Machine learning for fast quadrupedal locomotion.
-\newblock In \emph{Proceedings of the National Conference on Artificial
-  Intelligence}, pages 611--616. Menlo Park, CA; Cambridge, MA; London; AAAI
-  Press; MIT Press; 1999, 2004.
-
-\bibitem[Christensen et~al.(2013)Christensen, Schultz, and Stoy]{christensen}
-David~Johan Christensen, Ulrik~Pagh Schultz, and Kasper Stoy.
-\newblock A distributed and morphology-independent strategy for adaptive
-  locomotion in self-reconfigurable modular robots.
-\newblock \emph{Robotics and Autonomous Systems}, 2013.
-
-\bibitem[Romanishin()]{mitcubes}
-John Romanishin.
-\newblock Mit's m blocks toward modular robotics.
-\newblock
-  "http://web.mit.edu/newsoffice/2013/simple-scheme-for-self-assembling-robots-1004.html".
+\bibitem[Geijtenbeek et~al.(2013)Geijtenbeek, van~de Panne, and van~der
+  Stappen]{MuscleBasedBipeds}
+Thomas Geijtenbeek, Michiel van~de Panne, and A.~Frank van~der Stappen.
+\newblock Flexible muscle-based locomotion for bipedal creatures.
+\newblock \emph{ACM Transactions on Graphics}, 32\penalty0 (6), 2013.
 
 \bibitem[Smith et~al.(2005)]{ode}
 Russell Smith et~al.
 \newblock Open dynamics engine, 2005.
 
+\bibitem[Romanishin(2013)]{mitcubes}
+John Romanishin.
+\newblock Mit's m blocks toward modular robotics.
+\newblock
+  "http://web.mit.edu/newsoffice/2013/simple-scheme-for-self-assembling-robots-1004.html",
+  2013.
+
 \bibitem[Lang(2011)]{panda3d}
 Christoph Lang.
 \newblock \emph{Panda3D 1.7 Game Developer's Cookbook}.
 \newblock Packt Publishing, 2011.
+
+\bibitem[Jaeger(2007)]{jaeger2007echo}
+Herbert Jaeger.
+\newblock Echo state network.
+\newblock \emph{Scholarpedia}, 2\penalty0 (9):\penalty0 2330, 2007.
 
 \end{thebibliography}

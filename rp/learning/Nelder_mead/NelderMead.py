@@ -14,6 +14,8 @@ class NelderMead(Interface):
         self.resr = 0
         self.rese_or_c = 0
         self.random_init()
+        self.all_scores = []
+        self.iter = 0
 
     def random_init(self):
         """ generate self.size + 1 points in the research space """
@@ -92,6 +94,9 @@ class NelderMead(Interface):
         print "homotethia"
 
     def save_best(self):
+        self.all_scores.append([v[1] for v in self.points_and_v])
+        with open('all_scores.tkl', 'w') as f:
+            pickle.dump(self.all_scores, f)
         print "best score", self.points_and_v[0][1]
         with open('results.txt', 'w') as fich:
             pickle.dump(self.points_and_v[0][0], fich)

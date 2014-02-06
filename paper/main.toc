@@ -2,19 +2,19 @@
 \vspace {1em}
 \contentsline {chapter}{Contents}{ii}{dummy.2}
 \contentsline {chapter}{List of Figures}{iii}{dummy.4}
-\contentsline {chapter}{\numberline {1}State of the Art}{1}{chapter.6}
-\contentsline {chapter}{\numberline {2}Simulation Environment}{2}{chapter.7}
-\contentsline {section}{\numberline {2.1}Physics Engine}{2}{section.8}
-\contentsline {section}{\numberline {2.2}Visual rendering}{3}{section.10}
-\contentsline {subsection}{\numberline {2.2.1}The coordinate system}{4}{subsection.12}
-\contentsline {section}{\numberline {2.3}Structures of the Robots as a Graph}{6}{section.14}
-\contentsline {chapter}{\numberline {3}Control}{8}{chapter.17}
-\contentsline {section}{\numberline {3.1}PID Control of the joints}{8}{section.18}
-\contentsline {section}{\numberline {3.2}Central Pattern Generator}{9}{section.20}
-\contentsline {chapter}{\numberline {4}Learning}{12}{chapter.28}
-\contentsline {section}{\numberline {4.1}Random Search}{13}{section.30}
-\contentsline {section}{\numberline {4.2}Nelder-Mead method}{13}{section.31}
-\contentsline {chapter}{\numberline {5}Future Work}{15}{chapter.33}
+\contentsline {chapter}{\numberline {1}Related Work}{1}{chapter.6}
+\contentsline {chapter}{\numberline {2}Simulation Environment}{4}{chapter.7}
+\contentsline {section}{\numberline {2.1}Physics Engine}{4}{section.8}
+\contentsline {section}{\numberline {2.2}Visual rendering}{5}{section.10}
+\contentsline {subsection}{\numberline {2.2.1}The coordinate system}{6}{subsection.12}
+\contentsline {section}{\numberline {2.3}Structures of the Robots as a Graph}{8}{section.14}
+\contentsline {chapter}{\numberline {3}Control}{10}{chapter.17}
+\contentsline {section}{\numberline {3.1}PID Control of the joints}{10}{section.18}
+\contentsline {section}{\numberline {3.2}Central Pattern Generator}{11}{section.20}
+\contentsline {chapter}{\numberline {4}Learning}{14}{chapter.28}
+\contentsline {section}{\numberline {4.1}Random Search}{15}{section.30}
+\contentsline {section}{\numberline {4.2}Nelder-Mead method}{15}{section.31}
+\contentsline {chapter}{\numberline {5}Future Work}{17}{chapter.33}
 \vspace {2em}
 \vspace {2em}
-\contentsline {chapter}{Bibliography}{16}{dummy.34}
+\contentsline {chapter}{Bibliography}{18}{dummy.34}
