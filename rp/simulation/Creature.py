@@ -1,4 +1,5 @@
 import math
+import numpy as np
 from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
 from panda3d.ode import OdeHingeJoint
 from panda3d.ode import OdeBody, OdePlaneGeom 
@@ -40,6 +41,7 @@ class Creature():
         """ affect to the structure a learning process """
         if interface is None:
             #self.brain = Interface(self.cpg.get_size())
+            print "num of free parameters : ", self.cpg.get_size()
             self.brain = NelderMead(self.cpg.get_size())
         else:
             self.brain = interface
@@ -53,7 +55,10 @@ class Creature():
                 self.penalty = 0
             else:
                 self.brain.set_result(traveled_distance.length())
-            self.cpg.read_parameters(self.brain.next_val_to_test(), True)
+            params = self.brain.next_val_to_test()
+            params = np.reshape(params, (1, self.cpg.get_size()))
+            #print "shape", params.shape
+            self.cpg.read_parameters(params, True)
 
     def update_position(self):
         """ update the position and return the traveled distance """

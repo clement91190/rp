@@ -6,6 +6,7 @@ from panda3d.core import Vec3, TransformState
 from panda3d.core import BitMask32, Vec4
 from rp.simulation.Creature import Creature
 from rp.learning.interface import TestBest
+from rp.learning.server_brain import BrainOnline
 
 
 class Physics():
@@ -107,7 +108,25 @@ class MyApp(ShowBase):
                 creat.send_result_to_brain()
             self.reset(True)
             self.run(1500, visual=True)
-    
+     
+    def learn_with_server(self, nb_iter=-1):
+        i = 0
+        self.run(1500, visual=False)
+        for creat in self.creatures:
+            creat.affect_optimizer(BrainOnline("quad_learning"))
+        while i < nb_iter or nb_iter == -1: 
+            for creat in self.creatures:
+                creat.send_result_to_brain()
+            # mean of the movement over 3 trials.
+            self.reset(False)
+            self.run(1500, visual=False)
+            self.reset(False)
+            self.run(1500, visual=False)
+            self.reset(False)
+            self.run(1500, visual=False)
+            i += 1
+
+ 
     def learn(self, nb_iter=-1):
         i = 0
         self.run(1500, visual=False)
