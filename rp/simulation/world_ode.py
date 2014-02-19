@@ -97,21 +97,20 @@ class MyApp(ShowBase):
                 self.physics.simulationTask(self.creatures, 0.005)
         for creat in self.creatures:
             creat.cpg.reset = True
-        self.run(200, visual)
+        self.run(50, visual)
         for creat in self.creatures:
             creat.cpg.reset = False
      
 
     def see_params(self, params):
-        self.run(500, visual=True)
-
+        self.init_simu()
         for creat in self.creatures:
             creat.affect_optimizer(TestGiven(params))
         while True:
             for creat in self.creatures:
                 creat.send_result_to_brain()
             self.reset(True)
-            self.run(1500, visual=True)
+            self.run(2500, visual=True)
         
     def init_simu(self):
         self.run(100, visual=True)
@@ -133,12 +132,36 @@ class MyApp(ShowBase):
         self.init_simu()
         for creat in self.creatures:
             creat.affect_optimizer(BrainOnline("quad_learning"))
+        ind = 1
+        score_base = 5.
+        old_score = 0.
+        score_dif = 0.
+        stop = False
         while i < nb_iter or nb_iter == -1: 
             for creat in self.creatures:
-                creat.send_result_to_brain()
+                score = creat.position - creat.get_position()
+                score = score.length()
+                if  score - old_score < 0.5 * score_dif:
+                    stop = True
+                    score /= (score - old_score)/score_dif
+                    print "punished"
+                if score > score_base * (ind) and not stop:
+                    print "well done ! ", ind
+                    ind += 1
+                    # with this if a creature has a nice score, then it can be evaluated longer...
+                else:   
+                    stop = False
+                    score_dif = 0
+                    old_score = 0.
+                    score = 0.
+                    creat.send_result_to_brain()
+                    ind = 1
+                score_dif = score - old_score
+                old_score = score
+
             # mean of the movement over 3 trials.
             self.reset(False)
-            self.run(2500, visual=False)
+            self.run(1500, visual=False)
             i += 1
 
  

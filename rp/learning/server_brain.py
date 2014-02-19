@@ -12,7 +12,8 @@ class BrainOnline(Interface):
     def next_val_to_test(self):
         """ return the array of parameters to be tested """
         self.id, params = work_endpoints.get_task(self.optim_problem)
-        print "...got task params: {}".format(params)
+        #print "...got task params: {}".format(params)
+        print "...got task !"
         return params
 
     def set_result(self, score):
