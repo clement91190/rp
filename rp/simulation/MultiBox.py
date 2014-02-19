@@ -16,6 +16,12 @@ class MultiBox():
         #self.M.setBox(50, 0.1, 0.1, 0.1)
         #self.body.setMass(self.M)
         self.body.setPosition(0, 0, z)
+       
+    def set_position(self, v):
+        """ v : Vec3 """
+        self.body.set_position(v)
+        self.body.set_linear_vel(Vec3(0, 0, 0))
+        self.body.set_angular_vel(Vec3(0, 0, 0))
 
     def get_position(self):
         return self.body.getPosition()
@@ -63,6 +69,22 @@ class MultiBoxFactory():
         self.multiboxes = []
         self.physics = physics
         self.render = render
+
+    def record_position(self):
+        self.positions = []
+        for m in self.multiboxes:
+            self.positions.append(m.get_position())
+
+    def reset_position(self):    
+        for m, p in zip(self.multiboxes, self.positions):
+            m.set_position(p)
+    
+    def set_position(self, v):
+        """ v: Vec3 """
+        pos = self.multiboxes[0].get_position()
+        for m in self.multiboxes:
+            m.set_position(v + (m.get_position() - pos))
+        
 
     def get_position(self):
         if len(self.multiboxes) > 0:

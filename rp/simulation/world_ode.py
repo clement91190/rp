@@ -5,7 +5,7 @@ from panda3d.ode import OdeSimpleSpace, OdeJointGroup, OdePlaneGeom
 from panda3d.core import Vec3, TransformState
 from panda3d.core import BitMask32, Vec4
 from rp.simulation.Creature import Creature
-from rp.learning.interface import TestBest
+from rp.learning.interface import TestBest, TestGiven
 from rp.learning.server_brain import BrainOnline
 
 
@@ -91,27 +91,46 @@ class MyApp(ShowBase):
 
     def reset(self, visual=True):
         """ set all angles to 0 and wait to reset the shapes """
+        for i in range(200):
+            for creat in self.creatures:
+                creat.reset_position()
+                self.physics.simulationTask(self.creatures, 0.005)
         for creat in self.creatures:
             creat.cpg.reset = True
-        self.run(500, visual)
+        self.run(200, visual)
         for creat in self.creatures:
             creat.cpg.reset = False
-        
-    def see_best(self):
+     
 
+    def see_params(self, params):
         self.run(500, visual=True)
 
+        for creat in self.creatures:
+            creat.affect_optimizer(TestGiven(params))
+        while True:
+            for creat in self.creatures:
+                creat.send_result_to_brain()
+            self.reset(True)
+            self.run(1500, visual=True)
+        
+    def init_simu(self):
+        self.run(100, visual=True)
+        for creat in self.creatures:
+            creat.record_position() 
+     
+    def see_best(self):
+        self.init_simu()
         for creat in self.creatures:
             creat.affect_optimizer(TestBest())
         while True:
             for creat in self.creatures:
                 creat.send_result_to_brain()
             self.reset(True)
-            self.run(1500, visual=True)
+            self.run(300, visual=True)
      
     def learn_with_server(self, nb_iter=-1):
         i = 0
-        self.run(1500, visual=False)
+        self.init_simu()
         for creat in self.creatures:
             creat.affect_optimizer(BrainOnline("quad_learning"))
         while i < nb_iter or nb_iter == -1: 
@@ -119,11 +138,7 @@ class MyApp(ShowBase):
                 creat.send_result_to_brain()
             # mean of the movement over 3 trials.
             self.reset(False)
-            self.run(1500, visual=False)
-            self.reset(False)
-            self.run(1500, visual=False)
-            self.reset(False)
-            self.run(1500, visual=False)
+            self.run(2500, visual=False)
             i += 1
 
  
@@ -203,7 +218,7 @@ class MyApp(ShowBase):
         m.follow_father()
 
 
-    def add_four_legs_creature(self, plot=True):
+    def add_four_legs_creature(self, plot=False):
         m = MetaStructure()
         m.next_edge()
         m.next_edge()

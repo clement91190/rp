@@ -35,11 +35,24 @@ class Interface:
             pickle.dump(self.best_val, fich)
 
 
+
 class TestBest(Interface):
     def __init__(self):
         with open('results.txt', 'r') as fich:
             self.current = pickle.load(fich)
             print " loading best score", self.current
+
+    def next_val_to_test(self):
+        return self.current
+
+    def set_result(self, res):
+        print "traveled distance", res 
+
+
+class TestGiven(Interface):
+    def __init__(self, params):
+        self.current = params 
+        print " loading ", self.current
 
     def next_val_to_test(self):
         return self.current

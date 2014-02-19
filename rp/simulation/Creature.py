@@ -14,7 +14,7 @@ from rp.simulation.PID import PID
 
 
 class Creature():
-    def __init__(self, metastructure, physics, render, cpg_graph=False):
+    def __init__(self, metastructure, physics, render, cpg_graph=False, start_position=Vec3(0, 0, 2)):
         """constructor of the class
         use the metastructure"""
         self.metastructure = metastructure
@@ -33,9 +33,20 @@ class Creature():
         self.cpg = cpg.CPG(self.metastructure, cpg_graph)
         self.cpg.set_desired_frequency()
         self.cpg.set_desired_amplitude()
+        self.factory.set_position(start_position)
+        self.start_position = start_position
         self.position = 0
         self.problem = False
         self.penalty = 0
+     
+    def record_position(self):
+        self.factory.record_position()
+    
+    def reset_position(self):
+        self.factory.reset_position()
+
+    def rese_start_position(self):
+        self.factory.set_position(self.start_position)
 
     def affect_optimizer(self, interface=None):
         """ affect to the structure a learning process """
