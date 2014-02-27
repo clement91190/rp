@@ -96,9 +96,11 @@ class MyApp(ShowBase):
                 creat.reset_position()
                 self.physics.simulationTask(self.creatures, 0.005)
         for creat in self.creatures:
+            creat.reset()
             creat.control_model.reset = True
-        self.run(50, visual)
+        self.run(500, visual)
         for creat in self.creatures:
+            creat.reset()
             creat.control_model.reset = False
      
 
@@ -125,7 +127,7 @@ class MyApp(ShowBase):
             for creat in self.creatures:
                 creat.send_result_to_brain()
             self.reset(True)
-            self.run(300, visual=True)
+            self.run(600, visual=True)
 
     def see_best(self):
         self.init_simu()
@@ -317,7 +319,7 @@ class MyApp(ShowBase):
         self.creatures.append(Creature(m, self.physics, self.render, plot))
         #return Creature(m).get_variables()
 
-    def add_snake(self, size):
+    def add_snake(self, size, plot):
         """function that add the creature described in a file (name)
         and add it in panda world"""
         m = MetaStructure()
@@ -330,7 +332,7 @@ class MyApp(ShowBase):
         
         m.add_block()
 
-        self.creatures.append(Creature(m, self.physics, self.render))
+        self.creatures.append(Creature(m, self.physics, self.render, plot))
         #return Creature(m).get_variables()
 
 

@@ -40,14 +40,19 @@ class Creature():
         self.position = 0
         self.problem = False
         self.penalty = 0
-     
+    
+    def reset(self):
+        for i, node in enumerate(self.metastructure.dof_nodes):
+            (hinge, pid) = self.dof_motors[node]
+            pid.reset()
+
     def record_position(self):
         self.factory.record_position()
     
     def reset_position(self):
         self.factory.reset_position()
 
-    def rese_start_position(self):
+    def reset_start_position(self):
         self.factory.set_position(self.start_position)
 
     def affect_optimizer(self, interface=None):

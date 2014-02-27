@@ -8,6 +8,7 @@ import numpy as np
 class Fourier_Decompos(ControlModel):
     def __init__(self, metastructure, plot=False):
 
+        print " PLOTTING ", plot
         #call to superclass
         ControlModel.__init__(self, metastructure, plot)
 
@@ -29,18 +30,22 @@ class Fourier_Decompos(ControlModel):
         cos_sin_val = np.array(cos_sin_val)
         assert(len(cos_sin_val) == self.b_coeff.shape[1])
         self.theta = np.dot(self.b_coeff, cos_sin_val).reshape(1, self.n)
+        self.right_range_for_theta()
 
     def get_size(self):
         return np.prod(self.b_coeff.shape)
 
     def read_parameters(self, params, reset):
-        self.b_coeff = params.reshape(self.b_coeff.shape)
+        self.b_coeff =  0.5 * params.reshape(self.b_coeff.shape)
         self.reset = reset
         if self.reset:
             self.t = 0
             
     def run_all_dynamics(self, dt=0.01):
         self.update_theta(dt)
+        if self.plot:
+            self.update_plot()
+    
 
     def random_init(self):
         self.read_parameters(np.random.random(self.b_coeff.shape), reset=True)
