@@ -15,18 +15,6 @@ import rp.datastructure.metastructure as metastructure
 
 apply = lambda m, n,  t: np.matrix([[t(m, n, i, j) for j in range(n.shape[1])] for i in range(n.shape[0])])
 
-class ControlModel:
-    """ abstract class to represent the layer between the control of the joints angle and the learning algorithm """
-    def __init__(self, metastructure, plot=False):
-        pass
-
-    def get_theta(self):
-        pass
-
-    def read_angles(self):
-        pass
-
-
 
 
 class CPG:
@@ -66,11 +54,6 @@ class CPG:
             self.m_offset[i, i + self.n] = 1
             self.m_offset[i + self.n, i] = - self.ax ** 2 / 4
             self.m_offset[i + self.n, i + self.n] = - self.ax
-
-        self.plot = plot
-
-        if self.plot:
-            self.plot_init()
 
     def plot_init(self):
         self.simu_time = 10

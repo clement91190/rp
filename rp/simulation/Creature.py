@@ -4,7 +4,7 @@ from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
 from panda3d.ode import OdeHingeJoint
 from panda3d.ode import OdeBody, OdePlaneGeom 
 
-from rp.cpg import cpg
+from rp.control import cpg
 from rp.simulation.MultiBox import MultiBoxFactory
 from rp.learning.interface import Interface
 from rp.learning.Nelder_mead.NelderMead import NelderMead
@@ -307,7 +307,7 @@ class Creature():
             pid.read(hinge.getAngle())
             hinge.addTorque(cmd)
             #print hinge.getAngle()
-            self.cpg.real_angles[i] = hinge.getAngle()
+            self.cpg.angles[i] = hinge.getAngle()
             #hinge.addTorque(5)
             if abs(hinge.getAngleRate()) > 100:
                 #print "problem"
