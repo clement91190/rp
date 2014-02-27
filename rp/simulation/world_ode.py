@@ -1,4 +1,9 @@
 from rp.datastructure.metastructure import MetaStructure
+import time
+from rp.utils.config import config
+if not config.visual:
+    from pandac.PandaModules import loadPrcFileData
+    loadPrcFileData("", "window-type none")
 from direct.showbase.ShowBase import ShowBase
 from panda3d.ode import OdeWorld
 from panda3d.ode import OdeSimpleSpace, OdeJointGroup, OdePlaneGeom 
@@ -81,8 +86,9 @@ class MyApp(ShowBase):
         #np.setPos(0, 0, -2)
 
         #camera
-        base.cam.setPos(10, -30, 20)
-        base.cam.lookAt(0, 0, 5)
+        if config.visual:
+            base.cam.setPos(10, -30, 20)
+            base.cam.lookAt(0, 0, 5)
 
         self.taskMgr.add(self.update, 'update')
         #taskMgr.doMethodLater(0.5, simulationTask, "Physics Simulation")
@@ -150,6 +156,7 @@ class MyApp(ShowBase):
         old_score = 0.
         score_dif = 0.
         stop = False
+        t = time.time()
         while i < nb_iter or nb_iter == -1: 
             for creat in self.creatures:
                 score = creat.position - creat.get_position()
@@ -168,6 +175,8 @@ class MyApp(ShowBase):
                     old_score = 0.
                     score = 0.
                     creat.send_result_to_brain()
+                    if time.time() - t > 24:
+                        return;
                     ind = 1
                 score_dif = score - old_score
                 old_score = score

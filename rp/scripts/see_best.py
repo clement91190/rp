@@ -1,4 +1,9 @@
+import rp.utils.config
+
+rp.utils.config.config.visual=True
+
 from rp.simulation import world_ode as w
+
 
 app = w.MyApp()
 
