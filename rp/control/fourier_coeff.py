@@ -14,7 +14,9 @@ class Fourier_Decompos(ControlModel):
         print "Building Fourier Decompos Model"
         self.t = 0
         self.n_harmo = 2  # number of harmonics
-        self.b_coeff = np.array(self.n, self.n_harmo * 2 + 1)
+        self.b_coeff = np.zeros((self.n, self.n_harmo * 2 + 1))
+        self.t_array = [self.t * i for i in range(1, self.n_harmo + 1)]
+        print "# n of parameters  : ", self.get_size()
 
     def update_t_array(self):
         self.t_array = [self.t * i for i in range(1, self.n_harmo + 1)]
@@ -23,16 +25,22 @@ class Fourier_Decompos(ControlModel):
         if not self.reset:
             self.t += dt
             self.update_t_array()
-        cos_sin_val = [1.0] + list(np.cos(self.t_array)) + list(np.sin(self.t_array))
+        cos_sin_val = [1.0] + [v / (i + 1) * (i + 1)  for i, v in enumerate(list(np.cos(self.t_array)))] + [v / (i + 1) * (i + 1)  for i, v in enumerate(list(np.sin(self.t_array)))] 
         cos_sin_val = np.array(cos_sin_val)
-        assert(cos_sin_val.shape[0] == self.b_coeff.shape[1])
+        assert(len(cos_sin_val) == self.b_coeff.shape[1])
         self.theta = np.dot(self.b_coeff, cos_sin_val).reshape(1, self.n)
 
     def get_size(self):
         return np.prod(self.b_coeff.shape)
 
     def read_parameters(self, params, reset):
-        self.b_coeff = self.params.reshape(self.b_coeff.shape)
+        self.b_coeff = params.reshape(self.b_coeff.shape)
         self.reset = reset
         if self.reset:
             self.t = 0
+            
+    def run_all_dynamics(self, dt=0.01):
+        self.update_theta(dt)
+
+    def random_init(self):
+        self.read_parameters(np.random.random(self.b_coeff.shape), reset=True)

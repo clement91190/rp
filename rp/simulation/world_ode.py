@@ -5,7 +5,7 @@ from panda3d.ode import OdeSimpleSpace, OdeJointGroup, OdePlaneGeom
 from panda3d.core import Vec3, TransformState
 from panda3d.core import BitMask32, Vec4
 from rp.simulation.Creature import Creature
-from rp.learning.interface import TestBest, TestGiven
+from rp.learning.interface import TestBest, TestGiven, TestRandom
 from rp.learning.server_brain import BrainOnline
 
 
@@ -96,10 +96,10 @@ class MyApp(ShowBase):
                 creat.reset_position()
                 self.physics.simulationTask(self.creatures, 0.005)
         for creat in self.creatures:
-            creat.cpg.reset = True
+            creat.control_model.reset = True
         self.run(50, visual)
         for creat in self.creatures:
-            creat.cpg.reset = False
+            creat.control_model.reset = False
      
 
     def see_params(self, params):
@@ -117,6 +117,16 @@ class MyApp(ShowBase):
         for creat in self.creatures:
             creat.record_position() 
      
+    def see_random(self):
+        self.init_simu()
+        for creat in self.creatures:
+            creat.affect_optimizer(TestRandom(creat.control_model.get_size()))
+        while True:
+            for creat in self.creatures:
+                creat.send_result_to_brain()
+            self.reset(True)
+            self.run(300, visual=True)
+
     def see_best(self):
         self.init_simu()
         for creat in self.creatures:
@@ -128,6 +138,7 @@ class MyApp(ShowBase):
             self.run(300, visual=True)
      
     def learn_with_server(self, nb_iter=-1):
+#TODO clean this  !!!!
         i = 0
         self.init_simu()
         for creat in self.creatures:

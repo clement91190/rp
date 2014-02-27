@@ -53,6 +53,11 @@ class CPG(ControlModel):
             self.m_offset[i, i + self.n] = 1
             self.m_offset[i + self.n, i] = - self.ax ** 2 / 4
             self.m_offset[i + self.n, i + self.n] = - self.ax
+    
+    def random_init(self):
+        self.set_desired_amplitude()
+        self.set_desired_frequency()
+
 
     def get_x(self):
         """ return the value without the derivative"""

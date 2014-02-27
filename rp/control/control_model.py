@@ -35,6 +35,9 @@ class ControlModel(object):
         and option to reset, """
         pass
     
+    def run_all_dynamics(self, dt=0.01):
+        pass
+    
     def right_range_for_theta(self):
             self.theta = [max(self.theta[0, i], - math.pi * 0.75) for i in range(np.shape(self.theta)[1])]
             self.theta = [min(ti,   math.pi * 0.75) for ti in self.theta]

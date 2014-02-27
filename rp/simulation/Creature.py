@@ -4,7 +4,9 @@ from panda3d.core import Vec3, LMatrix4f,  LQuaternionf, TransformState
 from panda3d.ode import OdeHingeJoint
 from panda3d.ode import OdeBody, OdePlaneGeom 
 
-from rp.control import cpg
+from rp.control.cpg import CPG
+from rp.control.fourier_coeff import Fourier_Decompos
+
 from rp.simulation.MultiBox import MultiBoxFactory
 from rp.learning.interface import Interface
 from rp.learning.Nelder_mead.NelderMead import NelderMead
@@ -14,7 +16,7 @@ from rp.simulation.PID import PID
 
 
 class Creature():
-    def __init__(self, metastructure, physics, render, cpg_graph=False, start_position=Vec3(0, 0, 2)):
+    def __init__(self, metastructure, physics, render, control_model_graph=False, start_position=Vec3(0, 0, 2)):
         """constructor of the class
         use the metastructure"""
         self.metastructure = metastructure
@@ -30,9 +32,9 @@ class Creature():
         self.dof_motors = {}
         self.factory = MultiBoxFactory(self.physics, self.render)
         self.build()
-        self.cpg = cpg.CPG(self.metastructure, cpg_graph)
-        self.cpg.set_desired_frequency()
-        self.cpg.set_desired_amplitude()
+        #self.control_model = CPG(self.metastructure, control_model_graph)
+        self.control_model = Fourier_Decompos(self.metastructure, control_model_graph)
+        self.control_model.random_init()
         self.factory.set_position(start_position)
         self.start_position = start_position
         self.position = 0
@@ -51,9 +53,9 @@ class Creature():
     def affect_optimizer(self, interface=None):
         """ affect to the structure a learning process """
         if interface is None:
-            #self.brain = Interface(self.cpg.get_size())
-            print "num of free parameters : ", self.cpg.get_size()
-            self.brain = NelderMead(self.cpg.get_size())
+            #self.brain = Interface(self.control_model.get_size())
+            print "num of free parameters : ", self.control_model.get_size()
+            self.brain = NelderMead(self.control_model.get_size())
         else:
             self.brain = interface
         self.update_position()
@@ -67,9 +69,9 @@ class Creature():
             else:
                 self.brain.set_result(traveled_distance.length())
             params = self.brain.next_val_to_test()
-            params = np.reshape(params, (1, self.cpg.get_size()))
+            params = np.reshape(params, (1, self.control_model.get_size()))
             #print "shape", params.shape
-            self.cpg.read_parameters(params, True)
+            self.control_model.read_parameters(params, True)
 
     def update_position(self):
         """ update the position and return the traveled distance """
@@ -293,11 +295,9 @@ class Creature():
 
     def update_angles(self, dt):
         """update the target angles """
-        self.cpg.run_all_dynamics(0.01)
-        angles = self.cpg.get_theta()
+        self.control_model.run_all_dynamics(0.01)
+        angles = self.control_model.get_theta()
      
-        #self.cpg.read_angle(angles, 0.01)
-        #self.cpg.correct_speed()
         for i, node in enumerate(self.metastructure.dof_nodes):
             (hinge, pid) = self.dof_motors[node]
             pid.set_target_value(angles[0, i])
@@ -307,7 +307,7 @@ class Creature():
             pid.read(hinge.getAngle())
             hinge.addTorque(cmd)
             #print hinge.getAngle()
-            self.cpg.angles[i] = hinge.getAngle()
+            self.control_model.angles[i] = hinge.getAngle()
             #hinge.addTorque(5)
             if abs(hinge.getAngleRate()) > 100:
                 #print "problem"

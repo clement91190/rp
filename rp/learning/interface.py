@@ -34,6 +34,15 @@ class Interface:
         with open('results.txt', 'w') as fich:
             pickle.dump(self.best_val, fich)
 
+class TestRandom(Interface):
+    def __init__(self, size):
+        self.current = np.random.random(size)
+
+    def next_val_to_test(self):
+        return self.current
+
+    def set_result(self, res):
+        print "traveled distance", res 
 
 
 class TestBest(Interface):
