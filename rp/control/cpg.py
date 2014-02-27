@@ -89,12 +89,7 @@ class CPG(ControlModel):
         f = lambda t, phi: CPG.phi_diff(self.omega, self.w, phi, self.small_phi, self.get_r()) + self.aphi * self.phi_diff_error
         self.phi = rk4.rk4(0, self.phi, dt, f)
 
-    
-    def right_range_for_theta(self):
-            self.theta = [max(self.theta[0, i], - math.pi * 0.75) for i in range(np.shape(self.theta)[1])]
-            self.theta = [min(ti,   math.pi * 0.75) for ti in self.theta]
-            self.theta = np.array([self.theta])
-   
+  
     def update_theta(self):
         if self.reset:
             self.phi = math.pi * np.matrix(np.ones(self.n))

@@ -1,4 +1,5 @@
 """ file used for the implementation of the CPGs """
+import math
 import numpy as np
 import matplotlib.pyplot as pp
 #import rp.datastructure.metastructure as metastructure
@@ -33,7 +34,12 @@ class ControlModel(object):
         """ update the parameters of the control model, 
         and option to reset, """
         pass
-
+    
+    def right_range_for_theta(self):
+            self.theta = [max(self.theta[0, i], - math.pi * 0.75) for i in range(np.shape(self.theta)[1])]
+            self.theta = [min(ti,   math.pi * 0.75) for ti in self.theta]
+            self.theta = np.array([self.theta])
+ 
     def plot_init(self):
         self.simu_time = 10
         self.step = 3000
