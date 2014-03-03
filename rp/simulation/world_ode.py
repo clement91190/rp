@@ -21,7 +21,28 @@ class Physics():
         self.world.setGravity(0, 0, -9.81)
         #init the friction 
         self.world.initSurfaceTable(1)
-        self.world.setSurfaceEntry(0, 0, 150, 0.0, 9.1, 0.9, 0.00001, 0.0, 0.002)
+        
+        surfaceId1 = 0
+        surfaceId2 = 0
+        mu = 250
+        bounce = 0.2
+        bounce_vel = 0.1
+        soft_erp = 0.9
+        soft_cfm = 0.00001
+        slip = 0.0
+        dampen = 0.002
+
+        
+        self.world.setSurfaceEntry(
+                surfaceId1,
+                surfaceId2,
+                mu,
+                bounce,
+                bounce_vel,
+                soft_erp,
+                soft_cfm,
+                slip,
+                dampen)
         
         #init the collision space
         self.space = OdeSimpleSpace()

@@ -1,4 +1,4 @@
-from panda3d.ode import OdeBoxGeom, OdeBody, OdeMass
+from panda3d.ode import OdeBoxGeom, OdeSphereGeom, OdeBody, OdeMass
 from panda3d.core import Vec3, LQuaternionf, TransformState, BitMask32, Quat
 
 from rp.utils.primitives.cube import CubeMaker
@@ -111,7 +111,8 @@ class Box():
     def __init__(self, render, size, physics, color, body, transform):
               # Create a BoxGeom
         self.body = body
-        self.boxGeom = OdeBoxGeom(physics.space, size, size, size)
+        #self.boxGeom = OdeBoxGeom(physics.space, size, size, size)
+        self.boxGeom = OdeSphereGeom(physics.space, size)
         self.boxGeom.setCollideBits(BitMask32(0x00000002))
         self.boxGeom.setCategoryBits(BitMask32(0x00000001))
         self.boxGeom.setBody(body)
