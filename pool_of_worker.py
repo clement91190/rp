@@ -34,8 +34,8 @@ def main():
         if time.time() - t > 25:
             print "stoping  !"
             #stop_pool(pool)
-            start_pool(num_process, cmd)
             end.clean_data()
+            start_pool(num_process, cmd)
             t = time.time()
 
 if __name__ == "__main__":
