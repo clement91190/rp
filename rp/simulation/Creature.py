@@ -65,7 +65,21 @@ class Creature():
             self.brain = interface
         self.update_position()
 
+    def send_score_to_brain(self, score):
+        if self.penalty < 0:
+            self.brain.set_result(self.penalty)
+            self.penalty = 0
+        else:
+            self.brain.set_result(score)
+
+    def new_simulation(self):
+        params = self.brain.next_val_to_test()
+        params = np.reshape(params, (1, self.control_model.get_size()))
+        self.control_model.read_parameters(params, True)
+        self.position = self.get_position()
+
     def send_result_to_brain(self):
+        """ use deprecated """
         traveled_distance = self.update_position()
         if self.brain is not None:
             if traveled_distance.length() == 0:

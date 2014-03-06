@@ -24,8 +24,8 @@ class Physics():
         
         surfaceId1 = 0
         surfaceId2 = 0
-        mu = 250
-        bounce = 0.2
+        mu = 500
+        bounce = 0. # 2
         bounce_vel = 0.1
         soft_erp = 0.9
         soft_cfm = 0.00001
@@ -125,7 +125,7 @@ class MyApp(ShowBase):
         for creat in self.creatures:
             creat.reset()
             creat.control_model.reset = True
-        self.run(500, visual)
+        self.run(30, visual)
         for creat in self.creatures:
             creat.reset()
             creat.control_model.reset = False
@@ -142,9 +142,9 @@ class MyApp(ShowBase):
             self.run(2500, visual=True)
         
     def init_simu(self):
-        self.run(100, visual=True)
         for creat in self.creatures:
             creat.record_position() 
+        self.run(100, visual=True)
      
     def see_random(self):
         self.init_simu()
@@ -184,8 +184,11 @@ class MyApp(ShowBase):
                 score = score.length()
                 if  score - old_score < 0.5 * score_dif:
                     stop = True
-                    score /= (score - old_score)/score_dif
+                    if old_score > score:
+                        score = old_score  #means the creture "turned back"
                     print "punished"
+                    score = score * 0.8
+
                 if score > score_base * (ind) and not stop:
                     print "well done ! ", ind
                     ind += 1
@@ -193,11 +196,13 @@ class MyApp(ShowBase):
                 else:   
                     stop = False
                     score_dif = 0
+                    assert(score >= 0)
+                    creat.send_score_to_brain(score)
+                    creat.new_simulation()
                     old_score = 0.
                     score = 0.
-                    creat.send_result_to_brain()
                     if time.time() - t > 24:
-                        return;
+                        return;  #stop after 24 sec.
                     ind = 1
                 score_dif = score - old_score
                 old_score = score
