@@ -1,26 +1,67 @@
 % Chapter Template
 
-\chapter{Learning} % Main chapter title
+\chapter{Learning Methods} % Main chapter title
 
 \label{Chapter 4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
-\lhead{Chapter 4. \emph{Learning}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+\lhead{Chapter 4. \emph{Learning Methods}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
-It is then possible to learn the parameters of the CPG to optimize the movement of the structure. Instead of having to find the value of the angles, the CPGs act as basis function for the angles, and thatway we reduce the space of research to a space with finite dimensions. All the parameters (frequency, offset and amplitude of each node) are scaled to fit between $0$ and $1$. A simple fitness function can be extracted from the simulation, for example the distance traveled by the head of the structure. 
+In this chapter we present different Learning Methods that have been tested and compared on this particular problem. All of these methods are optimization algorithms to find a minimum (or a maximum) over a set of parameters. It is not possible to get a gradient or Hessian matrix for a problem involving a simulation as fitness function. Therefore none of these algorithms use the derivatives of the function as information to find optima (unlike Gradient Method or Broyden-Fletcher-Goldfarb-Shanno (BFGS)). The following sections present different algorithms that can perform such a task. We then compare their results on the simulation. For coherence in this chapter, we use the following notation: 
 
-It is not possible to get a gradient or Hessian matrix for this problem, as the function comes from the simulation. Moreover, the fitness function is not likely to be convex, as taking the mean of two good solutions for the movement of a structure does not necessary provide a good solution. The fitness function can also present some discontinuities or high variations because of collisions. Collisions are not continuous phenomena and even if the physics engine use smoothing techniques to simplify interractions, there is a very small difference between a biped structure walking and a biped structure almost walking but with one leg that does not touch the ground, but the fitness function will give completely different results as one structure is moving and the other is not. Finally there is also the problem of consistency of a result, because two structures can behave differently for the same parameters, as the simulation can show chaotic behavior as small variations can have a big impact on the movement. For all these reasons, it is difficult to use classical optimisation for the creatures to learn how to move in the simulated environment. 
+\begin{itemize}
+    \item $X = \{ X_p, p\in{\{1, ..., q\}}\} $ is a set of $q$ elements (or vectors) of the parameter space ($\mathbf{R}^ n $), where $n$ is the dimension of this space. $X_{p,i}$ is a scalar, and represent the $i$-th coordinate of the $p$-th element of the population.
+    \item $f (\mathbf{R} ^ n \to \mathbf{R})$ is the fitness function we want to minimize.
+    \item $X^{(p)}$ the p first element of the ordered list of element from set $X$ where the order relation is given by $X_i \leq X_j$ iff $f(X_i) \leq f(X_j)$
+    \item iterators $p, q$ are over the population, where $i, j$ are over the coordinate of each element  
+\end{itemize}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[scale=0.5]{Figures/four_legged.png}
-    \rule{35em}{0.5pt}
-    \caption[A structure with four legs learning]{A structure with four legs learning}
-    \label{fig:four_legged}
-\end{figure}
+\section{Genetic Algorithm}
 
-\section{Random Search}
+A Genetic Algorithm (GA) is an optimization algorithm that replicate the process of natural evolution. GAs were introduced in the 60s and early 70s and are inspired from biology. They consist of a loop of four steps until convergence (or a proper solution) is reached : evaluation, selection, cross-over, mutation. A population $X$ of $p$ elements is randomly generated to initialize the algorithm. The evaluation step is just running the fitness function $f$ over the new elements.
 
-A first very simple way of finding good solution is random search. We test a random set of parameters and keep the vector of parameters showing the best results. This has the benefit of being very simple to implement and provides a good testbench for fixing issues with the simulation. A first problem observed was the consistency of the solution, testing the same parameters can lead to very different results. A first way to correct this was to take longer sample (about 20 sec of simulation). Even with this correction, online learning brought some issues, as it is possible that a good results is only good because of the initial configuration given by testing previous movement. A way to correct this is to set all angles to a default value and wait for the structure to be have a null velocity. This also led to some issues and showed solution using the first movement to jump as far as poissible. 
+\subsection{Selection} 
+The first step is a selection step. The goal is to keep only a part of the population and eliminate the rest. This is directly related to Natural Selection, where the "weekest " animals are less likely to survive. They are different ways of keeping "good elements". The first idea that comes to mind in performing such a step is to keep the $q$ best elements, ie $X^{(q)}$. The problem with this solution is that it prevent the population from "exploring" as all the best elements will be kept, it is more likely for the population to get stuck into a local minima. A widely use alternative is the Tournament Selection. We randomly select two elements and keep only the best of the two. We repeat this step until enough elements have been eliminated (usually half of the population). This alternative give a chance to all elements even if they are not in $X^\{q}$ best.  
+
+\begin{algorithm}
+    \caption{Tournament Selection}
+    \begin{algorithmic}
+    \STATE $ p = 0 $
+        \WHILE{$p < q / 2$}
+            \STATE $ X_1 = random element(X) $ 
+            \STATE $ X_2 = random element(X) $
+            \IF{$f(X_1 \leq X_2)$}
+                \STATE $X.eliminate(X_2)$
+            \ELSE
+                \STATE $X.eliminate(X_1)$
+            \ENDIF
+        \ENDWHILE
+    
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Cross-Over}
+    The cross-over is a step to repopulate after the selection. By taking two random elements of the set, we can compute new elements (usually 2) by performing a cross-over of the the two parents. This step is inspired from reproduction in biology. The idea behind it is that by taking two good solutions, we can create 2 new elements that are likely to be good solutions. When the elements are scalar, a way of producing these solution is to use a barycenter of two solutions. 
+
+\begin{algorithm}
+    \caption{Cross-Over}
+
+    \begin{algorithmic}
+    \FOR{$p \in [1: q/2]$}
+            \STATE $X_1 = random element(X)$
+            \STATE $X_2 = random element(X)$
+            \STATE $\lambda = random float([0.5; 1.5])$
+            \STATE $X.add (\lambda * X_1 + ( 1 - \lambda) * X_2)$
+            \STATE $X.add (\lambda * X_2 + ( 1 - \lambda) * X_1)$
+    \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Mutation}
+    Finally the mutation step is a way of exploring new solutions. We randomly chose some elements to be mutated and modify them slightly. One way of doing the mutation when dealing with vector of real numbers is to use a gaussian distribution which use the previous elements as a mean, and a covariance matrix that depends of the population (for instance the covariance of p-nearest neighbors)
+
+\subsection{Discussion on the hyper parameters}
+
 
 \section{Nelder-Mead method}
 
@@ -45,6 +86,33 @@ The Nelder Mead method (or downhill simplex method) is a way of finding a local 
     \caption[A simplex following the Nelder-Mead method]{A simplex following the Nelder-Mead method}
     \label{fig:nelder_mead}
 \end{figure}
+
+
+
+Moreover, in this problem the fitness function is not likely to be convex, as taking the mean of two good solutions for the movement of a structure does not necessary provide a good solution. The fitness function can also present some discontinuities or high variations because of collisions. Collisions are not continuous phenomena and even if the physics engine use smoothing techniques to simplify interractions. For instance there is a very small difference between a biped structure walking and a biped structure almost walking but with one leg that does not touch the ground, but the fitness function will give completely different results as one structure is moving and the other is not. Finally there is also the problem of consistency of a result, because two structures can behave differently for the same parameters, as the simulation can show chaotic behavior as small variations can have a big impact on the movement. For all these reasons, it is difficult to use classical optimisation for the creatures to learn how to move in the simulated environment. 
+
+
+
+
+
+It is then possible to learn the parameters of the CPG to optimize the movement of the structure. Instead of having to find the value of the angles, the CPGs act as basis function for the angles, and thatway we reduce the space of research to a space with finite dimensions. All the parameters (frequency, offset and amplitude of each node) are scaled to fit between $0$ and $1$. A simple fitness function can be extracted from the simulation, for example the distance traveled by the head of the structure. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/four_legged.png}
+    \rule{35em}{0.5pt}
+    \caption[A structure with four legs learning]{A structure with four legs learning}
+    \label{fig:four_legged}
+\end{figure}
+
+\section{Random Search}
+
+A first very simple way of finding good solution is random search. We test a random set of parameters and keep the vector of parameters showing the best results. This has the benefit of being very simple to implement and provides a good testbench for fixing issues with the simulation. A first problem observed was the consistency of the solution, testing the same parameters can lead to very different results. A first way to correct this was to take longer sample (about 20 sec of simulation). Even with this correction, online learning brought some issues, as it is possible that a good results is only good because of the initial configuration given by testing previous movement. A way to correct this is to set all angles to a default value and wait for the structure to be have a null velocity. This also led to some issues and showed solution using the first movement to jump as far as poissible. 
+
+
+\section{Simulated Annealing}
+{
+
+}
 
 
 This method gave some good results for simple creature, (without to many degrees of freedom). I modified it to evaluate the function again, each time we sort the points of the simplex. Though it is less efficient, thatway, it is possible to prevent from having a lucky trial. For instance, as the test depends of initial condition, sometimes a result can be really good, but cannot be repeated, for instance a four legged structure can get a good score but end up on the back after one trial and will not be efficient on the next ones.
