@@ -61,7 +61,7 @@ class Physics():
         self.groundGeom.setCategoryBits(BitMask32(0x00000002))
 
         self.deltaTimeAccumulator = 0.0 
-        self.stepSize = 0.005
+        self.stepSize = 0.01
 
     # The task for our simulation
     def simulationTask(self, creatures, dt=0):
@@ -88,7 +88,7 @@ class Physics():
     def run_physics(self, t, creatures):
         """ run physics for t steps """
         for i in range(t):
-            self.simulationTask(creatures, 0.005)
+            self.simulationTask(creatures, 0.02)
 
 
 class MyApp(ShowBase):
@@ -231,7 +231,7 @@ class MyApp(ShowBase):
             i += 1
 
     def update(self, task):
-        self.physics.simulationTask(self.creatures, 0.01)
+        self.physics.simulationTask(self.creatures, 0.010)
         return task.cont
 
     def run(self, t, visual=False):

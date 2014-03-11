@@ -24,9 +24,9 @@ class Fourier_Decompos(ControlModel):
 
     def update_theta(self, dt=0.01):
         if not self.reset:
-            self.t += dt
+            self.t +=  0.3 * dt
             self.update_t_array()
-        cos_sin_val = [1.0] + [v / (i + 1) * (i + 1)  for i, v in enumerate(list(np.cos(self.t_array)))] + [v / (i + 1) * (i + 1)  for i, v in enumerate(list(np.sin(self.t_array)))] 
+        cos_sin_val = [1.0] + [v * 0.5 / (i + 1) * (i + 1)  for i, v in enumerate(list(np.cos(self.t_array)))] + [v * 0.5 / (i + 1) * (i + 1)  for i, v in enumerate(list(np.sin(self.t_array)))] 
         cos_sin_val = np.array(cos_sin_val)
         assert(len(cos_sin_val) == self.b_coeff.shape[1])
         self.theta = np.dot(self.b_coeff, cos_sin_val).reshape(1, self.n)

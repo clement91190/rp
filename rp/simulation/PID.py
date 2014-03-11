@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as pp
 
 class PID():
-    def __init__(self, gd=0.6, gi=0.25):
+    def __init__(self, gd=4, gi=1.25):
         
         self.x = 0
         self.dx = 0
@@ -11,12 +11,11 @@ class PID():
         self.gd = gd
         self.gi = gi
         self.er = 0
-        self.ge = 0.2
         self.target_value = 0
         self.mu = 0.01
-        self.globalg = 25
+        self.globalg = 4
         self.count = 0
-        self.satu = 100
+        self.satu = 10000
 
 
     def set_target_value(self, target_value):
@@ -35,7 +34,8 @@ class PID():
         self.er = er
         self.satu = satu_cmd
         
-        command = self.globalg * (self.ix * self.gi + self.dx * self.gd + self.ge * self.er)
+        self.ix = max(min(self.ix, self.satu), -self.satu)
+        command = self.globalg * (self.ix * self.gi + self.dx * self.gd + self.er)
         if command > self.satu:
             self.ix -= self.er * self.mu
             return self.control(self.satu)
@@ -43,7 +43,7 @@ class PID():
             self.ix -= self.er * self.mu
             return self.control(-self.satu)
         else:
-            command = self.globalg * (self.ix * self.gi + self.dx * self.gd + self.ge * self.er)
+            #command = self.globalg * (self.ix * self.gi + self.dx * self.gd + self.er)
             return self.control(command)
 
     def control(self, cmd, limit=math.pi * 0.75):

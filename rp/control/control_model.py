@@ -39,8 +39,8 @@ class ControlModel(object):
         pass
     
     def right_range_for_theta(self):
-            self.theta = [max(self.theta[0, i], - math.pi * 0.75) for i in range(np.shape(self.theta)[1])]
-            self.theta = [min(ti,   math.pi * 0.75) for ti in self.theta]
+            self.theta = [max(self.theta[0, i], - math.pi * 0.6) for i in range(np.shape(self.theta)[1])]
+            self.theta = [min(ti,   math.pi * 0.6) for ti in self.theta]
             self.theta = np.array([self.theta])
  
     def plot_init(self):

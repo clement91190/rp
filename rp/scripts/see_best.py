@@ -1,16 +1,21 @@
+#cd "/home/clement/src/rp/rp/"
+from rp.optim_server.optim_server.db import models as m
+import numpy as np
 import rp.utils.config
-
 rp.utils.config.config.visual=True
-
 from rp.simulation import world_ode as w
 
 
-app = w.MyApp()
+objs = m.ParamInstance.objects(optim_problem="quad_learning", optim_run=0, done=True).order_by('-score')
+obj = objs[0]
+print obj.score
+print obj.params
+params = np.array(obj.params)
+params.reshape((1,20))
 
-#for i in range(2, 7):
-#    app.add_snake(i)
-#    app.run(100, visual=False)
-#app.add_snake(6)
-#app.add_creature(True)
+
+#sys.path.insert(0, "/home/clement/src/rp/")
+app = w.MyApp()
 app.add_four_legs_creature(True)
-app.see_best()
+app.see_params(params)
+
