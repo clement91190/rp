@@ -68,7 +68,7 @@
 \textsc{\Large Research Project Report}\\[0.5cm] % Thesis type
 
 \HRule \\[0.4cm] % Horizontal line
-{\huge \bfseries Learning walking skills and Laws of Commands for modular Robots}\\[0.4cm] % Thesis title
+{\huge \bfseries Learning walking skills for Modular Robots}\\[0.4cm] % Thesis title
 \HRule \\[1.5cm] % Horizontal line
  
 \begin{minipage}{0.4\textwidth}
@@ -136,13 +136,11 @@ Date:\\
 \addtotoc{Abstract} % Add the "Abstract" page entry to the Contents
 
 \abstract{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
-CHANGE THIS
     
-    Though classical automation has proven to be really efficient for
-many problems in the last years so that we see consequence
-of its use everyday in our life, non-linear problems and
-problems with many degrees of freedom seem to be resistant to the classical approach.
-The goal of this project is to generate automaticly laws of command for complex modular structures composed of simple blocks and joints. By learning from a 3D world under simulated physics laws the robot will learn to move on the ground by itself. It will then be possible for someone to control it via a simple interface like a joystick. Another goal/demo is to start in a situation with blocks and joint scattered in the 3D world and find the best way to regroup all of them in one structure using the pre-generated command laws/results for all intermediary structures.
+   In their design Modular Robots present many advantages when facing a task in a difficult environment. Among these advantages the way they could potentially adapt to this environment and reconfigure themselves when facing different tasks makes them the favorite candidate for many applications, such as space exploration. However controlling the swarm of robots from high-level commands remains a tricky problem, especially since this problem is non-linear and contains many degrees of freedom. Therefore it is resistant to classical approaches used in automation when dealing with Robotics motion control.
+
+
+   The goal of this project is to present a survey of different control models and learning algorithms that proved to be efficient on similar problems. To compare these methods, we introduce a benchmark simulation built on the ODE Simulator and publicly available on Github. In this project we also apply for the first time Liquid State Machines to this particular problem of modular Robot locomotion. 
 }
 
 \clearpage % Start a new page
@@ -252,6 +250,7 @@ $\omega$ & angular frequency & rads$^{-1}$ \\
 \input{Chapters/Control} 
 \input{Chapters/Learning} 
 \input{Chapters/Future_works} 
+\input{Chapters/Conclusion} 
 
 %\input{Chapters/Chapter3}
 %\input{Chapters/Chapter4} 

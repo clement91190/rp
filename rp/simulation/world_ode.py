@@ -88,7 +88,7 @@ class Physics():
     def run_physics(self, t, creatures):
         """ run physics for t steps """
         for i in range(t):
-            self.simulationTask(creatures, 0.02)
+            self.simulationTask(creatures, 0.01)
 
 
 class MyApp(ShowBase):

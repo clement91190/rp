@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.16)  11 MAR 2014 17:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.16)  3 APR 2014 15:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -729,6 +729,12 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 36.
 
 (./main.aux
 
+LaTeX Warning: Label `fig:yamor' multiply defined.
+
+
+LaTeX Warning: Label `fig:yamor' multiply defined.
+
+
 LaTeX Warning: Label `fig:Snake' multiply defined.
 
 )
@@ -814,7 +820,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 79.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<Figures/Logo.jpg, id=100, 280.04625pt x 301.125pt>
+<Figures/Logo.jpg, id=132, 280.04625pt x 301.125pt>
 File: Figures/Logo.jpg Graphic file (type jpg)
  <use Figures/Logo.jpg>
 Package pdftex.def Info: Figures/Logo.jpg used on input line 92.
@@ -835,14 +841,14 @@ Package pdftex.def Info: Figures/Logo.jpg used on input line 92.
 ------------------------------------------------------------------------------
  Table of Contents
 ------------------------------------------------------------------------------
-(./main.toc)
+(./main.toc [2
+
+
+])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [2
-
-
-]
+ [3]
 ------------------------------------------------------------------------------
  List of Figures
 ------------------------------------------------------------------------------
@@ -850,7 +856,7 @@ Package pdftex.def Info: Figures/Logo.jpg used on input line 92.
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
- [3
+ [4
 
 
 ] (./Chapters/State_of_art.tex
@@ -862,35 +868,81 @@ Chapter 1.
 
 
 
-] [2]) (./Chapters/Simulation.tex [3]
+] <Figures/sims_genotype.png, id=234, 712.6625pt x 847.165pt>
+File: Figures/sims_genotype.png Graphic file (type png)
+
+<use Figures/sims_genotype.png>
+Package pdftex.def Info: Figures/sims_genotype.png used on input line 25.
+(pdftex.def)             Requested size: 213.8004pt x 254.15146pt.
+ [2]
+<Figures/evolved_creature.png, id=245, 671.50874pt x 552.0625pt>
+File: Figures/evolved_creature.png Graphic file (type png)
+
+<use Figures/evolved_creature.png>
+Package pdftex.def Info: Figures/evolved_creature.png used on input line 38.
+(pdftex.def)             Requested size: 201.45418pt x 165.62003pt.
+ [3 <./Figures/sims_genotype.png (PNG copy)> <./Figures/evolved_creature.png (P
+NG copy)>]
+<Figures/cpg.png, id=251, 424.58624pt x 355.3275pt>
+File: Figures/cpg.png Graphic file (type png)
+ <use Figures/cpg.png>
+Package pdftex.def Info: Figures/cpg.png used on input line 53.
+(pdftex.def)             Requested size: 127.37685pt x 106.59906pt.
+
+<Figures/yamor.png, id=252, 274.02374pt x 310.15875pt>
+File: Figures/yamor.png Graphic file (type png)
+ <use Figures/yamor.png>
+Package pdftex.def Info: Figures/yamor.png used on input line 63.
+(pdftex.def)             Requested size: 82.20775pt x 93.04834pt.
+
+<Figures/synthesized_walking.png, id=253, 925.4575pt x 538.01pt>
+File: Figures/synthesized_walking.png Graphic file (type png)
+
+<use Figures/synthesized_walking.png>
+Package pdftex.def Info: Figures/synthesized_walking.png used on input line 74.
+
+(pdftex.def)             Requested size: 277.63939pt x 161.40424pt.
+ [4 <./Figures/cpg.png (PNG copy)> <./Figures/yamor.png (PNG copy)>]
+
+Package natbib Warning: Citation `igel2007covariance' on page 5 undefined on in
+put line 80.
+
+<Figures/muscle_based.png, id=260, 790.955pt x 332.24126pt>
+File: Figures/muscle_based.png Graphic file (type png)
+
+<use Figures/muscle_based.png>
+Package pdftex.def Info: Figures/muscle_based.png used on input line 84.
+(pdftex.def)             Requested size: 158.1882pt x 66.44707pt.
+) (./Chapters/Simulation.tex [5 <./Figures/synthesized_walking.png (PNG copy)> 
+<./Figures/muscle_based.png (PNG copy)>]
 Chapter 2.
 ------------------------------------------------------------------------------
  2 Simulation Environment
 ------------------------------------------------------------------------------
-[4
+[6
 
-] <Figures/hinge.jpg, id=207, 401.5pt x 301.125pt>
+] <Figures/hinge.jpg, id=275, 401.5pt x 301.125pt>
 File: Figures/hinge.jpg Graphic file (type jpg)
  <use Figures/hinge.jpg>
 Package pdftex.def Info: Figures/hinge.jpg used on input line 22.
 (pdftex.def)             Requested size: 200.7495pt x 150.56212pt.
 
-[5 <./Figures/hinge.jpg>]
-<Figures/snake.png, id=214, 808.01875pt x 620.3175pt>
+[7 <./Figures/hinge.jpg>]
+<Figures/snake.png, id=282, 808.01875pt x 620.3175pt>
 File: Figures/snake.png Graphic file (type png)
  <use Figures/snake.png>
 Package pdftex.def Info: Figures/snake.png used on input line 33.
 (pdftex.def)             Requested size: 404.00839pt x 310.15799pt.
 
-[6 <./Figures/snake.png (PNG copy)>]
-<Figures/transform_matrix.png, id=220, 639.38875pt x 105.39375pt>
+[8 <./Figures/snake.png (PNG copy)>]
+<Figures/transform_matrix.png, id=289, 639.38875pt x 105.39375pt>
 File: Figures/transform_matrix.png Graphic file (type png)
 
 <use Figures/transform_matrix.png>
 Package pdftex.def Info: Figures/transform_matrix.png used on input line 48.
 (pdftex.def)             Requested size: 319.69359pt x 52.69673pt.
- [7 <./Figures/transform_matrix.png>]
-<Figures/schema_arbre.png, id=226, 557.2017pt x 628.749pt>
+ [9 <./Figures/transform_matrix.png>]
+<Figures/schema_arbre.png, id=295, 557.2017pt x 628.749pt>
 File: Figures/schema_arbre.png Graphic file (type png)
 
 <use Figures/schema_arbre.png>
@@ -904,19 +956,19 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 72.
 
-<Figures/vertebra.jpg, id=228, 96.36pt x 72.27pt>
+<Figures/vertebra.jpg, id=297, 96.36pt x 72.27pt>
 File: Figures/vertebra.jpg Graphic file (type jpg)
  <use Figures/vertebra.jpg>
 Package pdftex.def Info: Figures/vertebra.jpg used on input line 80.
 (pdftex.def)             Requested size: 192.71948pt x 144.53961pt.
 
-[8 <./Figures/schema_arbre.png>]) (./Chapters/Control.tex [9 <./Figures/vertebr
-a.jpg>]
+[10 <./Figures/schema_arbre.png>]) (./Chapters/Control.tex [11 <./Figures/verte
+bra.jpg>]
 Chapter 3.
 ------------------------------------------------------------------------------
  3 Control
 ------------------------------------------------------------------------------
-<Figures/servomotor.png, id=239, 1486.55376pt x 677.53125pt>
+<Figures/servomotor.png, id=307, 1486.55376pt x 677.53125pt>
 File: Figures/servomotor.png Graphic file (type png)
 
 <use Figures/servomotor.png>
@@ -927,14 +979,14 @@ Overfull \hbox (28.4965pt too wide) in paragraph at lines 18--20
  [][] 
  []
 
-[10
+[12
 
-] [11 <./Figures/servomotor.png>] [12]) (./Chapters/Learning.tex [13]
+] [13 <./Figures/servomotor.png>] [14]) (./Chapters/Learning.tex [15]
 Chapter 4.
 ------------------------------------------------------------------------------
  4 Learning Methods
 ------------------------------------------------------------------------------
-[14
+[16
 
 ]
 ! Extra }, or forgotten $.
@@ -943,26 +995,33 @@ l.23 ...l elements even if they are not in $X^\{q}
 ? 
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 26.
-[15] [16] <Figures/nelder_mead.jpg, id=302, 259.97125pt x 194.7275pt>
+[17] [18] <Figures/nelder_mead.jpg, id=368, 259.97125pt x 194.7275pt>
 File: Figures/nelder_mead.jpg Graphic file (type jpg)
 
 <use Figures/nelder_mead.jpg>
 Package pdftex.def Info: Figures/nelder_mead.jpg used on input line 84.
 (pdftex.def)             Requested size: 181.97862pt x 136.3083pt.
 
-<Figures/four_legged.png, id=303, 653.44125pt x 524.96124pt>
+<Figures/four_legged.png, id=369, 653.44125pt x 524.96124pt>
 File: Figures/four_legged.png Graphic file (type png)
 
 <use Figures/four_legged.png>
 Package pdftex.def Info: Figures/four_legged.png used on input line 101.
 (pdftex.def)             Requested size: 326.71982pt x 262.47998pt.
- [17 <./Figures/nelder_mead.jpg>] [18 <./Figures/four_legged.png (PNG copy)>]) 
-(./Chapters/Future_works.tex [19]
+ [19 <./Figures/nelder_mead.jpg>] [20 <./Figures/four_legged.png (PNG copy)>]) 
+(./Chapters/Future_works.tex [21]
 Chapter 5.
 ------------------------------------------------------------------------------
- 5 Future Work
+ 5 Results
 ------------------------------------------------------------------------------
-) [20
+) (./Chapters/Conclusion.tex [22
+
+]
+Chapter 6.
+------------------------------------------------------------------------------
+ 6 Conclusion
+------------------------------------------------------------------------------
+) [23
 
 ]
 ------------------------------------------------------------------------------
@@ -981,71 +1040,53 @@ ssembling-robots-
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 293.
- [21
+
+Package natbib Warning: There were undefined citations.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 292.
+[24
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 293.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 292.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 293.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 293.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 292.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 292.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 20FF71D918493155B7FB50C3D79F025C;5405.
 
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: B2105BC7CF4B084BF9B7E8E91C48F699;3627
-(rerunfilecheck)             After:  0AB9D1C3D0DC7E4D93064747CCF8CFB2;4076.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 293.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 292.
  ) 
 Here is how much of TeX's memory you used:
- 13576 strings out of 493307
- 189849 string characters out of 6139905
- 261556 words of memory out of 5000000
- 16707 multiletter control sequences out of 15000+600000
+ 13634 strings out of 493307
+ 190991 string characters out of 6139905
+ 262897 words of memory out of 5000000
+ 16745 multiletter control sequences out of 15000+600000
  14352 words of font info for 52 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  49i,12n,45p,1624b,650s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{figure.caption.56} has been referenced but does n
-ot exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{dummy.60} has been referenced but does not exist, r
-eplaced by a fixed one
-
-pdfTeX warning (dest): name{chapter.59} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.58} has been referenced but does not exist,
- replaced by a fixed one
-
-pdfTeX warning (dest): name{section.55} has been referenced but does not exist,
- replaced by a fixed one
-
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
-y10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (25 pages, 2985556 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (29 pages, 3590377 bytes).
 PDF statistics:
- 408 PDF objects out of 1000 (max. 8388607)
- 349 compressed objects within 4 object streams
- 102 named destinations out of 1000 (max. 500000)
- 238 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 477 PDF objects out of 1000 (max. 8388607)
+ 407 compressed objects within 5 object streams
+ 113 named destinations out of 1000 (max. 500000)
+ 332 words of extra memory for PDF output out of 10000 (max. 10000000)
 

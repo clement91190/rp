@@ -28,7 +28,7 @@ class LiquidLayer():
         self.Vm = rk4(self.t, self.Vm, self.t + dt, f)
 
 
-class EchoStateNetwork():
+class EchoStateNetwork(ControlModel):
     def __init__(self):
         self.input_layer = []
         size = 50
