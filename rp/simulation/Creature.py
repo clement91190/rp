@@ -32,8 +32,8 @@ class Creature():
         self.dof_motors = {}
         self.factory = MultiBoxFactory(self.physics, self.render)
         self.build()
-        #self.control_model = CPG(self.metastructure, control_model_graph)
-        self.control_model = Fourier_Decompos(self.metastructure, control_model_graph)
+        self.control_model = CPG(self.metastructure, control_model_graph)
+        #self.control_model = Fourier_Decompos(self.metastructure, control_model_graph)
         self.control_model.random_init()
         self.factory.set_position(start_position)
         self.start_position = start_position

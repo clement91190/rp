@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{11}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -9,12 +9,6 @@
 Karl Sims.
 \newblock Evolving 3d morphology and behavior by competition.
 \newblock \emph{Artificial life}, 1\penalty0 (4):\penalty0 353--372, 1994.
-
-\bibitem[Marbach and Ijspeert(2005)]{marbach}
-D.~Marbach and A.J. Ijspeert.
-\newblock Online optimization of modular robot locomotion.
-\newblock In \emph{Mechatronics and Automation, 2005 IEEE International
-  Conference}, volume~1, pages 248--253. IEEE, 2005.
 
 \bibitem[Sproewitz et~al.(2008)Sproewitz, Moeckel, Maye, and
   Ijspeert]{sproewitz}
@@ -29,6 +23,12 @@ Alexander Sproewitz, Rico Moeckel, J{\'e}r{\^o}me Maye, and Auke~Jan Ijspeert.
 Thomas Geijtenbeek, Michiel van~de Panne, and A.~Frank van~der Stappen.
 \newblock Flexible muscle-based locomotion for bipedal creatures.
 \newblock \emph{ACM Transactions on Graphics}, 32\penalty0 (6), 2013.
+
+\bibitem[Igel et~al.(2007)Igel, Hansen, and Roth]{igel2007covariance}
+Christian Igel, Nikolaus Hansen, and Stefan Roth.
+\newblock Covariance matrix adaptation for multi-objective optimization.
+\newblock \emph{Evolutionary computation}, 15\penalty0 (1):\penalty0 1--28,
+  2007.
 
 \bibitem[Smith et~al.(2005)]{ode}
 Russell Smith et~al.
@@ -46,9 +46,28 @@ Christoph Lang.
 \newblock \emph{Panda3D 1.7 Game Developer's Cookbook}.
 \newblock Packt Publishing, 2011.
 
-\bibitem[Jaeger(2007)]{jaeger2007echo}
+\bibitem[Maass et~al.(2002)Maass, Natschl{\"a}ger, and
+  Markram]{liquidstatemachine}
+Wolfgang Maass, Thomas Natschl{\"a}ger, and Henry Markram.
+\newblock Real-time computing without stable states: A new framework for neural
+  computation based on perturbations.
+\newblock \emph{Neural computation}, 14\penalty0 (11):\penalty0 2531--2560,
+  2002.
+
+\bibitem[Jaeger(2002)]{echostatejaeger}
+Herbert Jaeger.
+\newblock \emph{Tutorial on training recurrent neural networks, covering BPPT,
+  RTRL, EKF and the" echo state network" approach}.
+\newblock GMD-Forschungszentrum Informationstechnik, 2002.
+
+\bibitem[Jaeger(2007)]{echostate}
 Herbert Jaeger.
 \newblock Echo state network.
 \newblock \emph{Scholarpedia}, 2\penalty0 (9):\penalty0 2330, 2007.
+
+\bibitem[Nelder and Mead(1965)]{simplex}
+John~A Nelder and Roger Mead.
+\newblock A simplex method for function minimization.
+\newblock \emph{Computer journal}, 7\penalty0 (4):\penalty0 308--313, 1965.
 
 \end{thebibliography}

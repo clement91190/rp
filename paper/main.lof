@@ -1,20 +1,29 @@
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Designed examples of genotype graphs and correspond- ing creature morphologies.}}{3}{figure.caption.9}
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Karl Sims Creatures evolved for walking}}{3}{figure.caption.10}
-\contentsline {figure}{\numberline {1.3}{\ignorespaces Central Pattern Generator Architecture}}{4}{figure.caption.12}
-\contentsline {figure}{\numberline {1.4}{\ignorespaces Modular Robots implementation}}{4}{figure.caption.13}
-\contentsline {figure}{\numberline {1.5}{\ignorespaces Synthesized walking for a bipedial creature}}{5}{figure.caption.15}
-\contentsline {figure}{\numberline {1.6}{\ignorespaces Example of Muscle Path}}{5}{figure.caption.16}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Designed examples of genotype graphs and correspond- ing creature morphologies.}}{3}{figure.caption.10}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Karl Sims Creatures evolved for walking}}{3}{figure.caption.11}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Central Pattern Generator Architecture}}{4}{figure.caption.13}
+\contentsline {figure}{\numberline {1.4}{\ignorespaces Modular Robots implementation}}{4}{figure.caption.14}
+\contentsline {figure}{\numberline {1.5}{\ignorespaces Synthesized walking for a bipedial creature}}{5}{figure.caption.16}
+\contentsline {figure}{\numberline {1.6}{\ignorespaces Example of Muscle Path}}{5}{figure.caption.17}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces A Hinge Constraint}}{7}{figure.caption.19}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Simulated Snake in the environment}}{8}{figure.caption.21}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Transformation Matrix for 3D bodies}}{9}{figure.caption.23}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Structure described as graph}}{10}{figure.caption.25}
-\contentsline {figure}{\numberline {2.5}{\ignorespaces A Vertebra Constraint}}{11}{figure.caption.26}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces A Hinge Constraint}}{7}{figure.caption.20}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Simulated Snake in the environment}}{8}{figure.caption.22}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Transformation Matrix for 3D bodies}}{9}{figure.caption.24}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Structure described as graph}}{10}{figure.caption.26}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces A Vertebra Constraint}}{11}{figure.caption.27}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Answer of a joint to a sinusoid command}}{13}{figure.caption.29}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Learning Model}}{12}{figure.caption.29}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Answer of a joint to a sinusoid command}}{13}{figure.caption.31}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Liquid State Machine}}{17}{figure.caption.41}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces A simplex following the Nelder-Mead method}}{19}{figure.caption.65}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces A structure with four legs learning}}{20}{figure.caption.66}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces A simplex following the Nelder-Mead method}}{21}{figure.caption.92}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces A structure with four legs learning}}{22}{figure.caption.93}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Simulation Consistency}}{24}{figure.caption.97}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Learning Method : Simplex, Model : Fourier Decomposition}}{25}{figure.caption.100}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Learning Method : GA, Model : Fourier Decomposition}}{25}{figure.caption.101}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Learning Method : GA, Model : CPG}}{26}{figure.caption.102}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Learning Method : GA, Model : CPG}}{26}{figure.caption.103}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Learning Method : Simplex, Model : LMS}}{27}{figure.caption.104}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Learning Method : GA, Model : Liquid State Machine}}{27}{figure.caption.105}
 \addvspace {10\p@ }

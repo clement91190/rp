@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.16)  3 APR 2014 15:49
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.16)  20 APR 2014 20:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**main.tex
+**main
 (./main.tex
 LaTeX2e <2011/06/27>
 Babel <3.9f> and hyphenation patterns for 78 languages loaded.
@@ -729,13 +729,13 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 36.
 
 (./main.aux
 
-LaTeX Warning: Label `fig:yamor' multiply defined.
-
-
-LaTeX Warning: Label `fig:yamor' multiply defined.
-
-
 LaTeX Warning: Label `fig:Snake' multiply defined.
+
+
+LaTeX Warning: Label `fig:simplex_fourier' multiply defined.
+
+
+LaTeX Warning: Label `fig:cpg_gen' multiply defined.
 
 )
 \openout1 = `main.aux'.
@@ -820,7 +820,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 79.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<Figures/Logo.jpg, id=132, 280.04625pt x 301.125pt>
+<Figures/Logo.jpg, id=128, 280.04625pt x 301.125pt>
 File: Figures/Logo.jpg Graphic file (type jpg)
  <use Figures/Logo.jpg>
 Package pdftex.def Info: Figures/Logo.jpg used on input line 92.
@@ -839,16 +839,22 @@ Package pdftex.def Info: Figures/Logo.jpg used on input line 92.
 
 ]
 ------------------------------------------------------------------------------
+ Acknowledgements
+------------------------------------------------------------------------------
+[2
+
+]
+------------------------------------------------------------------------------
  Table of Contents
 ------------------------------------------------------------------------------
-(./main.toc [2
+(./main.toc [3
 
 
 ])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [3]
+ [4]
 ------------------------------------------------------------------------------
  List of Figures
 ------------------------------------------------------------------------------
@@ -856,7 +862,7 @@ Package pdftex.def Info: Figures/Logo.jpg used on input line 92.
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
- [4
+ [5
 
 
 ] (./Chapters/State_of_art.tex
@@ -868,14 +874,14 @@ Chapter 1.
 
 
 
-] <Figures/sims_genotype.png, id=234, 712.6625pt x 847.165pt>
+] <Figures/sims_genotype.png, id=252, 712.6625pt x 847.165pt>
 File: Figures/sims_genotype.png Graphic file (type png)
 
 <use Figures/sims_genotype.png>
 Package pdftex.def Info: Figures/sims_genotype.png used on input line 25.
 (pdftex.def)             Requested size: 213.8004pt x 254.15146pt.
  [2]
-<Figures/evolved_creature.png, id=245, 671.50874pt x 552.0625pt>
+<Figures/evolved_creature.png, id=262, 671.50874pt x 552.0625pt>
 File: Figures/evolved_creature.png Graphic file (type png)
 
 <use Figures/evolved_creature.png>
@@ -883,19 +889,19 @@ Package pdftex.def Info: Figures/evolved_creature.png used on input line 38.
 (pdftex.def)             Requested size: 201.45418pt x 165.62003pt.
  [3 <./Figures/sims_genotype.png (PNG copy)> <./Figures/evolved_creature.png (P
 NG copy)>]
-<Figures/cpg.png, id=251, 424.58624pt x 355.3275pt>
+<Figures/cpg.png, id=268, 424.58624pt x 355.3275pt>
 File: Figures/cpg.png Graphic file (type png)
  <use Figures/cpg.png>
 Package pdftex.def Info: Figures/cpg.png used on input line 53.
 (pdftex.def)             Requested size: 127.37685pt x 106.59906pt.
 
-<Figures/yamor.png, id=252, 274.02374pt x 310.15875pt>
+<Figures/yamor.png, id=269, 274.02374pt x 310.15875pt>
 File: Figures/yamor.png Graphic file (type png)
  <use Figures/yamor.png>
 Package pdftex.def Info: Figures/yamor.png used on input line 63.
 (pdftex.def)             Requested size: 82.20775pt x 93.04834pt.
 
-<Figures/synthesized_walking.png, id=253, 925.4575pt x 538.01pt>
+<Figures/synthesized_walking.png, id=270, 925.4575pt x 538.01pt>
 File: Figures/synthesized_walking.png Graphic file (type png)
 
 <use Figures/synthesized_walking.png>
@@ -903,11 +909,7 @@ Package pdftex.def Info: Figures/synthesized_walking.png used on input line 74.
 
 (pdftex.def)             Requested size: 277.63939pt x 161.40424pt.
  [4 <./Figures/cpg.png (PNG copy)> <./Figures/yamor.png (PNG copy)>]
-
-Package natbib Warning: Citation `igel2007covariance' on page 5 undefined on in
-put line 80.
-
-<Figures/muscle_based.png, id=260, 790.955pt x 332.24126pt>
+<Figures/muscle_based.png, id=278, 790.955pt x 332.24126pt>
 File: Figures/muscle_based.png Graphic file (type png)
 
 <use Figures/muscle_based.png>
@@ -921,28 +923,28 @@ Chapter 2.
 ------------------------------------------------------------------------------
 [6
 
-] <Figures/hinge.jpg, id=275, 401.5pt x 301.125pt>
+] <Figures/hinge.jpg, id=294, 401.5pt x 301.125pt>
 File: Figures/hinge.jpg Graphic file (type jpg)
  <use Figures/hinge.jpg>
 Package pdftex.def Info: Figures/hinge.jpg used on input line 22.
 (pdftex.def)             Requested size: 200.7495pt x 150.56212pt.
 
 [7 <./Figures/hinge.jpg>]
-<Figures/snake.png, id=282, 808.01875pt x 620.3175pt>
+<Figures/snake.png, id=302, 808.01875pt x 620.3175pt>
 File: Figures/snake.png Graphic file (type png)
  <use Figures/snake.png>
 Package pdftex.def Info: Figures/snake.png used on input line 33.
 (pdftex.def)             Requested size: 404.00839pt x 310.15799pt.
 
 [8 <./Figures/snake.png (PNG copy)>]
-<Figures/transform_matrix.png, id=289, 639.38875pt x 105.39375pt>
+<Figures/transform_matrix.png, id=308, 639.38875pt x 105.39375pt>
 File: Figures/transform_matrix.png Graphic file (type png)
 
 <use Figures/transform_matrix.png>
 Package pdftex.def Info: Figures/transform_matrix.png used on input line 48.
 (pdftex.def)             Requested size: 319.69359pt x 52.69673pt.
  [9 <./Figures/transform_matrix.png>]
-<Figures/schema_arbre.png, id=295, 557.2017pt x 628.749pt>
+<Figures/schema_arbre.png, id=314, 557.2017pt x 628.749pt>
 File: Figures/schema_arbre.png Graphic file (type png)
 
 <use Figures/schema_arbre.png>
@@ -956,7 +958,7 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 72.
 
-<Figures/vertebra.jpg, id=297, 96.36pt x 72.27pt>
+<Figures/vertebra.jpg, id=316, 96.36pt x 72.27pt>
 File: Figures/vertebra.jpg Graphic file (type jpg)
  <use Figures/vertebra.jpg>
 Package pdftex.def Info: Figures/vertebra.jpg used on input line 80.
@@ -968,60 +970,136 @@ Chapter 3.
 ------------------------------------------------------------------------------
  3 Control
 ------------------------------------------------------------------------------
-<Figures/servomotor.png, id=307, 1486.55376pt x 677.53125pt>
-File: Figures/servomotor.png Graphic file (type png)
+<Figures/models.png, id=327, 843.15pt x 300.12125pt>
+File: Figures/models.png Graphic file (type png)
+ <use Figures/models.png>
+Package pdftex.def Info: Figures/models.png used on input line 14.
+(pdftex.def)             Requested size: 421.57396pt x 150.06026pt.
 
-<use Figures/servomotor.png>
-Package pdftex.def Info: Figures/servomotor.png used on input line 18.
-(pdftex.def)             Requested size: 445.96957pt x 203.26094pt.
-
-Overfull \hbox (28.4965pt too wide) in paragraph at lines 18--20
+Overfull \hbox (4.10089pt too wide) in paragraph at lines 14--16
  [][] 
  []
 
 [12
 
-] [13 <./Figures/servomotor.png>] [14]) (./Chapters/Learning.tex [15]
+ <./Figures/models.png>]
+<Figures/servomotor.png, id=333, 1486.55376pt x 677.53125pt>
+File: Figures/servomotor.png Graphic file (type png)
+
+<use Figures/servomotor.png>
+Package pdftex.def Info: Figures/servomotor.png used on input line 28.
+(pdftex.def)             Requested size: 445.96957pt x 203.26094pt.
+
+Overfull \hbox (28.4965pt too wide) in paragraph at lines 28--30
+ [][] 
+ []
+
+[13 <./Figures/servomotor.png>] [14] [15]
+<Figures/echo_state.png, id=361, 136.875pt x 80.4825pt>
+File: Figures/echo_state.png Graphic file (type png)
+
+<use Figures/echo_state.png>
+Package pdftex.def Info: Figures/echo_state.png used on input line 108.
+(pdftex.def)             Requested size: 410.62395pt x 241.44685pt.
+ [16]) (./Chapters/Learning.tex [17 <./Figures/echo_state.png (PNG copy)>]
 Chapter 4.
 ------------------------------------------------------------------------------
  4 Learning Methods
 ------------------------------------------------------------------------------
-[16
+[18
 
 ]
 ! Extra }, or forgotten $.
-l.23 ...l elements even if they are not in $X^\{q}
+l.27 ...l elements even if they are not in $X^\{q}
                                                   $ best.
 ? 
+[19]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 26.
-[17] [18] <Figures/nelder_mead.jpg, id=368, 259.97125pt x 194.7275pt>
+put line 30.
+ [20] <Figures/nelder_mead.jpg, id=406, 259.97125pt x 194.7275pt>
 File: Figures/nelder_mead.jpg Graphic file (type jpg)
 
 <use Figures/nelder_mead.jpg>
-Package pdftex.def Info: Figures/nelder_mead.jpg used on input line 84.
+Package pdftex.def Info: Figures/nelder_mead.jpg used on input line 106.
 (pdftex.def)             Requested size: 181.97862pt x 136.3083pt.
 
-<Figures/four_legged.png, id=369, 653.44125pt x 524.96124pt>
+<Figures/four_legged.png, id=407, 653.44125pt x 524.96124pt>
 File: Figures/four_legged.png Graphic file (type png)
 
 <use Figures/four_legged.png>
-Package pdftex.def Info: Figures/four_legged.png used on input line 101.
+Package pdftex.def Info: Figures/four_legged.png used on input line 116.
 (pdftex.def)             Requested size: 326.71982pt x 262.47998pt.
- [19 <./Figures/nelder_mead.jpg>] [20 <./Figures/four_legged.png (PNG copy)>]) 
-(./Chapters/Future_works.tex [21]
+ [21 <./Figures/nelder_mead.jpg>])
+(./Chapters/Future_works.tex [22 <./Figures/four_legged.png (PNG copy)>]
 Chapter 5.
 ------------------------------------------------------------------------------
  5 Results
 ------------------------------------------------------------------------------
-) (./Chapters/Conclusion.tex [22
+<Figures/figure_simulation_consitency.png, id=443, 586.8324pt x 442.2924pt>
+File: Figures/figure_simulation_consitency.png Graphic file (type png)
 
-]
+<use Figures/figure_simulation_consitency.png>
+Package pdftex.def Info: Figures/figure_simulation_consitency.png used on input
+ line 17.
+(pdftex.def)             Requested size: 469.46655pt x 353.8344pt.
+
+Overfull \hbox (51.99348pt too wide) in paragraph at lines 17--19
+ [][] 
+ []
+
+[23
+
+] [24 <./Figures/figure_simulation_consitency.png>]
+<Figures/simplex_fourier.png, id=454, 586.8324pt x 442.2924pt>
+File: Figures/simplex_fourier.png Graphic file (type png)
+
+<use Figures/simplex_fourier.png>
+Package pdftex.def Info: Figures/simplex_fourier.png used on input line 35.
+(pdftex.def)             Requested size: 293.41548pt x 221.14566pt.
+
+<Figures/gen_fourier.png, id=455, 586.8324pt x 442.2924pt>
+File: Figures/gen_fourier.png Graphic file (type png)
+
+<use Figures/gen_fourier.png>
+Package pdftex.def Info: Figures/gen_fourier.png used on input line 44.
+(pdftex.def)             Requested size: 293.41548pt x 221.14566pt.
+
+<Figures/cpg_simplex.png, id=456, 586.8324pt x 442.2924pt>
+File: Figures/cpg_simplex.png Graphic file (type png)
+
+<use Figures/cpg_simplex.png>
+Package pdftex.def Info: Figures/cpg_simplex.png used on input line 52.
+(pdftex.def)             Requested size: 293.41548pt x 221.14566pt.
+
+<Figures/cpg_gen.png, id=457, 586.8324pt x 442.2924pt>
+File: Figures/cpg_gen.png Graphic file (type png)
+
+<use Figures/cpg_gen.png>
+Package pdftex.def Info: Figures/cpg_gen.png used on input line 61.
+(pdftex.def)             Requested size: 293.41548pt x 221.14566pt.
+
+<Figures/esn_simplex.png, id=458, 586.8324pt x 442.2924pt>
+File: Figures/esn_simplex.png Graphic file (type png)
+
+<use Figures/esn_simplex.png>
+Package pdftex.def Info: Figures/esn_simplex.png used on input line 69.
+(pdftex.def)             Requested size: 293.41548pt x 221.14566pt.
+
+<Figures/esn_gen.png, id=459, 586.8324pt x 442.2924pt>
+File: Figures/esn_gen.png Graphic file (type png)
+
+<use Figures/esn_gen.png>
+Package pdftex.def Info: Figures/esn_gen.png used on input line 77.
+(pdftex.def)             Requested size: 293.41548pt x 221.14566pt.
+ [25 <./Figures/simplex_fourier.png> <./Figures/gen_fourier.png>] [26 <./Figure
+s/cpg_simplex.png> <./Figures/cpg_gen.png>] [27 <./Figures/esn_simplex.png> <./
+Figures/esn_gen.png>]) (./Chapters/Conclusion.tex
+[28]
 Chapter 6.
 ------------------------------------------------------------------------------
  6 Conclusion
 ------------------------------------------------------------------------------
-) [23
+) [29
 
 ]
 ------------------------------------------------------------------------------
@@ -1039,35 +1117,32 @@ Underfull \hbox (badness 10000) in paragraph at lines 38--43
 ssembling-robots-
  []
 
-)
-
-Package natbib Warning: There were undefined citations.
-
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 292.
-[24
+[30
 
 
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 292.
+])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 297.
+ [31]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 297.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 292.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 292.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 297.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 297.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 20FF71D918493155B7FB50C3D79F025C;5405.
+(rerunfilecheck)             Checksum: F34D5C15AF6DA84CF4B1E006AF8FA2BE;5080.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 292.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 297.
  ) 
 Here is how much of TeX's memory you used:
- 13634 strings out of 493307
- 190991 string characters out of 6139905
- 262897 words of memory out of 5000000
- 16745 multiletter control sequences out of 15000+600000
+ 13739 strings out of 493307
+ 193094 string characters out of 6139905
+ 265646 words of memory out of 5000000
+ 16798 multiletter control sequences out of 15000+600000
  14352 words of font info for 52 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 49i,12n,45p,1624b,650s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,12n,45p,1620b,840s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
@@ -1083,10 +1158,10 @@ fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (29 pages, 3590377 bytes).
+Output written on main.pdf (37 pages, 3900473 bytes).
 PDF statistics:
- 477 PDF objects out of 1000 (max. 8388607)
- 407 compressed objects within 5 object streams
- 113 named destinations out of 1000 (max. 500000)
- 332 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 586 PDF objects out of 1000 (max. 8388607)
+ 491 compressed objects within 5 object streams
+ 157 named destinations out of 1000 (max. 500000)
+ 369 words of extra memory for PDF output out of 10000 (max. 10000000)
 

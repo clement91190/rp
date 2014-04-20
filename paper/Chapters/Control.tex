@@ -7,7 +7,17 @@
 \lhead{Chapter 3. \emph{Control}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
 %
-Once the simulation is fully implemented, the goal is to use it as a testbench for different ways of controlling the structure. The second part of the project will be fully consecrated on this part. A few tools have been implemented to test some of the algorithms that are used in such problems. 
+Once the simulation is fully implemented, the goal is to use it as a testbench for different ways of controlling the structure. The second part of the project was fully consecrated on this part. PID (Proportionnal-Integrate-Derivative) control loops have been implemented to make sure that the command is respected by the creatures. Three different model were implemented and tested to control the creature: Fourier Decomposition, Central Pattern Generators and Liquid State Machines. The goal of each of these models is to represent the $\alpha_i(t)$ functions that are the angle of the joints with a vector of finite size. The Fourier Decomposition model for example (see Introduction) represent the angle functions with their Fourier Decomposition.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/models.png}
+    \rule{35em}{0.5pt}
+    \caption[Learning Model]{Learning Model}
+    \label{fig:models}
+\end{figure}
+
+The two other models are described in this chapter.
 
 \section{PID Control of the joints}
 
@@ -79,4 +89,34 @@ For example if the movement of a joint is made difficult because of the ground, 
 
 \section{Liquid State Machine}
 
-ADD HERE
+Liquid State Machine (LSM) and Echo State Network were independantly and simultaneously introduced by Mass and al \cite{liquidstatemachine} and Jaeger and al. \cite{echostatejaeger} and present a way of generating oscillations \cite{echostate}. They were introduced as a way of using recurrent neural network for Machine learning purposes, as recurrent neural network are harder to train using the classical backpropagation algorithm. A LSM is created from a random recurrent neural network that contains N neurons and is called the reservoir. The state of the neurons in the reservoir are updated using the following equation: 
+\begin{equation*}
+    X_{t + 1} = f( W_r * X_{t})
+\end{equation*}
+ where $W_r$ is the random weight matrix inside the reservoir and f is the activation fonction ( in this project we used the hyperbolic tangent as the activation function)
+
+Once this network is created, oscillations can be observed in the state of each neurons. A weight matrix is randomly initiated to produce linear combinations of these oscillations that can be plugged to control the joints angles of the creature.
+
+\begin{equation*}
+    \alpha_i(t) = \frac{\pi}{2} f( W_o * X_{t})
+\end{equation*}
+
+where $W_o$ is the output weights and f is also an activation function. We then multiply the results by $\frac{\pi}{2}$ to ensure that the angles are in an acceptable range for the control in any situation.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=3.0]{Figures/echo_state.png}
+    \rule{35em}{0.5pt}
+    \caption[Liquid State Machine]{Liquid State Machine}
+    \label{fig:echo_state}
+\end{figure}
+
+
+The idea of the Liquid State Machine is to focus the learning parameters on the output weights. The reservoir of neurons can be big, and produce a large variety of periodic signals. By learning the $W_o$ matrix ( of size $N * K$ where $N$ is the size of the reservoir and $K$ the number of hinge) each hinge can select some features of these oscillations. 
+
+It is also possible to use a feedback loop in the network, by plugging the mesured angles in the reservoir using the output weights. 
+
+ 
+
+
+

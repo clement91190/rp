@@ -18,7 +18,7 @@ Under this assumption, we have the function $\alpha_i(t)$ that are only dependin
 With this decomposition, we transform our infinite dimensional research space ( of functions ) to a finite one containing the $b_{ki}$ ($ -N <= k <= N $) coefficients. The parameter $N$ is a restriction over the harmonics and can be seen as a precision parameter that determines how near we can get from any periodic function. This space of research remains big and does not reflects in its structure any of the physical interaction that can exist between two actuators (symmetry, graph structure) of the creature. Therefore, some of the following related works use different techniques to reduce the dimension of the space and also different learning techniques to obtain a solution. 
 
 \section{Karl Sims Creatures}
-The first remarquable examples of modular robotics learning to evolve in a 3D simulated world is due to Karl Sims's Creature in 1994 \cite{karl}. In his work, the structure of the creature evolves at the same time as the control system. One way of reducing the search space of Fourier coefficients is to create a graph that generate oscillations (much like the brain of animals does). The neural network used in Karl's creature takes as input a set of values from different sensors and each node can perform a specific function such as sums, products, logical and trigonometric functions to generate the oscillations of the structure. The physical shape of the creature, is built from a genotype and informations to grow a creature from the genotype.   
+The first remarquable examples of modular robotics learning to evolve in a 3D simulated world is due to Karl Sims's Creature in 1994 \cite{karl}. In his work, the structure of the creature evolves at the same time as the control system. One way of reducing the search space of Fourier coefficients is to create a graph that generate oscillations (much like the brain of animals does). The neural network used in Karl's creature takes as input a set of values from different sensors and each node can perform a specific function such as sums, products, logical and trigonometric functions to generate the oscillations of the structure. The physical shape of the creature, is built from a genotype and informations to grow the creature.   
  
 \begin{figure}[htbp]
     \centering
@@ -31,7 +31,7 @@ The first remarquable examples of modular robotics learning to evolve in a 3D si
 \end{figure}
 
 \newpage
-Karl Sims uses Genetic Algorithms in order to optimize all the parameters of the control graph and the structure. The mutation and cross-over steps of the Genetic Algorithm have been implemented for updating the population of genotypes. At each evaluation step, creatures are grown from a genotype and compared for a specific task (walking, jumping, swimming). 
+Karl Sims uses Genetic Algorithms (cf Learning Methods section) in order to optimize all the parameters of the control graph and the structure. The mutation and cross-over steps of the Genetic Algorithm have been implemented for updating the population of genotypes. At each evaluation step, creatures are grown from a genotype and compared for a specific task (walking, jumping, swimming). 
 
 \begin{figure}[htbp]
     \centering
@@ -74,7 +74,7 @@ The Bio-Robotics lab also implemented physical blocs in order to build a swarm o
     \includegraphics[scale=0.3]{Figures/synthesized_walking.png}
     \rule{35em}{0.5pt}
     \caption[Synthesized walking for a bipedial creature]{Synthesized walking for a bipedal creature}
-    \label{fig:yamor}
+    \label{fig:synthesized_walking}
 \end{figure}
 
 More recently, the progress of computational power and the growing interest of building humanoid robots for different tasks in non-friendly environment, such as the initiative from Virginia Tech to build a disaster response robots, or the growing demand of the animation movie and video games industry led to new results. Geijtenbeek et al \cite{MuscleBasedBipeds} used muscle-based actuators and optimize at the same time the routing of the muscles and the control of the muscle activation from a musculoskeletal model. Though this approach is for graphic purposes (SIGGRAPH Conference) and it uses a musculoskeletal model, they follow the same method : a specific control model (simulation of the physical response and interaction of muscles) and a learning algorithm. In this paper, they use covariance matrix adaptation as a the optimization method \cite{igel2007covariance}. This method updates a population of solutions by building new generations at each step based on a normal distribution, which mean and covariance are estimated from the evaluation of the previous generation. Their results showed robust locomotion for different speed, target directions and small ground variations in terrain.
@@ -84,7 +84,7 @@ More recently, the progress of computational power and the growing interest of b
     \includegraphics[scale=0.2]{Figures/muscle_based.png}
     \rule{35em}{0.5pt}
     \caption[Example of Muscle Path]{Example of Muscle Path}
-    \label{fig:yamor}
+    \label{fig:muscle_based}
 \end{figure}
 
 

@@ -89,6 +89,7 @@ class Physics():
         """ run physics for t steps """
         for i in range(t):
             self.simulationTask(creatures, 0.01)
+            #self.simulationTask(creatures, 0.03)
 
 
 class MyApp(ShowBase):
