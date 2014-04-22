@@ -6,22 +6,22 @@
 
 \lhead{Chapter 4. \emph{Learning Methods}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
-In this chapter we present different Learning Methods that have been tested and compared on this particular problem. All of these methods are optimization algorithms to find a minimum (or a maximum) over a set of parameters. It is not possible to get a gradient or Hessian matrix for a problem involving a simulation as fitness function. Therefore none of these algorithms use the derivatives of the function as information to find optima (unlike Gradient Method or Broyden-Fletcher-Goldfarb-Shanno (BFGS)). The following sections present different algorithms that can perform such a task. We then compare their results on the simulation. For coherence in this chapter, we use the following notation: 
+In this chapter we present different Learning Methods that have been tested and compared on this particular problem. All of these methods are optimisation algorithms to find a minimum (or a maximum) over a set of parameters. It is not possible to get a gradient or Hessian matrix for a problem involving a simulation as fitness function. Therefore none of these algorithms use the derivatives of the function as information to find optima (unlike Gradient Method or Broyden-Fletcher-Goldfarb-Shanno (BFGS)). The following sections present different algorithms that can perform such a task. We then compare their results on the simulation. For coherence in this chapter, we use the following notation: 
 
 \begin{itemize}
     \item $X = \{ X_p, p\in{\{1, ..., q\}}\} $ is a set of $q$ elements (or vectors) of the parameter space ($\mathbf{R}^ n $), where $n$ is the dimension of this space. $X_{p,i}$ is a scalar, and represent the $i$-th coordinate of the $p$-th element of the population.
-    \item $f (\mathbf{R} ^ n \to \mathbf{R})$ is the fitness function we want to minimize.
+    \item $f (\mathbf{R} ^ n \to \mathbf{R})$ is the fitness function we want to minimise.
     \item $X^{(p)}$ the p first element of the ordered list of element from set $X$ where the order relation is given by $X_i \leq X_j$ iff $f(X_i) \leq f(X_j)$
     \item iterators $p, q$ are over the population, where $i, j$ are over the coordinate of each element  
 \end{itemize}
 
-Moreover, in this problem the fitness function is not likely to be convex, as taking the mean of two good solutions for the movement of a structure does not necessary provide a good solution. The fitness function can also present some discontinuities or high variations because of collisions. Collisions are not continuous phenomena and even if the physics engine use smoothing techniques to simplify interractions. For instance there is a very small difference between a biped structure walking and a biped structure almost walking but with one leg that does not touch the ground, but the fitness function will give completely different results as one structure is moving and the other is not. Finally there is also the problem of consistency of a result, because two structures can behave differently for the same parameters, as the simulation can show chaotic behavior as small variations can have a big impact on the movement. For all these reasons, it is difficult to use classical optimization for the creatures to learn how to move in the simulated environment. 
+Moreover, in this problem the fitness function is not likely to be convex, as taking the mean of two good solutions for the movement of a structure does not necessary provide a good solution. The fitness function can also present some discontinuities or high variations because of collisions. Collisions are not continuous phenomena and even if the physics engine use smoothing techniques to simplify interactions. For instance there is a very small difference between a biped structure walking and a biped structure almost walking but with one leg that does not touch the ground, but the fitness function will give completely different results as one structure is moving and the other is not. Finally there is also the problem of consistency of a result, because two structures can behave differently for the same parameters, as the simulation can show chaotic behaviour as small variations can have a big impact on the movement. For all these reasons, it is difficult to use classical optimisation for the creatures to learn how to move in the simulated environment. 
 
-It is then possible to learn the parameters of the learning model (CPG, LSM, Fourier coeffiscients, see previous chapter) to optimize the movement of the structure. 
+It is then possible to learn the parameters of the learning model (CPG, LSM, Fourier coefficients, see previous chapter) to optimise the movement of the structure. 
 
 \section{Genetic Algorithm}
 
-A Genetic Algorithm (GA) is an optimization algorithm that replicates the process of natural selection. GAs were introduced in the 60s and early 70s and are inspired from biology. They consist of a loop of four steps until convergence (or a proper solution) is reached : evaluation, selection, cross-over, mutation. A population $X$ of $p$ elements is randomly generated to initialize the algorithm. The evaluation step is just running the fitness function $f$ over the new elements.
+A Genetic Algorithm (GA) is an optimisation algorithm that replicates the process of natural selection. GAs were introduced in the 60s and early 70s and are inspired from biology. They consist of a loop of four steps until convergence (or a proper solution) is reached : evaluation, selection, cross-over, mutation. A population $X$ of $p$ elements is randomly generated to initialise the algorithm. The evaluation step is just running the fitness function $f$ over the new elements.
 
 \subsection{Selection} 
 The first step is a selection step. The goal is to keep only a part of the population and eliminate the rest. This is directly related to Natural Selection, where the "weakest" animals are less likely to survive. They are different ways of keeping "good elements". The first idea that comes to mind in performing such a step is to keep the $q$ best elements, ie $X^{(q)}$. The problem with this solution is that it prevent the population from "exploring" as all the best elements will be kept, it is more likely for the population to get stuck into a local minima. A widely use alternative is the Tournament Selection. We randomly select two elements and keep only the best of the two. We repeat this step until enough elements have been eliminated (usually half of the population). This alternative give a chance to all elements even if they are not in $X^\{q}$ best.  
@@ -62,12 +62,12 @@ The first step is a selection step. The goal is to keep only a part of the popul
 
 
 \subsection{Mutation}
-    Finally the mutation step is a way of exploring new solutions. We randomly chose some elements to be mutated and modify them slightly. One way of doing the mutation when dealing with vector of real numbers is to use a gaussian distribution which use the previous elements as a mean, and a covariance matrix that depends of the population (for instance the covariance of p-nearest neighbors)
+    Finally the mutation step is a way of exploring new solutions. We randomly chose some elements to be mutated and modify them slightly. One way of doing the mutation when dealing with vector of real numbers is to use a Gaussian distribution which use the previous elements as a mean, and a co variance matrix that depends of the population (for instance the co variance of p-nearest neighbours)
 
 
 \section{Nelder-Mead method}
 
-The Nelder Mead method \cite{simplex} (or downhill simplex method) is a way of finding a local optimum, without knowing the gradient of the function in a given multidimensional space. We initialize a non-degenerated simplex in this space, then we follow the procedure described in the algorithm hereunder:
+The Nelder Mead method \cite{simplex} (or downhill simplex method) is a way of finding a local optimum, without knowing the gradient of the function in a given multidimensional space. We initialise a non-degenerated simplex in this space, then we follow the procedure described in the algorithm here-under:
 
 \begin{algorithm}
     \caption{Nelder-Mead Method}
@@ -75,7 +75,7 @@ The Nelder Mead method \cite{simplex} (or downhill simplex method) is a way of f
     \STATE $ p = 0 $
         \REPEAT 
             \STATE order the points of the simplex such that $f(x_0) >= f(x_1) >= f(x_2) \dot >= f(x_n)$
-            \STATE compute the center of gravity of all the points $x_g$
+            \STATE compute the centre of gravity of all the points $x_g$
             \STATE compute the reflection of $x_n$ in respect to $x_g$ ($x_r = x_g + (x_g - x_n )$)
             \IF{$f(x_r) > f(x_{n - 1})$} 
                 \STATE compute the expansion point : $x_e = x_g + 2 * (x_g - x_n )$ 
@@ -89,7 +89,7 @@ The Nelder Mead method \cite{simplex} (or downhill simplex method) is a way of f
                 \IF{$f(x_c) >= f(x_n)$}
                     \STATE replace $x_n$ with $x_c$ 
                 \ELSE
-                    \STATE \verb?homothetia?
+                    \STATE \verb?homotetia?
                     \FORALL{$x_i,  1 <= i < n$}
                         \STATE replace $x_i$ with : $x_i = x_0 + 0.5 * (x_i - x_0 )$ 
                     \ENDFOR
@@ -121,7 +121,7 @@ The Nelder Mead method \cite{simplex} (or downhill simplex method) is a way of f
 
 \section{Random Search}
 
-A first very simple way of finding good solution is random search. We test a random set of parameters and keep the vector of parameters showing the best results. This has the benefit of being very simple to implement and provides a good testbench for fixing issues with the simulation. A first problem observed was the consistency of the solution, testing the same parameters can lead to very different results. A first way to correct this was to take longer sample (about 20 sec of simulation). Even with this correction, online learning brought some issues, as it is possible that a good results is only good because of the initial configuration given by testing previous movement. A way to correct this is to set all angles to a default value and wait for the structure to have a null velocity. This also showed solutions using the first movement to jump as far as possible. 
+A first very simple way of finding good solution is random search. We test a random set of parameters and keep the vector of parameters showing the best results. This has the benefit of being very simple to implement and provides a good test-bench for fixing issues with the simulation. A first problem observed was the consistency of the solution, testing the same parameters can lead to very different results. A first way to correct this was to take longer sample (about 20 sec of simulation). Even with this correction, online learning brought some issues, as it is possible that a good results is only good because of the initial configuration given by testing previous movement. A way to correct this is to set all angles to a default value and wait for the structure to have a null velocity. This also showed solutions using the first movement to jump as far as possible. 
 
 
 %\section{Simulated Annealing}
