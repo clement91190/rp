@@ -1,0 +1,102 @@
+% Chapter Template
+
+\chapter{Simulation Environment} % Main chapter title
+
+\label{Chapter 2} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\lhead{Chapter 2. \emph{Simulation Environment}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+The first task of my project was to build a simulator to be able to get feedback from a simulated world. The goal of the simulator is to provide an environment which is governed by physics laws. In this project such physics laws are gravity, friction and collisisons. Combining these phenomena on complex structures can lead to situations that are difficult to predict, especially since it has a chaotic behavior. Two movements of a structure in such a physical world, though they differ just a little, can lead to very different outcomes.  
+
+\section{Physics Engine}
+
+In order to simulate the behavior of complex shapes and bodies in a simulated world, a physical engine is required. This kind of physical engine is used in a lot of different areas, for instance the film and video games industry, to simulate destructions or complex situations where placing all bodies by hand would be too difficult. I tested two different librairies that provide tools to simulate these complex situtations : \verb?bullet? and \verb?ODE? (\verb?Open Dynamics Engine? \cite{ode}). The first part was to simulate the static part of the world, which is the ground. For now, I used a plane, with a friction coefficient, but we can imagine testing the creatures on different surfaces, (not necessarly plans)to test there reaction to a difficult environment. Also, in order to simplify the creature, so that the modules are simple shapes, all the robots are only composed of cubes (like the MIT project \cite{mitcubes}, linked by different type of joints. The idea behind this is to make the creature depending on a really simple implementation of these modules, that can benefit from a chain manufactoring. ODE and bullet also provide tools to simulate joints (adding constraint on the relative movements of different bodies) and also to animate them simulating motors. I choose ODE for its simplicity to control different joints using this motors. In order to simulate a servomotor properly, it is for instance possible to set a maximimum torque, boundaries within the degrees of freedom of the joint, and give a command to the motor.
+ 
+    All the calculation of the physics interaction is computed periodicly by setting the time to wait between two calculations. Setting this parameter can be tricky : if we set it value that is too small, then the simulation will slow and it will take time to compute a 10 seconds simulation of the world. On the contrairy, a large value for this parameter can lead to errors in the movement of the simulated bodies, especially if there are bodies with a high velocity in the simulation.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/hinge.jpg}
+    \rule{35em}{0.5pt}
+    \caption[A Hinge Constraint]{A 3D representation of a Hinge Constrain}
+    \label{fig:Hinge}
+\end{figure}
+
+\section{Visual rendering}
+A good thing about the physical engine is that it is completly separated from the rendering part. That way, we can run all the simulation without watching the results which would recquire additional computation and slow down the learning process. But it is also necessary to see the result, especially for the purpose of debuging the simulator. Carnegie Mellon University developps a framework called panda3d (\cite{panda3d}), that integrate both a rendering librairy using OpenGl and different physics engines (ODE and bullet). All these tools are developped in C/C++ with binding for python, which makes it an easy tool to create animation movie, games or simulations. They provide very useful tutorial to get started using these tools on their website.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/snake.png}
+    \rule{35em}{0.5pt}
+    \caption[Simulated Snake in the environment]{3D Rendering of a snake in the environment}
+    \label{fig:Snake}
+\end{figure}
+
+
+
+\subsection{The coordinate system}
+
+In order to represent all the objects that we manipulate in the simulation (physics and rendering), panda3d, as most of 3D software, uses a system of global/local coordinate and a tree architecture. Each element of the tree is represented in the coordinates of the father. In order to keep a coherence with this architecture, it is natural to use a graph to represent the modular structure of the Robots in this project. Panda3d also uses 4-by-4 matrices to represent the transformation of a node to its one of its children. These transformation are classical in 3D representation. They combine the benefits of 3 by 3 matrices that represent functions ($\mathbb{R}^3 \to \mathbb{R}^3$) that can be interpreted as the set of combined rotations and homotetia, where the matrix multiplication is the composition of such transformations. But manipulating translations requires to use 4 by 4 matrices(multiplying any matrix by the vector $(0, 0, 0)^t$ will not change this vector) instead of 3 by 3 thatway the properties of the product are kept, which makes it a very useful tool to manipulate 3d objects. These calculation can run on a GPU as this is the kind of calculation GPU are designed for.
+For instance, if the children of the node are translated of a vector $(1, 0, 0)$, then we can use a function on the object representing the Matrice (TransformState in panda3d) to change the matrice and add the translation. The same goes for giving a certain orientation to the object using quaternions to represent the 3D orientation and add this to the 4 by 4 matrix.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/transform_matrix.png}
+    \rule{35em}{0.5pt}
+    \caption[Transformation Matrix for 3D bodies]{Transformation Matrix for 3D bodies}
+    \label{fig:transform_matrix}
+\end{figure}
+
+
+\pagebreak
+\section{Structures of the Robots as a Graph} 
+
+We can represent a Robot as a graph, where each node is a component of the robot. In this project there is four types of components : 
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5]{Figures/schema_arbre.png}
+    \rule{35em}{0.5pt}
+    \caption[Structure described as graph]{Structure described as a graph}
+    \label{fig:TreeStruct}
+\end{figure}
+
+
+
+\begin{itemize}
+    \item the head: which has a cube shapes and 6 sons (one for each faces), There is only one head per structure.
+    \item a structural block: This is also a cube, also with 6 sons (or edges in the graph) for all faces.
+    \item a hinge joint: The hinge is composed of two small cubes, separated by the joint whith one degree of freedom.
+    \item a vertebra : a vertebra is very much like a hinge but has two degrees of freedom (two angle directions) with smaller range, but bigger maximal torque.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=2.0]{Figures/vertebra.jpg}
+    \rule{35em}{0.5pt}
+    \caption[A Vertebra Constraint]{A 3D representation of a Vertebra Constrain}
+    \label{fig:Vertebra}
+\end{figure}
+
+
+
+This Structure is represented in python with an object called MetaStructure, with very simple function to move within the graph and add components. This object is the key to describe a structure. It is then very simple to create a creature that we have in mind ( or for possible later use to generate them automaticly\ldots). For instance, this is the code to create a snake with a given size : for the number of cell, we add a block and a joint. 
+
+\begin{verbatim}
+def add_snake(m, size):
+    #m is a Metastructure
+    for i in range(size):
+        m.add_block()
+        m.follow_edge()
+        m.add_joint()
+        m.follow_edge()
+    
+    m.add_block()
+\end{verbatim}
+
+
